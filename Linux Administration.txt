@@ -1,0 +1,127 @@
+配置网卡，网络，网关
+
+修改配置文件：/etc/sysconfig/network-scripts/ifcfg-eth0
+#################### CONTENT TEXT BEGIN ####################
+DEVICE="eth0"
+BOOTPROTO="none"
+HWADDR="00:0C:29:D9:AA:3C"
+NM_CONTROLLED="yes"
+ONBOOT="yes"
+TYPE="Ethernet"
+UUID="7dfee4ec-90c1-45b6-bef1-7cad8ab5ff9a"
+USERCTL="no"
+PEERDNS="yes"
+NETMASK="255.255.255.0"
+IPADDR="192.168.0.88"
+GATEWAY="192.168.0.1"
+##################### CONTENT TEXT END #####################
+
+
+配置DNS
+修改配置文件：/etc/resolv.conf
+内容如下：
+#################### CONTENT TEXT BEGIN ####################
+nameserver 8.8.8.8
+nameserver 123.108.220.18
+##################### CONTENT TEXT END #####################
+
+
+配置完成需要重启网络服务: 
+service network restart
+
+
+设置或者重置修改密码
+passwd 用户名
+
+
+为用户添加sudo权限
+修改配置文件：/etc/sudoers
+#################### CONTENT TEXT BEGIN ####################
+## Allow root to run any commands anywhere 
+root	ALL=(ALL) 	ALL
+admin	ALL=(ALL)	ALL
+totem	ALL=(ALL)	ALL
+##################### CONTENT TEXT END #####################
+
+
+命令行下载文件
+wget http://www.baidu.com/index.html
+
+
+压缩文件
+tar -cvfz archieve.tar.gz 目录或文件 目录或文件 ......
+解压缩文件
+tar -xvf archieve.tar.gz
+
+tar命令常用参数：
+-c表示创建压缩文件
+-x表示解压
+-v表示显示详细信息（可选）
+-f表示从文件输入
+
+-r表示追加文件
+-t表示显示文件列表
+-z表示文件是经gzip压缩的
+-j表示文件是经bz2压缩的
+
+
+man命令常用操作，也可以查看less命令的帮助
+[q]退出；
+[Enter]一行行地下翻；
+[Space]一页页地下翻；
+[b]上翻一页；
+[/]后跟一个字符串和[Enter]来查找字符串；
+[n]发现上一次查找的下一个匹配
+
+
+Linux系统关机，重启
+关机: shutdown now -h
+重启: shutdown now -r 或者 reboot
+
+
+Linux防火墙设置配置
+1) 重启后生效 
+开启： chkconfig iptables on 
+关闭： chkconfig iptables off 
+
+2) 即时生效，重启后失效 
+开启： service iptables start 
+关闭： service iptables stop 
+
+需要说明的是对于Linux下的其它服务都可以用以上命令执行开启和关闭操作。 
+
+在开启了防火墙时，做如下设置，开启相关端口， 
+修改/etc/sysconfig/iptables 文件，添加以下内容： 
+-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT 
+-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+
+
+Nginx在Red Hat Enterprise Linux或者CentOS上的安装
+
+网址：http://nginx.org/en/download.html
+配置仓库文件：/etc/yum.repos.d/nginx.repo
+#################### CONTENT TEXT BEGIN ####################
+[nginx]
+name=nginx repo
+baseurl=http://nginx.org/packages/OS/OSRELEASE/$basearch/
+gpgcheck=0
+enabled=1
+## 用"rhel"或者"centos"替换其中的"OS"
+## 用"5"或者"6"替换其中的"OSRELEASE"
+##################### CONTENT TEXT END #####################
+
+安装命令：yum install nginx
+
+
+
+
+Nginx的管理与配置
+网址：http://nginx.org
+命令安装目录：/usr/sbin/nginx
+配置文件目录：/etc/nginx/
+主配置文件： /etc/nginx/ nginx.conf
+HTML目录： /usr/share/nginx/html
+启动，关闭，重启：
+/opt/nginx/sbin/nginx -s reload
+
+这里的 -s 表示给nginx主进程发送一个信号。可选的信号为：stop,quit,reoptn,reload，在这里我们用reload信号来让nginx重启
