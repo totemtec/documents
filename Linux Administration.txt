@@ -125,3 +125,19 @@ HTML目录： /usr/share/nginx/html
 /opt/nginx/sbin/nginx -s reload
 
 这里的 -s 表示给nginx主进程发送一个信号。可选的信号为：stop,quit,reoptn,reload，在这里我们用reload信号来让nginx重启
+
+
+修正警告：
+	-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8)
+检查文件：/etc/environment这个文件应该是空文件
+在文件中加入下面内容，重新登陆
+#################### CONTENT TEXT BEGIN ####################
+LANG=en_US.utf-8
+LC_ALL=en_US.utf-8
+##################### CONTENT TEXT END #####################
+
+
+安装中文支持
+# yum install "@Chinese Support"
+
+

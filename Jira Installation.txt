@@ -1,0 +1,43 @@
+安装Jira5.1
+
+2. 下载Jira最新版
+# wget http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-5.1.1-x64.bin
+
+下载地址可以在下面网址找到，注意版本的选择
+http://www.atlassian.com/software/jira/download
+
+3. 为下载的bin文件添加执行权限
+# chmod a+x chmod a+x atlassian-jira-5.1.1-x64.bin
+
+4. 执行bin文件
+# ./atlassian-jira-5.1.1-x64.bin
+
+有三种安装模式：快速安装、自定义安装、升级
+自定义安装可以选择安装目录，一个是程序目录，一个是数据目录，这两个不能使用同一个目录
+自定义安装可以选择端口，默认是8080
+自定义安装可以选择是否安装为service
+
+5. Jira的启动与关闭，脚本位与JIRA_HOME/bin目录下
+# ./start-jira.sh
+# ./stop-jira.sh
+
+6. Jira的访问，直接访问
+http://localhost:8080
+
+安装向导
+
+1. 创建Jira数据库
+mysql> CREATE DATABASE jiradb CHARACTER SET utf8 COLLATE utf8_bin;
+
+2. 第1次访问Jira，会出现安装向导
+选择外部数据库，填写数据库相关信息，下一步
+
+3. 纪录Server ID
+BBGS-LKO0-PJG6-WERM
+
+4. 关闭Jira
+# ./stop-jira.sh
+
+5. 开始破解
+
+

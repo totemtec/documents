@@ -1,0 +1,24 @@
+Red Hat Enterprise Linux or CentOS
+
+安装MySQL 5.x
+
+1. 安装
+#yum install mysql-server
+
+2. 启动
+#service mysqld start
+
+3. 修改root密码，默认为空
+#mysqladmin -u root password 'YourPassword'
+
+4. 以root身份连接数据，会提示要求输入密码
+#mysql -u root -p
+
+5. 创建数据库示例
+mysql> CREATE DATABASE jiradb CHARACTER SET utf8 COLLATE utf8_bin;
+
+6. 切换数据库
+mysql> use jiradb;
+
+7. 退出
+mysql> quit
