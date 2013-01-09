@@ -1,0 +1,20 @@
+1.下载对应版本的JDK并拷贝到Linux机器上：  
+jdk-6u38-linux-x64-rpm.bin  
+
+2.赋权限：
+# chmod a+x jdk-6u38-linux-x64-rpm.bin
+
+3.安装：
+# ./jdk-6u38-linux-x64-rpm.bin
+
+4.设置java环境:直接下载etc/profile在最后添加如下内容，然后上传  
+# set java environment  
+JAVA_HOME=/usr/java/jdk1.6.0_38  
+CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+PATH=$JAVA_HOME/bin:$PATH  
+export JAVA_HOME CLASSPATH PATH
+
+使配置文件生效
+# source /etc/profile
+
+5.是否成功安装JDK验证：# java  
