@@ -4,9 +4,11 @@ Red Hat Enterprise Linux or CentOS
 
 1. 安装
 #yum install mysql-server
+卸载：yum -y remove mysql-server
 
 2. 启动
 #service mysqld start
+#service mysqld stop
 
 3. 修改root密码，默认为空
 #mysqladmin -u root password 'YourPassword'
@@ -17,8 +19,39 @@ Red Hat Enterprise Linux or CentOS
 5. 创建数据库示例
 mysql> CREATE DATABASE jiradb CHARACTER SET utf8 COLLATE utf8_bin;
 
+删除数据库
+mysql> drop database jiradb;
+
 6. 切换数据库
 mysql> use jiradb;
 
 7. 退出
 mysql> quit
+
+
+修改MySQL数据目录
+
+1. 停止服务
+service mysqld stop
+
+2、修改/etc/my.cnf
+在[mysqld]中，
+把datadir=/var/lib/mysql更改为datadir=/data/mysql
+把socket=/var/lib/mysql.sock更改为socket=/data/mysql/mysql.sock
+
+[mysqld]
+datadir=/data/mysql
+socket=/data/mysql/mysql.sock
+
+在文件末尾中添加socket路径：
+
+[client]
+socket=/data/mysql/mysql.sock
+
+3、移动data目录
+
+mv /var/lib/mysql  /data
+
+4、修改启动文件/etc/init.d/mysqld
+把get_mysql_option mysqld datadir "/var/lib/mysql" 
+更改为get_mysql_option mysqld datadir "/data/mysql"

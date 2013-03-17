@@ -97,9 +97,10 @@ Linux防火墙设置配置
 
 在开启了防火墙时，做如下设置，开启相关端口， 
 修改/etc/sysconfig/iptables 文件，添加以下内容： 
--A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT 
--A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
-
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 8080 -j ACCEPT
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 8005 -j ACCEPT
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
 
 Nginx在Red Hat Enterprise Linux或者CentOS上的安装
 
@@ -145,4 +146,17 @@ LC_ALL=en_US.utf-8
 安装中文支持
 # yum install "@Chinese Support"
 
+centos安装是是使用linux text 模式安装没有安装xwindows界面。现在要使用，使用yum安装
+
+登录系统，使用yum 安装 
+#yum groupinstall 'X Window System'  -y 
+安装GNOME桌面环境 
+#yum groupinstall  'GNOME Desktop Environment' -y 
+如果安装KDE桌面环境 
+#yum groupinstall 'KDE (K Desktop Environment)' -y 
+
+卸载GNOME桌面环境 
+#yum groupremove "GNOME Desktop Environment" 
+卸载KDE桌面环境 
+#yum groupremove "KDE (K Desktop Environment)"
 

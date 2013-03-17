@@ -14,8 +14,13 @@ http://www.atlassian.com/software/jira/download
 
 有三种安装模式：快速安装、自定义安装、升级
 自定义安装可以选择安装目录，一个是程序目录，一个是数据目录，这两个不能使用同一个目录
+
+[/opt/atlassian/jira]
+[/var/atlassian/application-data/jira]
+
 自定义安装可以选择端口，默认是8080
 自定义安装可以选择是否安装为service
+
 
 5. Jira的启动与关闭，脚本位与JIRA_HOME/bin目录下
 # ./start-jira.sh

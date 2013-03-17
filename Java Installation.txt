@@ -7,7 +7,7 @@ jdk-6u38-linux-x64-rpm.bin
 3.安装：
 # ./jdk-6u38-linux-x64-rpm.bin
 
-4.设置java环境:直接下载etc/profile在最后添加如下内容，然后上传  
+4.设置java环境:文件/etc/profile在最后添加如下内容，然后上传  
 # set java environment  
 JAVA_HOME=/usr/java/jdk1.6.0_38  
 CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
