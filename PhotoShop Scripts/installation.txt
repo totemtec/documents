@@ -1,0 +1,4 @@
+Copy to path: 
+
+MAC: /Applications/Adobe Photoshop CS5/Presets/Scripts
+PC: c:\program files\Adobe Photoshop CS5\Presets\Scripts
