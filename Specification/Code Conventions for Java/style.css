@@ -1,0 +1,49 @@
+a:link {
+	color: #006666
+}
+a:visited {
+	color: #006666
+}
+a:active {
+	color: #000099
+}
+a:hover {
+	color: #ff0000
+}
+.time {
+	color: #000000; font-family: georgia, Verdana, Arial; font-size: 12pt; font-weight: bold 
+}
+.disable_text {
+	color: #aaaaaa; font-family: Verdana, 宋体; font-size: 10pt;
+}
+.disable_title {
+	color: #aaaaaa; font-family: Verdana, 宋体; font-size: 10pt; font-weight: bold;
+}
+.text{
+    font-family: Verdana, 宋体 ; font-size: 10pt;
+}
+.title {
+    font-family: Verdana, 宋体 ; font-size: 10pt; font-weight: bold; 
+}
+.classic_title {
+    font-family: 隶书, 宋体 ; font-size: 16pt;
+}
+.article_title {
+    font-family: Verdana, 宋体 ; font-size: 11pt; font-weight: bold;
+}
+.article_text{
+    font-family: Verdana, 宋体 ; font-size: 10pt; line-height:24px;
+}
+.paragraph_title{
+    font-family: Verdana, 宋体 ; font-size: 10pt; font-weight: bold; 
+}
+
+.normaltitle{
+   font-family: 宋体 ; font-size: 13pt;
+}
+.middletext{
+    font-family: 宋体 ; font-size: 12pt;
+}
+.smalltext{
+    font-family: 宋体 ; font-size: 9pt;
+}
