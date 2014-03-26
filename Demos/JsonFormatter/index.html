@@ -9,10 +9,6 @@
 
   <title>Collapsible JSON Formatter - view your json code in colors</title>
 
-<meta name="description" content="Collapsible JSON Formatter - view your json code in colors">
-
-<meta name="keywords" content="Json, Printer, Colorer, Format, Color, Collapsible">
-
 <script>
 
 // we need tabs as spaces and not CSS magin-left 
@@ -649,13 +645,9 @@ A.OtherToolsLink:hover { text-decoration:underline; }
 
 <div class="HeadersRow">
 
-  <div id="HeaderTitle"> Quick Json Formatter <span style='color:#aaa;font-weight:bold;font-style:italic'>Online</span> 1.0 Copyright (c) 2008-2009 Vladimir Bodurov &nbsp; <a href="http://blog.bodurov.com/Formatter-and-colorer-of-raw-JSON-code">about this tool</a></div>
-
   <h3 id="HeaderSubTitle">Collapsible JSON Formatter</h3>
 
-  <div>Enter your JSON here: <span style='color:#777;font-size:10px'>(Your code will NOT be posted to a server, the program executes on the client)</span></div>
-
-
+  <div>Enter your JSON here: <span style='color:#777;font-size:10px'></span></div>
 
   <textarea id="RawJson">
 
@@ -738,145 +730,6 @@ A.OtherToolsLink:hover { text-decoration:underline; }
 </div>
 
 <div id="Canvas" class="Canvas"></div>
-
-
-
-<form id="InvisibleLink" action="http://www.bodurov.com/JsonFormatter/view.aspx" target="_blank">
-
-  <input type="hidden" id="InvisibleLinkUrl" name="json" value="" />
-
-</form>
-
-
-
-<div style="font-size:10px;color:grey;text-align:right;margin-top:20px">
-
-  <input type="button" value="link to this json" onClick="LinkToJson()" style="color:#777" /> &nbsp; &nbsp;
-
-  my other tools: &nbsp;
-
-  <a href="http://www.bodurov.com/NearestStars/" class="OtherToolsLink">
-
-    Nearest Stars</a> &nbsp; &nbsp;
-
-  <a href="http://www.bodurov.com/VectorVisualizer/" class="OtherToolsLink">
-
-    Vector Visualizer</a> &nbsp; &nbsp;
-
-  <a href="http://www.bodurov.com/TextDiff/" class="OtherToolsLink">
-
-    Text Difference</a>
-
-</div>
-
-
-
-
-
-
-
-
-
-<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
-
-</script>
-
-<script type="text/javascript">
-
-	_uacct = "UA-2223138-1";
-
-	urchinTracker();
-
-	
-
-	
-
-	
-
-
-
-function onLoad() {
-
-    var version = getSilverlightVersion();
-
-    if (version) { __utmSetVar(version); }
-
-}
-
-
-
-function getSilverlightVersion() {
-
-    var version = 'No Silverlight';
-
-    var container = null;
-
-    try {
-
-        var control = null;
-
-        if (window.ActiveXObject) {
-
-            control = new ActiveXObject('AgControl.AgControl');
-
-        }
-
-        else {
-
-            if (navigator.plugins['Silverlight Plug-In']) {
-
-                container = document.createElement('div');
-
-                document.body.appendChild(container);
-
-                container.innerHTML= '<embed type="application/x-silverlight" src="data:," />';
-
-                control = container.childNodes[0];
-
-            }
-
-        }
-
-        if (control) {
-
-            if (control.isVersionSupported('5.0')) { version = 'Silverlight/5.0'; }
-
-            else if (control.isVersionSupported('4.0')) { version = 'Silverlight/4.0'; }
-
-            else if (control.isVersionSupported('3.0')) { version = 'Silverlight/3.0'; }
-
-            else if (control.isVersionSupported('2.0')) { version = 'Silverlight/2.0'; }
-
-            else if (control.isVersionSupported('1.0')) { version = 'Silverlight/1.0'; }
-
-        }
-
-    }
-
-    catch (e) { }
-
-    if (container) {
-
-        document.body.removeChild(container);
-
-    }
-
-    return version;
-
-}
-
-onLoad();
-
-</script>
-
-
-
-
-
-
-
-
-
 
 
 </body>
