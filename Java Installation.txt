@@ -1,20 +1,37 @@
-1.下载对应版本的JDK并拷贝到Linux机器上：  
-jdk-6u38-linux-x64-rpm.bin  
+在CentOS 6.3 x64 测试
+
+1.下载对应版本的JDK到Linux机器上：  
+
+#
+wget --no-cookies \
+--no-check-certificate \
+--header "Cookie: oraclelicense=accept-securebackup-cookie" \
+"http://download.oracle.com/otn-pub/java/jdk/7u55-b13/jdk-7u55-linux-x64.rpm" \
+-O /opt/jdk-7u55-linux-x64.rpm
+
 
 2.赋权限：
-# chmod a+x jdk-6u38-linux-x64-rpm.bin
+
+# chmod +x /opt/jdk-7u55-linux-x64.rpm
 
 3.安装：
-# ./jdk-6u38-linux-x64-rpm.bin
 
-4.设置java环境:文件/etc/profile在最后添加如下内容，然后上传  
-# set java environment  
-JAVA_HOME=/usr/java/jdk1.6.0_38  
-CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
-PATH=$JAVA_HOME/bin:$PATH  
-export JAVA_HOME CLASSPATH PATH
+# rpm -Uvh /opt/jdk-7u55-linux-x64.rpm
 
-使配置文件生效
-# source /etc/profile
+4.设置java环境:
+# alternatives --install /usr/bin/java java /usr/java/jdk1.7.0_55/jre/bin/java 20000
+# alternatives --install /usr/bin/jar jar /usr/java/jdk1.7.0_55/bin/jar 20000
+# alternatives --install /usr/bin/javac javac /usr/java/jdk1.7.0_55/bin/javac 20000
+# alternatives --install /usr/bin/javaws javaws /usr/java/jdk1.7.0_55/jre/bin/javaws 20000
+# alternatives --set java /usr/java/jdk1.7.0_55/jre/bin/java
+# alternatives --set javaws /usr/java/jdk1.7.0_55/jre/bin/javaws
+# alternatives --set javac /usr/java/jdk1.7.0_55/bin/javac
+# alternatives --set jar /usr/java/jdk1.7.0_55/bin/jar
 
-5.是否成功安装JDK验证：# java  
+检查一下配置：
+
+# ls -lA /etc/alternatives/{jar,java*}
+
+5.是否成功安装JDK验证：
+
+# java -version
