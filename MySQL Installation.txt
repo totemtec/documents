@@ -43,10 +43,6 @@ service mysqld stop
 datadir=/data/mysql
 socket=/data/mysql/mysql.sock
 
-在文件末尾中添加socket路径：
-
-[client]
-socket=/data/mysql/mysql.sock
 
 3、移动data目录
 

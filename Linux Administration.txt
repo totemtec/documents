@@ -1,3 +1,4 @@
+
 配置网卡，网络，网关
 
 修改配置文件：/etc/sysconfig/network-scripts/ifcfg-eth0
@@ -97,50 +98,39 @@ Linux防火墙设置配置
 
 在开启了防火墙时，做如下设置，开启相关端口， 
 修改/etc/sysconfig/iptables 文件，添加以下内容： 
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
 -A INPUT -m state --state NEW -m tcp -p tcp --dport 80 -j ACCEPT
 -A INPUT -m state --state NEW -m tcp -p tcp --dport 8080 -j ACCEPT
 -A INPUT -m state --state NEW -m tcp -p tcp --dport 8005 -j ACCEPT
--A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT
 
-Nginx在Red Hat Enterprise Linux或者CentOS上的安装
-
-网址：http://nginx.org/en/download.html
-配置仓库文件：/etc/yum.repos.d/nginx.repo
-#################### CONTENT TEXT BEGIN ####################
-[nginx]
-name=nginx repo
-baseurl=http://nginx.org/packages/OS/OSRELEASE/$basearch/
-gpgcheck=0
-enabled=1
-## 用"rhel"或者"centos"替换其中的"OS"
-## 用"5"或者"6"替换其中的"OSRELEASE"
-##################### CONTENT TEXT END #####################
-
-安装命令：yum install nginx
-
-
-
-
-Nginx的管理与配置
-网址：http://nginx.org
-命令安装目录：/usr/sbin/nginx
-配置文件目录：/etc/nginx/
-主配置文件： /etc/nginx/ nginx.conf
-HTML目录： /usr/share/nginx/html
-启动，关闭，重启：
-/opt/nginx/sbin/nginx -s reload
-
-这里的 -s 表示给nginx主进程发送一个信号。可选的信号为：stop,quit,reoptn,reload，在这里我们用reload信号来让nginx重启
 
 
 修正警告：
-	-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8)
-检查文件：/etc/environment这个文件应该是空文件
-在文件中加入下面内容，重新登陆
-#################### CONTENT TEXT BEGIN ####################
-LANG=en_US.utf-8
-LC_ALL=en_US.utf-8
-##################### CONTENT TEXT END #####################
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+
+消除上述警告的方法：
+# sudo vi /etc/sysconfig/i18n
+添加一行： LC_CTYPE="en_US.UTF-8"
+
+保存退出后：执行命令使设置生效：
+# source /etc/sysconfig/i18n
+
+
+
+挂载分区         
+1. 创建目录：
+# mkdir /data
+
+2. 手动挂载
+mount /dev/sdb1 /data    # 将sdb这个硬盘挂载成为/data
+
+3. 启动自动挂载
+修改文件 /etc/fstab
+例如：echo '/dev/sdb1               /data                   ext3    defaults        0 0' >> /etc/fstab
+
+
+
 
 
 安装中文支持
