@@ -9,6 +9,12 @@ Apache httpd 安装
 3 手动启动
 # service httpd start
 
+警告信息：Starting httpd: httpd: Could not reliably determine the server's fully qualified domain name, using 10.162.220.123 for ServerName
+
+去掉警告信息：
+# vi /etc/httpd/conf/httpd.conf
+将ServerName这行打开，设置你的域名，如果没有域名，直接设置成localhost
+
 4 重新启动
 # service httpd restart
 

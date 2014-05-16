@@ -53,6 +53,9 @@ wget http://www.baidu.com/index.html
 安装openssh，scp等命令要用到
 yum install openssh-clients
 
+远程加密传输文件
+scp localfile username@server:path
+scp ~/tomcat.tar.gz root@192.168.0.2:~/upload/
 
 压缩文件
 tar -cvfz archieve.tar.gz 目录或文件 目录或文件 ......
@@ -83,6 +86,9 @@ man命令常用操作，也可以查看less命令的帮助
 Linux系统关机，重启
 关机: shutdown now -h
 重启: shutdown now -r 或者 reboot
+
+远程加密传输文件
+yum install openssh-clients
 
 
 Linux防火墙设置配置

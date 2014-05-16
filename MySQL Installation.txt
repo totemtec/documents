@@ -44,6 +44,11 @@ datadir=/data/mysql
 socket=/data/mysql/mysql.sock
 
 
+在文件末尾中添加socket路径，如果不添加则root用户无法登录：
+
+[client]
+socket=/data/mysql/mysql.sock
+
 3、移动data目录
 
 mv /var/lib/mysql  /data
@@ -51,3 +56,10 @@ mv /var/lib/mysql  /data
 4、修改启动文件/etc/init.d/mysqld
 把get_mysql_option mysqld datadir "/var/lib/mysql" 
 更改为get_mysql_option mysqld datadir "/data/mysql"
+
+5、为root用户授权，可以从外网直接访问MySQL
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'Totem2012' WITH GRANT OPTION;
+
+6、创建MySQL用户，下面2个用户不能互相混用
+注意要求主机使用百分号%，这样从别的任何地方都可以连接
+注意要求主机使用localhost，这样才可以使用localhost连接数据库

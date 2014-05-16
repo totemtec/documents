@@ -9,6 +9,13 @@ wget --no-cookies \
 "http://download.oracle.com/otn-pub/java/jdk/7u55-b13/jdk-7u55-linux-x64.rpm" \
 -O /opt/jdk-7u55-linux-x64.rpm
 
+如果网速太慢，超过30分钟会被服务器断掉
+可以自己先下载了，然后使用scp再传上服务器
+
+远程加密传输文件
+scp local_file user_name@remote_server:path
+scp ~/tomcat.tar.gz root@192.168.0.2:~/upload/
+
 
 2.赋权限：
 
