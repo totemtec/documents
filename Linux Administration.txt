@@ -138,7 +138,6 @@ mount /dev/sdb1 /data    # 将sdb这个硬盘挂载成为/data
 
 
 
-
 安装中文支持
 # yum install "@Chinese Support"
 
@@ -156,3 +155,18 @@ centos安装是是使用linux text 模式安装没有安装xwindows界面。现�
 卸载KDE桌面环境 
 #yum groupremove "KDE (K Desktop Environment)"
 
+
+
+阿里云服务器的一些设置：
+
+挂载数据盘  http://help.aliyun.com/view/13435365.html
+
+给阿里云服务器添加swap交换区,避免OOM Killer
+
+#cd /var/
+#dd if=/dev/zero of=swapfile bs=1024 count=4194304 #创建大小为4G的文件swapfile，bs块大小，count块数量（bs*count=文件大小） swapfile 是文件交换区
+#mkswap swapfile #格式化虚拟内存文件
+#swapon swapfile #激活虚拟内存文件
+
+再编辑自动挂载文件，让系统开机的时候自动加载虚拟内存文件
+#echo '/var/swapfile               swap                   swap    defaults        0 0' >> /etc/fstab
