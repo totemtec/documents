@@ -1,0 +1,760 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>  面向对象的设计原则</title>
+
+<meta name="description" content="面向对象的设计原则" />
+
+<link rel="stylesheet" href="http://desheng.me/wp-content/themes/monochrome/style.css" type="text/css" />
+
+<link rel="stylesheet" href="http://desheng.me/wp-content/themes/monochrome/comment-style.css" type="text/css" />
+
+<!--[if lt IE 7]>
+
+<link rel="stylesheet" href="http://desheng.me/wp-content/themes/monochrome/ie6.css" type="text/css" />
+
+<![endif]--> 
+
+<style type="text/css">
+
+.post img, .post a img { border:1px solid #ccc; padding:5px; margin:0 10px 0 0;  background:#f2f2f2; }
+
+.post a:hover img { border:1px solid #38a1e5; background:#9cd1e1; }
+
+.post img.wp-smiley { border:0px; padding:0px; margin:0px; background:none; }
+
+</style>
+
+
+
+ 
+
+<link rel="alternate" type="application/rss+xml" title="一升 &raquo; 面向对象的设计原则 评论 feed" href="http://desheng.me/2011/10/22/%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1%e7%9a%84%e8%ae%be%e8%ae%a1%e5%8e%9f%e5%88%99/feed/" />
+<link rel='stylesheet' id='NextGEN-css'  href='http://desheng.me/wp-content/plugins/nextgen-gallery/css/nggallery.css?ver=1.0.0' type='text/css' media='screen' />
+<link rel='stylesheet' id='shutter-css'  href='http://desheng.me/wp-content/plugins/nextgen-gallery/shutter/shutter-reloaded.css?ver=1.3.2' type='text/css' media='screen' />
+<script type='text/javascript' src='http://desheng.me/wp-includes/js/l10n.js?ver=20101110'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var shutterSettings = {
+	msgLoading: "L O A D I N G",
+	msgClose: "Click to Close",
+	imageCount: "1"
+};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://desheng.me/wp-content/plugins/nextgen-gallery/shutter/shutter-reloaded.js?ver=1.3.2'></script>
+<script type='text/javascript' src='http://desheng.me/wp-includes/js/jquery/jquery.js?ver=1.4.4'></script>
+<script type='text/javascript' src='http://desheng.me/wp-content/plugins/nextgen-gallery/js/jquery.cycle.all.min.js?ver=2.88'></script>
+<script type='text/javascript' src='http://desheng.me/wp-content/plugins/nextgen-gallery/js/ngg.slideshow.min.js?ver=1.05'></script>
+<script type='text/javascript' src='http://desheng.me/wp-includes/js/comment-reply.js?ver=20090102'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://desheng.me/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://desheng.me/wp-includes/wlwmanifest.xml" /> 
+<link rel='index' title='一升' href='http://desheng.me/' />
+<link rel='start' title='iPhone开发基础问题总结' href='http://desheng.me/2010/10/03/iphone%e5%bc%80%e5%8f%91%e5%9f%ba%e7%a1%80%e9%97%ae%e9%a2%98%e6%80%bb%e7%bb%93/' />
+<link rel='prev' title='20 &#8211; 30岁, 我拿十年做什么?' href='http://desheng.me/2011/09/01/20-30%e5%b2%81-%e6%88%91%e6%8b%bf%e5%8d%81%e5%b9%b4%e5%81%9a%e4%bb%80%e4%b9%88/' />
+<link rel='next' title='《从零到百亿》读书笔记' href='http://desheng.me/2011/10/27/inside_facebook/' />
+<meta name="generator" content="WordPress 3.1" />
+<link rel='canonical' href='http://desheng.me/2011/10/22/%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1%e7%9a%84%e8%ae%be%e8%ae%a1%e5%8e%9f%e5%88%99/' />
+<link rel='shortlink' href='http://desheng.me/?p=200' />
+	
+<!-- START: Syntax Highlighter ComPress -->
+<script type="text/javascript" src="http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shCore.js"></script>
+<script type="text/javascript" src="http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shAutoloader.js"></script>
+<link type="text/css" rel="stylesheet" href="http://desheng.me/wp-content/plugins/syntax-highlighter-compress/styles/shCoreDefault.css"/>
+<!-- END: Syntax Highlighter ComPress -->
+
+  
+<link rel="stylesheet" type="text/css" media="screen" href="http://desheng.me/wp-content/plugins/wordpress-easy-contents/wp_easy_contents.css" />
+
+<meta name='NextGEN' content='1.8.4' />
+<script type="text/javascript" src="http://desheng.me/wp-content/themes/monochrome/js/scroll.js"></script>
+
+<script type="text/javascript" src="http://desheng.me/wp-content/themes/monochrome/js/jscript.js"></script>
+
+<script type="text/javascript" src="http://desheng.me/wp-content/themes/monochrome/js/comment.js"></script>
+
+</head>
+
+
+
+<body>
+
+<div id="wrapper">
+
+
+
+ <div id="header">
+
+
+
+  <div id="header_top">
+
+
+
+   <div id="logo">
+
+       <a href="http://desheng.me/">一升</a>
+
+    <h1></h1>
+
+      </div>
+
+
+
+      <div class="header_menu"><ul id="menu-%e5%85%b3%e4%ba%8e" class="menu"><li id="menu-item-64" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-64"><a href="http://desheng.me/category/iphone/">iPhone</a></li>
+<li id="menu-item-309" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-309"><a href="http://desheng.me/%e5%85%b3%e4%ba%8e/">关于</a></li>
+</ul></div>   
+
+  </div>
+
+
+
+  </div><!-- #header end -->  <div id="contents" class="clearfix">
+
+
+
+   <div id="left_col">
+
+
+
+        <div id="header_meta">
+
+     <ul id="bread_crumb" class="clearfix">
+
+      <li id="bc_home"><a href="http://desheng.me/">首页</a></li>
+
+      <li id="bc_cat"><a href="http://desheng.me/category/iphone/" title="查看 iPhone 的全部文章" rel="category tag">iPhone</a> . <a href="http://desheng.me/category/php/" title="查看 PHP 的全部文章" rel="category tag">PHP</a> . <a href="http://desheng.me/category/%e6%88%90%e9%95%bf/" title="查看 成长 的全部文章" rel="category tag">成长</a></li>
+
+      <li>面向对象的设计原则</li>
+
+     </ul>
+
+    </div>
+
+    
+
+
+
+    <div class="post clearfix" id="single_post">
+
+     <div class="post_content_wrapper">
+
+      <h2 class="post_title"><span>面向对象的设计原则</span></h2>
+
+      <div class="post_content">
+
+       <p>正如牛顿三大定律在经典力学中的位置一样，“开-闭”原则（Open-Closed Principle）是面向对象的可复用设计（Object Oriented Design或OOD）的基石。其他设计原则（里氏代换原则、依赖倒转原则、合成/聚合复用原则、迪米特法则、接口隔离原则）是实现“开-闭”原则的手段和工具。</p>
+<h1>一、“开-闭”原则（Open-Closed Principle,OCP）</h1>
+<h2>1.1“开-闭”原则的定义及优点</h2>
+<p>1）定义：一个软件实体应当对扩展开放，对修改关闭( Software entities should be open for extension,but closed for modification.)。即在设计一个模块的时候，应当使这个模块可以在不被修改的前提下被扩展。</p>
+<p>2）满足“开-闭”原则的系统的优点</p>
+<p>a)通过扩展已有的软件系统，可以提供新的行为，以满足对软件的新需求，使变化中的软件系统有一定的适应性和灵活性。</p>
+<p>b)已有的软件模块，特别是最重要的抽象层模块不能再修改，这就使变化中的软件系统有一定的稳定性和延续性。</p>
+<p>c)这样的系统同时满足了可复用性与可维护性。</p>
+<h2>1.2如何实现“开-闭”原则</h2>
+<p>在面向对象设计中，不允许更改的是系统的抽象层，而允许扩展的是系统的实现层。换言之，定义一个一劳永逸的抽象设计层，允许尽可能多的行为在实现层被实现。</p>
+<p>解决问题关键在于抽象化，抽象化是面向对象设计的第一个核心本质。</p>
+<p>对一个事物抽象化，实质上是在概括归纳总结它的本质。抽象让我们抓住最最重要的东西，从更高一层去思考。这降低了思考的复杂度，我们不用同时考虑那么多的东西。换言之，我们封装了事物的本质，看不到任何细节。</p>
+<p>在面向对象编程中，通过抽象类及接口，规定了具体类的特征作为抽象层，相对稳定，不需更改，从而满足“对修改关闭”；而从抽象类导出的具体类可以改变系统的行为，从而满足“对扩展开放”。</p>
+<p>对实体进行扩展时，不必改动软件的源代码或者二进制代码。关键在于抽象。</p>
+<h2>1.3对可变性的封装原则</h2>
+<p>“开-闭”原则也就是“对可变性的封装原则”（Principle of Encapsulation of Variation ，EVP）。即找到一个系统的可变因素，将之封装起来。换言之，在你的设计中什么可能会发生变化，应使之成为抽象层而封装，而不是什么会导致设计改变才封装。</p>
+<p>“对可变性的封装原则”意味着：</p>
+<p>a)一种可变性不应当散落在代码的许多角落，而应当被封装到一个对象里面。同一可变性的不同表象意味着同一个继承等级结构中的具体子类。因此，此处可以期待继承关系的出现。继承是封装变化的方法，而不仅仅是从一般的对象生成特殊的对象。</p>
+<p>b)一种可变性不应当与另一种可变性混合在一起。作者认为类图的继承结构如果超过两层，很可能意味着两种不同的可变性混合在了一起。</p>
+<p>使用“可变性封装原则”来进行设计可以使系统遵守“开-闭”原则。即使无法百分之百的做到“开-闭”原则，但朝这个方向努力，可以显著改善一个系统的结构。</p>
+<h1>二、里氏代换原则（Liskov Substitution Principle, LSP）</h1>
+<h2>2.1概念</h2>
+<p>定义：如果对每一个类型为T1的对象O1，都有类型为T2 的对象O2，使得以T1定义的所有程序P在所有的对象O1都代换为O2时，程序P的行为没有变化，那么类型T2是类型T1的子类型。</p>
+<p>即，一个软件实体如果使用的是一个基类的话，那么一定适用于其子类。而且它觉察不出基类对象和子类对象的区别。也就是说,在软件里面,把基类都替换成它的子类,程序的行为没有变化。</p>
+<p>反过来的代换不成立，如果一个软件实体使用的是一个子类的话，那么它不一定适用于基类。任何基类可以出现的地方，子类一定可以出现。基于契约的设计、抽象出公共部分作为抽象基类的设计。</p>
+<h2>2.2里氏代换原则与“开-闭”原则的关系</h2>
+<p>实现“开-闭”原则的关键步骤是抽象化。基类与子类之间的继承关系就是抽象化的体现。因此里氏代换原则是对实现抽象化的具体步骤的规范。</p>
+<p>违反里氏代换原则意味着违反了“开-闭”原则，反之未必。</p>
+<h1>三、 依赖倒转原则（dependence inversion principle, DIP）</h1>
+<h2>3.1概念</h2>
+<p>依赖倒转原则就是要依赖于抽象，不要依赖于实现。（Abstractions should not depend upon details. Details should depend upon abstractions.）要针对接口编程，不要针对实现编程。（Program to an interface, not an implementation.）</p>
+<p>也就是说应当使用接口和抽象类进行变量类型声明、参数类型声明、方法返还类型说明，以及数据类型的转换等。而不要用具体类进行变量的类型声明、参数类型声明、方法返还类型说明，以及数据类型的转换等。要保证做到这一点，一个具体类应当只实现接口和抽象类中声明过的方法，而不要给出多余的方法。</p>
+<p>传统的过程性系统的设计办法倾向于使高层次的模块依赖于低层次的模块，抽象层次依赖于具体层次。倒转原则就是把这个错误的依赖关系倒转过来。</p>
+<p>面向对象设计的重要原则是创建抽象化，并且从抽象化导出具体化，具体化给出不同的实现。继承关系就是一种从抽象化到具体化的导出。</p>
+<p>抽象层包含的应该是应用系统的商务逻辑和宏观的、对整个系统来说重要的战略性决定，是必然性的体现。具体层次含有的是一些次要的与实现有关的算法和逻辑，以及战术性的决定，带有相当大的偶然性选择。具体层次的代码是经常变动的，不能避免出现错误。</p>
+<p>从复用的角度来说，高层次的模块是应当复用的，而且是复用的重点，因为它含有一个应用系统最重要的宏观商务逻辑，是较为稳定的。而在传统的过程性设计中，复用则侧重于具体层次模块的复用。</p>
+<p>依赖倒转原则则是对传统的过程性设计方法的“倒转”，是高层次模块复用及其可维护性的有效规范。</p>
+<p>特例：对象的创建过程是违背“开—闭”原则以及依赖倒转原则的，但通过工厂模式，能很好地解决对象创建过程中的依赖倒转问题。</p>
+<h2>3.2关系</h2>
+<p>“开-闭”原则与依赖倒转原则是目标和手段的关系。如果说开闭原则是目标,依赖倒转原则是到达&#8221;开闭&#8221;原则的手段。如果要达到最好的&#8221;开闭&#8221;原则,就要尽量的遵守依赖倒转原则，依赖倒转原则是对&#8221;抽象化&#8221;的最好规范。</p>
+<p>里氏代换原则是依赖倒转原则的基础，依赖倒转原则是里氏代换原则的重要补充。</p>
+<h2>3.3耦合（或者依赖）关系的种类</h2>
+<p>零耦合（Nil Coupling）关系：两个类没有耦合关系</p>
+<p>具体耦合（Concrete Coupling）关系：发生在两个具体的（可实例化的）类之间，经由一个类对另一个具体类的直接引用造成。</p>
+<p>抽象耦合（Abstract Coupling）关系：发生在一个具体类和一个抽象类（或接口）之间，使两个必须发生关系的类之间存有最大的灵活性。</p>
+<h3>3.3.1如何把握耦合</h3>
+<p>我们应该尽可能的避免实现继承，原因如下：</p>
+<p>1 失去灵活性，使用具体类会给底层的修改带来麻烦。</p>
+<p>2 耦合问题，耦合是指两个实体相互依赖于对方的一个量度。程序员每天都在(有意识地或者无意识地)做出影响耦合的决定：类耦合、API耦合、应用程序耦合 等等。在一个用扩展的继承实现系统中，派生类是非常紧密的与基类耦合，而且这种紧密的连接可能是被不期望的。如B extends A ，当B不全用A中的所有methods时，这时候，B调用的方法可能会产生错误!</p>
+<p>我们必须客观的评价耦合度，系统之间不可能总是松耦合的，那样肯定什么也做不了。</p>
+<h3>3.3.2我们决定耦合的程度的依据何在呢？</h3>
+<p>简单的说，就是根据需求的稳定性，来决定耦合的程度。对于稳定性高的需求，不容易发生变化的需求，我们完全可以把各类设计成紧耦合的(我们虽然讨论类之间的耦合度，但其实功能块、模块、包之间的耦合度也是一样的)，因为这样可以提高效率，而且我们还可以使用一些更好的技术来提高效率或简化代码，例如c# 中的内部类技术。可是，如果需求极有可能变化，我们就需要充分的考虑类之间的耦合问题，我们可以想出各种各样的办法来降低耦合程度，但是归纳起来，不外乎增加抽象的层次来隔离不同的类，这个抽象层次可以是抽象的类、具体的类，也可以是接口，或是一组的类。我们可以用一句话来概括降低耦合度的思想：&#8221;针对接口编程，而不是针对实现编程。</p>
+<p>在我们进行编码的时候，都会留下我们的指纹，如public的多少，代码的格式等等。我们可以耦合度量评估重新构建代码的风险。因为重新构建实际上是维护编码的一种形式，维护中遇到的那些麻烦事在重新构建时同样会遇到。我们知道在重新构建之后，最常见的随机bug大部分都是不当耦合造成的 。</p>
+<p>如果不稳定因素越大，它的耦合度也就越大。</p>
+<p>某类的不稳定因素=依赖的类个数/被依赖的类个数</p>
+<p>依赖的类个数＝ 在编译此类的时被编译的其它类的个数总和</p>
+<h3>3.3.3怎样将大系统拆分成小系统</h3>
+<p>解决这个问题的一个思路是将许多类集合成一个更高层次的单位,形成一个高内聚、低耦合的类的集合，这是我们设计过程中应该着重考虑的问题！</p>
+<p>耦合的目标是维护依赖的单向性，有时我们也会需要使用坏的耦合。在这种情况下，应当小心记录下原因，以帮助日后该代码的用户了解使用耦合真正的原因。</p>
+<h2>3.4怎样做到依赖倒转？</h2>
+<p>以抽象方式耦合是依赖倒转原则的关键。抽象耦合关系总要涉及具体类从抽象类继承，并且需要保证在任何引用到基类的地方都可以改换成其子类，因此，里氏代换原则是依赖倒转原则的基础。</p>
+<p>在抽象层次上的耦合虽然有灵活性，但也带来了额外的复杂性，如果一个具体类发生变化的可能性非常小，那么抽象耦合能发挥的好处便十分有限，这时可以用具体耦合反而会更好。</p>
+<p>层次化：所有结构良好的面向对象构架都具有清晰的层次定义，每个层次通过一个定义良好的、受控的接口向外提供一组内聚的服务。</p>
+<p>依赖于抽象：建议不依赖于具体类，即程序中所有的依赖关系都应该终止于抽象类或者接口。尽量做到：</p>
+<p>1、任何变量都不应该持有一个指向具体类的指针或者引用。</p>
+<p>2、任何类都不应该从具体类派生。</p>
+<p>3、任何方法都不应该覆写它的任何基类中的已经实现的方法。</p>
+<h2>3.5依赖倒转原则的优缺点</h2>
+<p>依赖倒转原则虽然很强大，但却最不容易实现。因为依赖倒转的缘故，对象的创建很可能要使用对象工厂，以避免对具体类的直接引用，此原则的使用可能还会导致产生大量的类，对不熟悉面向对象技术的工程师来说，维护这样的系统需要较好地理解面向对象设计。</p>
+<p>依赖倒转原则假定所有的具体类都是会变化的，这也不总是正确。有一些具体类可能是相当稳定，不会变化的，使用这个具体类实例的应用完全可以依赖于这个具体类型，而不必为此创建一个抽象类型。</p>
+<h1>四、合成/聚合复用原则（Composite/Aggregate Reuse Principle或CARP）</h1>
+<h2>4.1概念</h2>
+<p>定义：在一个新的对象里面使用一些已有的对象，使之成为新对象的一部分；新的对象通过向这些对象的委派达到复用这些对象的目的。</p>
+<p>应首先使用合成/聚合，合成/聚合则使系统灵活，其次才考虑继承，达到复用的目的。而使用继承时，要严格遵循里氏代换原则。有效地使用继承会有助于对问题的理解，降低复杂度，而滥用继承会增加系统构建、维护时的难度及系统的复杂度。</p>
+<p>如果两个类是“Has-a”关系应使用合成、聚合，如果是“Is-a”关系可使用继承。&#8221;Is-A&#8221;是严格的分类学意义上定义，意思是一个类是另一个类的&#8221;一种&#8221;。而&#8221;Has-A&#8221;则不同，它表示某一个角色具有某一项责任。</p>
+<h2>4.2什么是合成？什么是聚合？</h2>
+<p>合成（Composition）和聚合（Aggregation）都是关联（Association）的特殊种类。</p>
+<p>聚合表示整体和部分的关系，表示“拥有”。如奔驰S360汽车，对奔驰S360引擎、奔驰S360轮胎的关系是聚合关系，离开了奔驰S360汽车，引擎、轮胎就失去了存在的意义。在设计中, 聚合不应该频繁出现，这样会增大设计的耦合度。</p>
+<p>合成则是一种更强的“拥有”，部分和整体的生命周期一样。合成的新的对象完全支配其组成部分，包括它们的创建和湮灭等。一个合成关系的成分对象是不能与另一个合成关系共享的。</p>
+<p>换句话说，合成是值的聚合（Aggregation by Value），而一般说的聚合是引用的聚合（Aggregation by Reference）。</p>
+<p>明白了合成和聚合关系，再来理解合成/聚合原则应该就清楚了，要避免在系统设计中出现，一个类的继承层次超过3层，则需考虑重构代码，或者重新设计结构。当然最好的办法就是考虑使用合成/聚合原则。</p>
+<h2>4.3通过合成/聚合的优缺点</h2>
+<p>优点：</p>
+<p>1) 新对象存取成分对象的唯一方法是通过成分对象的接口。</p>
+<p>2) 这种复用是黑箱复用，因为成分对象的内部细节是新对象所看不见的。</p>
+<p>3) 这种复用支持包装。</p>
+<p>4) 这种复用所需的依赖较少。</p>
+<p>5) 每一个新的类可以将焦点集中在一个任务上。</p>
+<p>6) 这种复用可以在运行时间内动态进行，新对象可以动态的引用与成分对象类型相同的对象。</p>
+<p>7) 作为复用手段可以应用到几乎任何环境中去。</p>
+<p>缺点:就是系统中会有较多的对象需要管理。</p>
+<h2>4.4通过继承来进行复用的优缺点</h2>
+<p>优点：</p>
+<p>新的实现较为容易，因为超类的大部分功能可以通过继承的关系自动进入子类。</p>
+<p>修改和扩展继承而来的实现较为容易。</p>
+<p>缺点：</p>
+<p>继承复用破坏包装，因为继承将超类的实现细节暴露给子类。由于超类的内部细节常常是对于子类透明的，所以这种复用是透明的复用，又称“白箱”复用。</p>
+<p>如果超类发生改变，那么子类的实现也不得不发生改变。</p>
+<p>从超类继承而来的实现是静态的，不可能在运行时间内发生改变，没有足够的灵活性。</p>
+<p>继承只能在有限的环境中使用。</p>
+<h1>五、 迪米特法则（Law of Demeter，LoD）</h1>
+<h2>5.1概述</h2>
+<p>定义：一个软件实体应当尽可能少的与其他实体发生相互作用。</p>
+<p>这样，当一个模块修改时，就会尽量少的影响其他的模块。扩展会相对容易。</p>
+<p>这是对软件实体之间通信的限制。它要求限制软件实体之间通信的宽度和深度。</p>
+<h2>5.2迪米特法则的其他表述：</h2>
+<p>1）只与你直接的朋友们通信。</p>
+<p>2）不要跟“陌生人”说话。</p>
+<p>3）每一个软件单位对其他的单位都只有最少的知识，而且局限于那些与本单位密切相关的软件单位。</p>
+<h2>5.3狭义的迪米特法则</h2>
+<p>如果两个类不必彼此直接通信，那么这两个类就不应当发生直接的相互作用。如果其中的一个类需要调用另一个类的某一个方法的话，可以通过第三者转发这个调用。</p>
+<p>朋友圈的确定</p>
+<p>“朋友”条件：</p>
+<p>1）当前对象本身（this）</p>
+<p>2）以参量形式传入到当前对象方法中的对象</p>
+<p>3）当前对象的实例变量直接引用的对象</p>
+<p>4）当前对象的实例变量如果是一个聚集，那么聚集中的元素也都是朋友</p>
+<p>5）当前对象所创建的对象</p>
+<p>任何一个对象，如果满足上面的条件之一，就是当前对象的“朋友”；否则就是“陌生人”。</p>
+<p>缺点：会在系统里造出大量的小方法，散落在系统的各个角落。</p>
+<p>与依赖倒转原则互补使用</p>
+<h2>5.4狭义的迪米特法则的缺点：</h2>
+<p>在系统里造出大量的小方法，这些方法仅仅是传递间接的调用，与系统的商务逻辑无关。</p>
+<p>遵循类之间的迪米特法则会是一个系统的局部设计简化，因为每一个局部都不会和远距离的对象有直接的关联。但是，这也会造成系统的不同模块之间的通信效率降低，也会使系统的不同模块之间不容易协调。</p>
+<h2>5.5迪米特法则与设计模式</h2>
+<p>门面（外观）模式和调停者（中介者）模式实际上就是迪米特法则的具体应用。</p>
+<h2>5.6广义的迪米特法则</h2>
+<p>迪米特法则的主要用意是控制信息的过载。在将迪米特法则运用到系统设计中时，要注意下面的几点：</p>
+<p>1）在类的划分上，应当创建有弱耦合的类。</p>
+<p>2）在类的结构设计上，每一个类都应当尽量降低成员的访问权限。</p>
+<p>3）在类的设计上，只要有可能，一个类应当设计成不变类。</p>
+<p>4）在对其他类的引用上，一个对象对其对象的引用应当降到最低。</p>
+<h2>5.7广义迪米特法则在类的设计上的体现</h2>
+<p>1）优先考虑将一个类设置成不变类</p>
+<p>2）尽量降低一个类的访问权限</p>
+<p>3）谨慎使用Serializable</p>
+<p>4）尽量降低成员的访问权限</p>
+<p>5）取代C Struct</p>
+<p>迪米特法则又叫作最少知识原则（Least Knowledge Principle或简写为LKP），就是说一个对象应当对其他对象有尽可能少的了解。</p>
+<h2>5.8如何实现迪米特法则</h2>
+<p>迪米特法则的主要用意是控制信息的过载，在将其运用到系统设计中应注意以下几点：</p>
+<p>1) 在类的划分上，应当创建有弱耦合的类。类之间的耦合越弱，就越有利于复用。</p>
+<p>2) 在类的结构设计上，每一个类都应当尽量降低成员的访问权限。一个类不应当public自己的属性，而应当提供取值和赋值的方法让外界间接访问自己的属性。</p>
+<p>3) 在类的设计上，只要有可能，一个类应当设计成不变类。</p>
+<p>4) 在对其它对象的引用上，一个类对其它对象的引用应该降到最低。</p>
+<h1>六、 接口隔离原则（interface separate principle, ISP）</h1>
+<h2>6.1概念</h2>
+<p>接口隔离原则：使用多个专门的接口比使用单一的总接口要好。也就是说，一个类对另外一个类的依赖性应当是建立在最小的接口上。</p>
+<p>这里的&#8221;接口&#8221;往往有两种不同的含义：一种是指一个类型所具有的方法特征的集合，仅仅是一种逻辑上的抽象；另外一种是指某种语言具体的&#8221;接口&#8221;定义，有严格的定义和结构。比如c# 语言里面的Interface结构。对于这两种不同的含义，ISP的表达方式以及含义都有所不同。(上面说的一个类型，可以理解成一个类，我们定义了一个类，也就是定义了一种新的类型)</p>
+<p>当我们把&#8221;接口&#8221;理解成一个类所提供的所有方法的特征集合的时候，这就是一种逻辑上的概念。接口的划分就直接带来类型的划分。这里，我们可以把接口理解成角色，一个接口就只是代表一个角色，每个角色都有它特定的一个接口，这里的这个原则可以叫做&#8221;角色隔离原则&#8221;。</p>
+<p>如果把&#8221;接口&#8221;理解成狭义的特定语言的接口，那么ISP表达的意思是说，对不同的客户端，同一个角色提供宽窄不同的接口，也就是定制服务，个性化服务。就是仅仅提供客户端需要的行为，客户端不需要的行为则隐藏起来。</p>
+<p>应当为客户端提供尽可能小的单独的接口，而不要提供大的总接口。</p>
+<p>这也是对软件实体之间通信的限制。但它限制的只是通信的宽度，就是说通信要尽可能的窄。</p>
+<p>遵循迪米特法则和接口隔离原则，会使一个软件系统功能扩展时，修改的压力不会传到别的对象那里。</p>
+<h2>6.2如何实现接口隔离原则</h2>
+<p>不应该强迫用户依赖于他们不用的方法。</p>
+<p>1、利用委托分离接口。</p>
+<p>2、利用多继承分离接口。</p>
+<p>&nbsp;</p>
+<p>转自：<a href="http://dev.csdn.net/author/hotmailmsn/67b483ad2819482682f1cd2f542bcd67.html" target="_blank">http://dev.csdn.net/author/hotmailmsn/67b483ad2819482682f1cd2f542bcd67.html</a></p>
+<div style="clear:both; margin-top:5px; margin-bottom:5px;"></div><div style="float:left"><!-- JiaThis Button BEGIN -->
+
+<div id="ckepop">
+
+	<span class="jiathis_txt">分享到：</span>
+
+	<a class="jiathis_button_tsina">新浪微博</a>
+
+	<a class="jiathis_button_tqq">腾讯微博</a>
+
+	<a class="jiathis_button_renren">人人网</a>
+
+	<a class="jiathis_button_qzone">QQ空间</a>
+
+	<a class="jiathis_button_evernote">EverNote</a>
+
+	<a href="http://www.jiathis.com/share?uid=1583716" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+
+	<a class="jiathis_counter_style"></a>
+
+</div>
+
+<script type="text/javascript">var jiathis_config = {data_track_clickback:true};</script>
+
+<script type="text/javascript" src="http://v2.jiathis.com/code/jia.js?uid=1583716" charset="utf-8"></script>
+
+<!-- JiaThis Button END --></div><div style="clear:both; margin-top:5px; margin-bottom:5px;"></div>             </div>
+
+     </div>
+
+     <dl class="post_meta">
+
+        <dt class="meta_date">2011</dt>
+
+         <dd class="post_date">10<span>/22</span></dd>
+
+                <dt>分类：</dt>
+
+         <dd><a href="http://desheng.me/category/iphone/" title="查看 iPhone 的全部文章" rel="category tag">iPhone</a><br /><a href="http://desheng.me/category/php/" title="查看 PHP 的全部文章" rel="category tag">PHP</a><br /><a href="http://desheng.me/category/%e6%88%90%e9%95%bf/" title="查看 成长 的全部文章" rel="category tag">成长</a></dd>
+
+                 <dt>TAGS</dt><dd><a href="http://desheng.me/tag/%e8%ae%be%e8%ae%a1%e5%8e%9f%e5%88%99/" rel="tag">设计原则</a><br /><a href="http://desheng.me/tag/%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1/" rel="tag">面向对象</a></dd>                <dt class="meta_comment"><a href="http://desheng.me/2011/10/22/%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1%e7%9a%84%e8%ae%be%e8%ae%a1%e5%8e%9f%e5%88%99/#respond" title="面向对象的设计原则 上的评论">抢沙发</a></dt>
+
+             </dl>
+
+    </div>
+
+
+
+
+
+    <div id="comments_wrapper">
+
+     <div id="comments">
+
+
+
+
+
+
+
+
+
+
+
+ <div id="comment_header" class="clearfix">
+
+
+
+  <ul id="comment_header_left">
+
+   <li id="add_comment"><a href="#respond">抢沙发</a></li>
+
+   <li id="comment_feed"><a href="http://desheng.me/comments/feed/" title="评论RSS">评论RSS</a></li>
+
+  </ul>
+
+
+
+  <ul id="comment_header_right">
+
+    <li id="trackback_switch"><a href="javascript:void(0);">引用通告 ( 0 )</a></li>
+
+    <li id="comment_switch" class="comment_switch_active"><a href="javascript:void(0);">评论 ( 0 )</a></li>
+
+  </ul>
+
+
+
+
+
+ </div><!-- comment_header END -->
+
+
+
+
+
+<div id="comment_area">
+
+<!-- start commnet -->
+
+<ol class="commentlist">
+
+	<li class="comment"><div class="comment-content"><p>还没有评论</p></div></li>
+
+	</ol>
+
+<!-- comments END -->
+
+
+
+
+
+</div><!-- #comment-list END -->
+
+
+
+
+
+<div id="trackback_area">
+
+<!-- start trackback -->
+
+
+
+<div id="trackback_url_wrapper">
+
+<label for="trackback_url">引用网址</label>
+
+<input type="text" name="trackback_url" id="trackback_url" size="60" value="http://desheng.me/2011/10/22/%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1%e7%9a%84%e8%ae%be%e8%ae%a1%e5%8e%9f%e5%88%99/trackback/" readonly="readonly" onfocus="this.select()" />
+
+</div>
+
+
+
+<ol class="commentlist">
+
+
+
+<li class="comment"><div class="comment-content"><p>还没有引用通告。</p></div></li>
+
+</ol>
+
+<!-- trackback end -->
+
+</div><!-- #trackbacklist END -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<fieldset class="comment_form_wrapper" id="respond">
+
+
+
+<div id="cancel_comment_reply"><a rel="nofollow" id="cancel-comment-reply-link" href="/2011/10/22/%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1%e7%9a%84%e8%ae%be%e8%ae%a1%e5%8e%9f%e5%88%99/#respond" style="display:none;">点击这里取消回复。</a></div>
+
+
+
+<form action="http://desheng.me/wp-comments-post.php" method="post" id="commentform">
+
+
+
+<div id="guest_info">
+
+ <div id="guest_name"><label for="author"><span>大名</span></label><input type="text" name="author" id="author" value="" size="22" tabindex="1"  /></div>
+
+ <div id="guest_email"><label for="email"><span>E-MAIL</span> - 不会被公布-</label><input type="text" name="email" id="email" value="" size="22" tabindex="2"  /></div>
+
+ <div id="guest_url"><label for="url"><span>网站</span></label><input type="text" name="url" id="url" value="" size="22" tabindex="3" /></div>
+
+ </div>
+
+
+
+<div id="comment_textarea">
+
+ <textarea name="comment" id="comment" cols="50" rows="10" tabindex="4"></textarea>
+
+</div>
+
+
+
+
+
+<div id="submit_comment_wrapper">
+
+ <p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="909256bc9e" /></p> <input name="submit" type="submit" id="submit_comment" tabindex="5" value="提交评论" title="提交评论" alt="提交评论" />
+
+</div>
+
+
+
+<div id="input_hidden_field">
+
+<input type='hidden' name='comment_post_ID' value='200' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</div>
+
+
+
+</form>
+
+</fieldset><!-- #comment-form-area END -->
+
+
+
+
+
+</div><!-- #comment end -->    </div>
+
+
+
+        <div id="previous_next_post" class="clearfix">
+
+     <p id="previous_post"><a href="http://desheng.me/2011/09/01/20-30%e5%b2%81-%e6%88%91%e6%8b%bf%e5%8d%81%e5%b9%b4%e5%81%9a%e4%bb%80%e4%b9%88/" rel="prev">20 &#8211; 30岁, 我拿十年做什么?</a></p>
+
+     <p id="next_post"><a href="http://desheng.me/2011/10/27/inside_facebook/" rel="next">《从零到百亿》读书笔记</a></p>
+
+    </div>
+
+    
+
+   </div><!-- #left_col end -->
+
+
+
+   <div id="right_col">
+
+  
+
+  
+
+    <div class="side_box" id="search_area_top">
+
+   <div id="search_area" class="clearfix">
+
+        <form action="http://www.google.com/cse" method="get" id="searchform">
+
+     <div><input type="text" value="Google Search" name="q" id="search_input" onfocus="this.value=''; changefc('white');" /></div>
+
+     <div><input type="image" src="http://desheng.me/wp-content/themes/monochrome/img/search_button.gif" name="sa" alt="搜索本博客" title="搜索本博客" id="search_button" />
+
+          <input type="hidden" name="cx" value="008605441473153778614:kn4bnjs_ag0" />
+
+          <input type="hidden" name="ie" value="UTF-8" />
+
+     </div>
+
+    </form>
+
+       </div>
+
+      <div id="tag_list" class="clearfix">
+
+    <a href="javascript:void(0);" class="search_tag">标签列表</a>
+
+    <ul class='wp-tag-cloud'>
+	<li><a href='http://desheng.me/tag/viewdidunload/' class='tag-link-25' title='1 个话题' style='font-size: 11px;'>viewDidUnload</a></li>
+	<li><a href='http://desheng.me/tag/nsoperationqueue/' class='tag-link-26' title='1 个话题' style='font-size: 11px;'>NSOperationQueue</a></li>
+	<li><a href='http://desheng.me/tag/%e4%bc%98%e5%8c%96/' class='tag-link-24' title='1 个话题' style='font-size: 11px;'>优化</a></li>
+	<li><a href='http://desheng.me/tag/tableview/' class='tag-link-23' title='1 个话题' style='font-size: 11px;'>tableview</a></li>
+	<li><a href='http://desheng.me/tag/release/' class='tag-link-18' title='1 个话题' style='font-size: 11px;'>release</a></li>
+	<li><a href='http://desheng.me/tag/optimize/' class='tag-link-22' title='1 个话题' style='font-size: 11px;'>Optimize</a></li>
+	<li><a href='http://desheng.me/tag/cancelalloperations/' class='tag-link-27' title='1 个话题' style='font-size: 11px;'>cancelAllOperations</a></li>
+	<li><a href='http://desheng.me/tag/%e7%bc%96%e7%a0%81%e8%a7%84%e8%8c%83/' class='tag-link-28' title='1 个话题' style='font-size: 11px;'>编码规范</a></li>
+	<li><a href='http://desheng.me/tag/%e9%9d%a2%e5%90%91%e5%af%b9%e8%b1%a1/' class='tag-link-36' title='1 个话题' style='font-size: 11px;'>面向对象</a></li>
+	<li><a href='http://desheng.me/tag/%e8%ae%be%e8%ae%a1%e5%8e%9f%e5%88%99/' class='tag-link-37' title='1 个话题' style='font-size: 11px;'>设计原则</a></li>
+	<li><a href='http://desheng.me/tag/%e5%b5%8c%e5%a5%97/' class='tag-link-33' title='1 个话题' style='font-size: 11px;'>嵌套</a></li>
+	<li><a href='http://desheng.me/tag/navigationcontroller/' class='tag-link-32' title='1 个话题' style='font-size: 11px;'>NavigationController</a></li>
+	<li><a href='http://desheng.me/tag/guideline/' class='tag-link-30' title='1 个话题' style='font-size: 11px;'>Guideline</a></li>
+	<li><a href='http://desheng.me/tag/tabbarcontroller/' class='tag-link-31' title='1 个话题' style='font-size: 11px;'>TabBarController</a></li>
+	<li><a href='http://desheng.me/tag/iboutlets/' class='tag-link-17' title='1 个话题' style='font-size: 11px;'>IBOutlets</a></li>
+	<li><a href='http://desheng.me/tag/loadnibnamed/' class='tag-link-16' title='1 个话题' style='font-size: 11px;'>loadNibNamed</a></li>
+	<li><a href='http://desheng.me/tag/%e5%9f%ba%e7%a1%80/' class='tag-link-7' title='1 个话题' style='font-size: 11px;'>基础</a></li>
+	<li><a href='http://desheng.me/tag/uitableviewcell/' class='tag-link-9' title='1 个话题' style='font-size: 11px;'>UITableViewCell</a></li>
+	<li><a href='http://desheng.me/tag/app-store/' class='tag-link-20' title='2 个话题' style='font-size: 11px;'>app store</a></li>
+	<li><a href='http://desheng.me/tag/xcode4/' class='tag-link-19' title='2 个话题' style='font-size: 11px;'>xcode4</a></li>
+	<li><a href='http://desheng.me/tag/php/' class='tag-link-4' title='2 个话题' style='font-size: 11px;'>PHP</a></li>
+	<li><a href='http://desheng.me/tag/%e6%8f%90%e4%ba%a4/' class='tag-link-21' title='2 个话题' style='font-size: 11px;'>提交</a></li>
+	<li><a href='http://desheng.me/tag/asihttprequest/' class='tag-link-8' title='2 个话题' style='font-size: 11px;'>ASIHttpRequest</a></li>
+	<li><a href='http://desheng.me/tag/facebook/' class='tag-link-63' title='2 个话题' style='font-size: 11px;'>Facebook</a></li>
+	<li><a href='http://desheng.me/tag/content-disposition/' class='tag-link-73' title='2 个话题' style='font-size: 11px;'>Content-Disposition</a></li>
+	<li><a href='http://desheng.me/tag/%e9%98%bf%e9%87%8c%e4%ba%91/' class='tag-link-70' title='2 个话题' style='font-size: 11px;'>阿里云</a></li>
+	<li><a href='http://desheng.me/tag/oss/' class='tag-link-69' title='2 个话题' style='font-size: 11px;'>OSS</a></li>
+	<li><a href='http://desheng.me/tag/objective-c/' class='tag-link-29' title='2 个话题' style='font-size: 11px;'>objective-c</a></li>
+	<li><a href='http://desheng.me/tag/iphone/' class='tag-link-3' title='7 个话题' style='font-size: 11px;'>iPhone</a></li>
+	<li><a href='http://desheng.me/tag/ios/' class='tag-link-15' title='13 个话题' style='font-size: 11px;'>ios</a></li>
+</ul>
+   </div>
+
+     </div>
+
+  
+
+  <div class="side_box" id="categories-3">
+<h3>分类目录</h3>
+		<ul>
+	<li class="cat-item cat-item-3"><a href="http://desheng.me/category/iphone/" title="查看 iPhone 下的所有文章">iPhone</a> (19)
+</li>
+	<li class="cat-item cat-item-13"><a href="http://desheng.me/category/javascript/" title="查看 Javascript 下的所有文章">Javascript</a> (2)
+</li>
+	<li class="cat-item cat-item-4"><a href="http://desheng.me/category/php/" title="查看 PHP 下的所有文章">PHP</a> (8)
+</li>
+	<li class="cat-item cat-item-34"><a href="http://desheng.me/category/%e6%88%90%e9%95%bf/" title="查看 成长 下的所有文章">成长</a> (6)
+</li>
+		</ul>
+</div>
+		<div class="side_box" id="recent-posts-4">
+		<h3>最近文章</h3>
+		<ul>
+				<li><a href="http://desheng.me/2013/11/13/%e4%b8%8b%e8%bd%bd%e6%96%87%e4%bb%b6%e6%97%b6%e8%ae%be%e7%bd%ae%e6%96%87%e4%bb%b6%e5%90%8d%e7%9a%84%e6%96%b9%e6%b3%95/" title="阿里云存储中，下载文件时设置文件名的方法">阿里云存储中，下载文件时设置文件名的方法</a></li>
+				<li><a href="http://desheng.me/2013/09/02/%e4%bb%80%e4%b9%88%e6%98%af%e7%a4%be%e4%bc%9a%e5%8c%96%e6%8b%9b%e8%81%98/" title="什么是社会化招聘">什么是社会化招聘</a></li>
+				<li><a href="http://desheng.me/2013/08/03/%e4%bd%bf%e7%94%a8http%e5%a4%b4%e8%ae%be%e7%bd%ae%e6%96%87%e4%bb%b6%e4%b8%8b%e8%bd%bd%e6%97%b6%e7%9a%84%e6%96%87%e4%bb%b6%e5%90%8d/" title="使用HTTP header设置文件下载时的文件名">使用HTTP header设置文件下载时的文件名</a></li>
+				<li><a href="http://desheng.me/2013/08/02/thinkphpngingx%e5%ae%9e%e7%8e%b0%e4%ba%8c%e7%ba%a7%e7%9b%ae%e5%bd%95/" title="ThinkPHP+Ngingx实现二级目录">ThinkPHP+Ngingx实现二级目录</a></li>
+				<li><a href="http://desheng.me/2012/11/22/facebook-engineerings-notes-under-the-hood-integrating-standalone-mobile-app-features-into-facebook-for-ios/" title="Facebook Engineering&#8217;s Notes &#8220;Under the hood: Integrating standalone mobile app features into Facebook for iOS&#8221;">Facebook Engineering&#8217;s Notes &#8220;Under the hood: Integrating standalone mobile app features into Facebook for iOS&#8221;</a></li>
+				</ul>
+		</div>
+<div class="side_box" id="linkcat-2">
+<h3>友情链接</h3>
+
+	<ul class='xoxo blogroll'>
+<li><a href="http://dangpu.sinaapp.com" title="高质量iOS学习资源" target="_blank">知识当铺</a>
+高质量iOS学习资源</li>
+
+	</ul>
+</div>
+
+
+
+  <iframe width="100%" height="666" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?width=0&height=666&fansRow=2&ptype=1&speed=0&skin=10&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1696935602&verifier=ea95cb6d"></iframe>
+
+</div><!-- #right_col end -->
+
+  </div><!-- #contents end -->
+
+
+
+  <div id="footer">
+
+   <ul id="copyright">
+
+    <li style="background:none;">
+
+                Copyright &copy;&nbsp; 2010-2013     &nbsp;<a href="http://desheng.me/">一升</a></li>
+
+    <li><a href="http://www.mono-lab.net/">Theme designed by mono-lab</a></li>
+
+    <li><a href="http://wordpress.org/">Powered by WordPress</a></li>
+
+   </ul>
+
+  </div>
+
+ 
+
+</div><!-- #wrapper end -->
+
+
+
+<div id="return_top">
+
+ <a href="#wrapper">&nbsp;</a>
+
+</div>
+
+
+
+<div style="display:none"><script src="http://s17.cnzz.com/stat.php?id=2448128&web_id=2448128" language="JavaScript"></script></div><div style="display:none"><a href="http://blog.printf.com.cn/" title="普人特福的博客">普人特福的博客</a><a href="http://blog.printf.com.cn/" title="cnzz&51la for wordpress,cnzz for wordpress,51la for wordpress">cnzz&51la for wordpress,cnzz for wordpress,51la for wordpress</a></div>	
+<!-- START: Syntax Highlighter ComPress -->
+<script type="text/javascript">
+    SyntaxHighlighter.autoloader(
+        'applescript			http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushAppleScript.js',
+        'actionscript3 as3		http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushAS3.js',
+        'bash shell				http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushBash.js',
+        'coldfusion cf			http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushColdFusion.js',
+        'cpp c					http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushCpp.js',
+        'c# c-sharp csharp		http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushCSharp.js',
+        'css					http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushCss.js',
+        'delphi pascal pas		http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushDelphi.js',
+        'diff patch			    http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushDiff.js',
+        'erl erlang				http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushErlang.js',
+        'groovy					http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushGroovy.js',
+        'java					http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushJava.js',
+        'jfx javafx				http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushJavaFX.js',
+        'js jscript javascript	http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushJScript.js',
+        'perl pl				http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushPerl.js',
+        'php					http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushPhp.js',
+        'text plain				http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushPlain.js',
+        'powershell ps          http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushPowerShell.js',
+        'py python				http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushPython.js',
+        'ruby rails ror rb		http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushRuby.js',
+        'sass scss              http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushSass.js',
+        'scala					http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushScala.js',
+        'sql					http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushSql.js',
+        'vb vbnet				http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushVb.js',
+        'xml xhtml xslt html	http://desheng.me/wp-content/plugins/syntax-highlighter-compress/scripts/shBrushXml.js'
+    );
+                    SyntaxHighlighter.defaults['toolbar'] = false;     SyntaxHighlighter.defaults['tab-size'] = 4;
+    SyntaxHighlighter.all();
+</script>
+<!-- END: Syntax Highlighter ComPress -->
+
+	
+
+<script type="text/javascript">
+
+
+
+  var _gaq = _gaq || [];
+
+  _gaq.push(['_setAccount', 'UA-18590971-1']);
+
+  _gaq.push(['_setDomainName', '.desheng.me']);
+
+  _gaq.push(['_trackPageview']);
+
+
+
+  (function() {
+
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+
+  })();
+
+
+
+</script>
+
+
+
+<!-- 量子统计 -->
+
+<script type="text/javascript" src="http://js.tongji.linezing.com/2097612/tongji.js" charset="UTF-8"></script><noscript><a href="http://www.linezing.com"><img src="http://img.tongji.linezing.com/2097612/tongji.gif"/></a></noscript>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+SVN服务器的安装和配置
+
+一、安装Subversion
+#yum install subversion
+
+
+二，基本的SVN服务器配置
+1，新建一个目录用于存储SVN所有文件
+# mkdir /home/svn
+
+2，新建一个版本仓库
+mkdir -p /data/svn/repos
+svnadmin create /data/svn/repos
+
+3，修改配置文件
+# vi /data/svn/repos/conf/svnserve.conf
+
+[general]
+anon-access = none
+auth-access = write
+password-db = passwd
+authz-db = authz
+realm = /opt/svn/repos
+
+说明：
+anon-access = none #不允许匿名用户访问
+auth-access = write #通过验证的用户可以读和写
+password-db = passwd #用户保存文件
+authz-db = authz #权限管理文件
+realm = /data/svn/repos #仓库名称
+
+
+
+修改密码：
+# vi /data/svn/repos/conf/passwd
+
+修改用户访问策略:
+# vi /data/svn/repos/conf/authz
+
+最后一行的* =表示，除了上面设置了权限的用户组之外，其他任何人都被禁止访问本目录。这个很重要，一定要加上！
+
+启动SVN服务器：
+# svnserve -d -r /data/svn/repos
+
+
+启动后可以用 svn://host/repos  这样的svn协议来访问，验证服务已OK
+
+
+设置svn开机自启动
+    编辑文件 /etc/sysconfig/rc.local
+    添加一行   svnserve -d -r /var/svn/repos
+
+
+设置勾子 自动更新，必须先手动checkout，因为要输入密码
+
+# vi post-commit
+
+export LANG=en_US.UTF-8
+SVN=/usr/bin/svn
+WEB=/data/www2/zgtcb
+$SVN update $WEB --username majianglin --password h-.c3aV2 --no-auth-cache
+chown -R www:www $WEB
+
+
+设置勾子，执行远程服务器上的SVN更新
+
+1. 设置不需要密码的SSH登录
+
+SSH自动登录，不需要验证
+
+A为本地主机(即用于控制其他主机的机器) ; 
+B为远程主机(即被控制的机器Server), 假如ip为172.24.253.2 ; 
+
+在A上的命令:
+ 代码如下	复制代码
+# ssh-keygen -t rsa (连续三次回车,即在本地生成了公钥和私钥,不设置密码) 
+# ssh root@172.24.253.2 "mkdir .ssh;chmod 0700 .ssh" (需要输入密码) 
+# scp ~/.ssh/id_rsa.pub root@172.24.253.2:.ssh/id_rsa.pub (需要输入密码)
+
+在B上的命令:
+ 代码如下	复制代码
+# touch /root/.ssh/authorized_keys2 (如果已经存在这个文件, 跳过这条) 
+# cat /root/.ssh/id_rsa.pub  >> /root/.ssh/authorized_keys2 (将id_rsa.pub的内容追加到 authorized_keys2 中)
+
+回到A机器:
+ 代码如下	复制代码
+# ssh root@172.24.253.2 (不需要密码, 登录成功)
+
+2. 设置SVN服务器上的勾子，这个勾子只执行1句话，就是登录远程服务器，然后执行一个远程脚本
+
+# vi post-commit
+
+/usr/bin/ssh -l root  182.92.184.102 "/bin/bash /root/svn-update.sh"
+
+
+所有的脚本要注意添加执行权限，以及正确的用户和组权限
