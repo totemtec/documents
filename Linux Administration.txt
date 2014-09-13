@@ -59,9 +59,9 @@ scp localfile username@server:path
 scp ~/tomcat.tar.gz root@192.168.0.2:~/upload/
 
 压缩文件
-tar -cvfz archieve.tar.gz 目录或文件 目录或文件 ......
+tar cvfz archieve.tar.gz 目录或文件 目录或文件 ......
 解压缩文件
-tar -xvf archieve.tar.gz
+tar xvf archieve.tar.gz
 
 tar命令常用参数：
 -c表示创建压缩文件
