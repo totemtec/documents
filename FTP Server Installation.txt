@@ -1,0 +1,51 @@
+FTP 服务器安装
+
+抄自阿里云
+
+一、Redhat/CentOS安装vsftp软件
+1.更新yum源
+首先需要更新系统的yum源，便捷工具下载地址：http://help.aliyun.com/manual?spm=0.0.0.0.zJ3dBU&helpId=1692
+2.安装vsftp
+使用yum命令安装vsftp
+#yum install vsftpd -y
+3.添加ftp帐号和目录
+先检查一下nologin的位置，通常在/usr/sbin/nologin或者/sbin/nologin下。
+使用下面的命令创建帐户，该命令指定了/alidata/www/wwwroot为用户pwftp的家目录，您可以自己定义帐户名和目录：
+#useradd -d /alidata/www/wwwroot -s /sbin/nologin pwftp
+修改该帐户密码:
+#passwd pwftp
+修改指定目录的权限
+#chown -R pwftp.pwftp /alidata/www/wwwroot
+4.配置vsftp
+编辑vsftp配置文件，命令如下：
+#vi /etc/vsftpd/vsftpd.conf
+将配置文件中”anonymous_enable=YES “改为 “anonymous_enable=NO”
+取消如下配置前的注释符号：
+local_enable=YES
+write_enable=YES
+chroot_local_user=YES
+保存修改，按ESC键，输入：wq
+5.修改shell配置
+vi编辑/etc/shells，如果该文件里没有/usr/sbin/nologin或者/sbin/nologin（具体看当前系统配置）则追加进去
+6.启动vsftp服务并测试登录
+使用命令启动vsftp服务：
+#service vsftpd start
+然后用帐号pwftp测试下是否可以登陆ftp。目录是/alidata/www/wwwroot。
+
+设置开机启动
+#chkconfig vsftpd on
+
+如果端口没开需要打开防火墙21端口
+如果500错误了，需要
+
+
+# vi/etc/selinux/config
+SELINUX=enforcing
+替换成
+SELINUX=disabled
+
+重启机器后，就可以登录了
+$ ftp ftp://username@192.168.0.1
+
+
+

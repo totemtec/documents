@@ -35,6 +35,22 @@ service network restart
 passwd 用户名
 
 
+查看硬盘状况
+# df -lh
+
+查看内存状况
+# free
+
+查看CPU
+#cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c
+
+查看系统内核
+#uname -a
+
+查看系统信息
+#cat /etc/issue
+
+
 为用户添加sudo权限
 修改配置文件：/etc/sudoers
 #################### CONTENT TEXT BEGIN ####################
