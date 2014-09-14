@@ -58,7 +58,7 @@ realm = /data/svn/repos #仓库名称
 export LANG=en_US.UTF-8
 SVN=/usr/bin/svn
 WEB=/data/www2/zgtcb
-$SVN update $WEB --username majianglin --password h-.c3aV2 --no-auth-cache
+$SVN update $WEB --username majianglin --password xxxxxxxx --no-auth-cache
 chown -R www:www $WEB
 
 
@@ -90,7 +90,7 @@ B为远程主机(即被控制的机器Server), 假如ip为172.24.253.2 ;
 
 # vi post-commit
 
-/usr/bin/ssh -l root  182.92.184.102 "/bin/bash /root/svn-update.sh"
+/usr/bin/ssh -l root  HOST_IP "/bin/bash /root/svn-update.sh"
 
 
 所有的脚本要注意添加执行权限，以及正确的用户和组权限
