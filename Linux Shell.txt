@@ -1,0 +1,2 @@
+转换文本文件编码
+$ iconv -f GBK -t UTF-8 inputfilename > outputfilename

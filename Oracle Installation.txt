@@ -16,7 +16,7 @@
 
 1.依赖性准备
 
-    #yum install make gcc binutils gcc-c++ compat-libstdc++ elfutils-libelf-devel elfutils-libelf-devel-static ksh libaio libaio-devel numactl-devel sysstat unixODBC unixODBC-devel pcre-devel glibc.i686
+    # yum install make gcc binutils gcc-c++ compat-libstdc++ elfutils-libelf-devel elfutils-libelf-devel-static ksh libaio libaio-devel numactl-devel sysstat unixODBC unixODBC-devel pcre-devel glibc.i686
 
 2.用户和组准备
 
@@ -273,3 +273,18 @@ exit $?
 
     #开头的命令  说明需要使用root用户执行
     $开头的命令  说明需要用oracle用户执行
+
+
+Oracle启动问题
+Java提示：Could not get JDBC Connection; nested exception is org.apache.commons.dbcp.SQLNestedException: Cannot create PoolableConnectionFactory (IO 错误: The Network Adapter could not establish the connection
+Oracle提示：
+ERROR:
+ORA-01034: ORACLE not available
+ORA-27101: shared memory realm does not exist
+Linux-x86_64 Error: 2: No such file or directory
+
+解决办法：
+使用Oracle用户执行命令
+
+$ sqlplus / as sysdba
+SQL> startup
