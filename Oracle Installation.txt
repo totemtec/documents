@@ -200,6 +200,8 @@ PATH=$PATH:$ORACLE_HOME/bin
         (PROGRAM = extproc)
         )
     )
+
+
 3.执行`$lsnrctl reload`重启监听
 
 4.编辑 `/etc/oratab` 把 `orcl11g:/export/servers/oracle/11.2.0:N`的‘N’，改为‘Y’，这样就可以通过`dbstart`启动此实例，也可以通过`dbshut`关闭此实例了。
@@ -288,3 +290,21 @@ Linux-x86_64 Error: 2: No such file or directory
 
 $ sqlplus / as sysdba
 SQL> startup
+
+
+
+
+
+Oracle表死锁的问题
+
+# sqlplus /nolog
+SQL> conn sys/sys as sysdba;
+
+先查询锁定记录
+
+SQL> SELECT s.sid, s.serial# FROM v$locked_object lo, dba_objects ao, v$session s WHERE ao.object_id = lo.object_id AND lo.session_id = s.sid;
+
+然后删除锁定记录
+SQL> ALTER system KILL session 'SID,serial#';  
+其中 SID填写上文中查到的SID数值，serial#填写serial#列的数值如：
+ALTER system KILL session '214,23456'; 
