@@ -116,7 +116,7 @@ try
       {"name": "Icon-60@3x",       "size":180},	//iPhone 6 Plus (@3x)
       {"name": "Icon-60@2x",       "size":120},	//iPhone 6 and iPhone 5 (@2x)
       {"name": "Icon-76@2x",       "size":152},	//iPad and iPad mini (@2x)
-      {"name": "Icon-76@1x",       "size":76},	//iPad 2 and iPad mini (@1x)
+      {"name": "Icon-76",          "size":76},	//iPad 2 and iPad mini (@1x)
       
       {"name": "Icon",             "size":57},	//iPhone Non-Retina (iOS 6.1 and Prior)
       {"name": "Icon@2x",          "size":114},	//iPhone Retina (iOS 6.1 and Prior)
