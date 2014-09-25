@@ -241,6 +241,7 @@ Completing Database Creation
 
 ## 自启动脚本
 
+
 加入 /etc/init.d/oracle 文件：
 
 #!/bin/sh -e
@@ -285,8 +286,9 @@ exit $?
 加入自动启动:
     $ sudo chkconfig --add oracle
 
-上面内容启动不了，还需要修改文件：
-vi /lotus/oracle/servers/oracle/11.2.0/dbs/init.ora
+另外注意要给上面执行文件加执行权限：
+
+# chmod +x /etc/init.d/oracle
 
 
 ## 文档约定
