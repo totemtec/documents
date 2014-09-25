@@ -27,15 +27,15 @@
 
 3.目录准备及权限调整
 
-    #mkdir -p /export/servers/oracle/11.2.0  //数据库系统安装目录
-    #mkdir /export/data/oradata    //数据库数据安装目录
-    #mkdir /export/data/oradata_back  //数据备份目录
-    #mkdir /home/oracle/inventory //清单目录
-    #chown -R oracle:oinstall /export/servers/oracle
-    #chown -R oracle:oinstall /home/oracle/inventory
-    #chown -R oracle:oinstall /export/data
-    #chomod -R 775 /export/servers/oracle
-    #chomod -R 775 /export/data
+    # mkdir -p /lotus/oracle/product/11.2.0  //数据库系统安装目录
+    # mkdir /lotus/oracle/oradata    //数据库数据安装目录
+    # mkdir /lotus/oracle/orabackup  //数据备份目录
+    # mkdir /lotus/oracle/inventory //清单目录
+    # chown -R oracle:oinstall /lotus/oracle/product/11.2.0
+    # chown -R oracle:oinstall /lotus/oracle/inventory
+    # chown -R oracle:oinstall /lotus/oracle/oradata
+    # chmod -R 775 /lotus/oracle/product/11.2.0
+    # chmod -R 775 /lotus/oracle/oradata
 
   以上工作可通过招待 pre-install.sh 脚本完成.
 
@@ -54,7 +54,7 @@
     net.core.wmem_default = 262144
     net.core.wmem_max = 1048586
     保存文件。
-    #/sbin/sysctl -p          //让参数生效
+    # /sbin/sysctl -p          //让参数生效
 
 5.用户的限制文件修改
 
@@ -96,31 +96,31 @@
 
 修改应答文件
 
-    $vim /home/oracle/database/response/my_db_install.rsp,按实际情况修改以下项
+    $vim my_db_install.rsp,按实际情况修改以下项
         oracle.install.option=INSTALL_DB_SWONLY
         ORACLE_HOSTNAME=oracle11g.jd.com
         UNIX_GROUP_NAME=oinstall
-        INVENTORY_LOCATION=/home/oracle/inventory/
-        ORACLE_HOME=/export/servers/oracle/11.2.0
-        ORACLE_BASE=/export/servers/oracle
+        INVENTORY_LOCATION=/lotus/oracle/inventory/
+        ORACLE_HOME=/lotus/oracle/product/11.2.0
+        ORACLE_BASE=/lotus/oracle/product
         oracle.install.db.InstallEdition=EE
         oracle.install.db.isCustomInstall=false
         oracle.install.db.DBA_GROUP=dba
         oracle.install.db.OPER_GROUP=dba
         DECLINE_SECURITY_UPDATES=true
 
-    修改好的应答文件，保存在 /vagrant/zhs16gbk/db_install.rsp 文件中，可直接使用。
+    修改好的应答文件，保存在 db_install.rsp 文件中，可直接使用。
 
 3.根据应答文件，开始安装
 
      $ sudo su - oracle
      $ cd /home/oracle/database/
-     $ ./runInstaller -silent -responseFile /vagrant/zhs16gbk/db_install.rsp
+     $ ./runInstaller -silent -responseFile db_install.rsp
 
 4.按提示切换到root用户的终端，依次执行脚本
 
-    #/home/oracle/inventory/orainstRoot.sh
-    #/opt/oracle/11.2.0/root.sh
+    # /lotus/oracle/inventory/orainstRoot.sh
+    # /lotus//oracle/11.2.0/root.sh
     脚本位置会提示
 
 5.切换到oracle用户的终端，敲”回车“，完成安装
@@ -131,9 +131,10 @@
     添加以下内容
 
 # User specific environment and startup programs
+
 export ORACLE_SID=orcl
-export ORACLE_BASE=/app/server/oracle
-export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/db_1
+export ORACLE_BASE=/lotus/oracle/product
+export ORACLE_HOME=$ORACLE_BASE/11.2.0
 export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib
 PATH=$PATH:$ORACLE_HOME/bin
 
@@ -155,10 +156,10 @@ PATH=$PATH:$ORACLE_HOME/bin
     OPERATION_TYPE = "createDatabase"
     GDBNAME = "orcl11g"
     SID = "orcl"
-    SYSPASSWORD = "OraPwd11"
-    SYSTEMPASSWORD = "OraPwd11"
-    DATAFILEDESTINATION = /app/data/oradata
-    RECOVERYAREADESTINATION = /app/data/oradata_back
+    SYSPASSWORD = "密码"
+    SYSTEMPASSWORD = "密码"
+    DATAFILEDESTINATION = /lotus/oracle/oradata
+    RECOVERYAREADESTINATION = /lotus/oracle/orabackup
     SYSDBAUSERNAME = "system"
     SYSDBAPASSWORD = "OraPwd11"
     #以上2项可选
@@ -171,14 +172,28 @@ PATH=$PATH:$ORACLE_HOME/bin
 
 2.使用dbca静默建库
 
-    $dbca -silent -responseFile /vagrant/zhs16gbk/dbca.rsp
+    $ dbca -silent -responseFile ~/dbca.rsp
+
+这个时候会看到提示和进度
+
+Copying database files
+1% complete
+26% complete
+Creating and starting Oracle instance
+40% complete
+61% complete
+Completing Database Creation
+70% complete
+100% complete
 
 #### 配置监听
 
 1.使用netca静默方式创建监听
 
-    $netca /silent /responsefile /vagrant/zhs16gbk/netca.rsp
+    $ netca /silent /responsefile ~/netca.rsp
     执行完成会在 $ORACLE_HOME/network/admin目录下生成sqlnet.ora和listener.ora两个文件。
+
+提示：。。。。。。 Oracle Net Services configuration successful. The exit code is 0
 
 2.注册sid
 
@@ -196,13 +211,12 @@ PATH=$PATH:$ORACLE_HOME/bin
     (SID_LIST =
         (SID_DESC =
         (SID_NAME = orcl)
-        (ORACLE_HOME = /app/server/oracle/product/11.2.0/db_1)
-        (PROGRAM = extproc)
+        (ORACLE_HOME = /lotus/oracle/product/11.2.0)
         )
     )
 
 
-3.执行`$lsnrctl reload`重启监听
+3.执行`$ lsnrctl reload`重启监听
 
 4.编辑 `/etc/oratab` 把 `orcl11g:/export/servers/oracle/11.2.0:N`的‘N’，改为‘Y’，这样就可以通过`dbstart`启动此实例，也可以通过`dbshut`关闭此实例了。
 
@@ -210,7 +224,7 @@ PATH=$PATH:$ORACLE_HOME/bin
 
 1.查看监听状态
 
-    $lsnrctl status
+    $ lsnrctl status
     类似以下返回，说明监听状态正常
         Service "ORCL" has 1 instance(s).
         Instance "orcl11g", status UNKNOWN, has 1 handler(s) for this service...
@@ -221,13 +235,13 @@ PATH=$PATH:$ORACLE_HOME/bin
 
 2.sqlplus连接测试
 
-    $export $ORACLE_SID=orcl11g
-    $sqlplus / as sysdba
+    $ export $ORACLE_SID=orcl11g
+    $ sqlplus / as sysdba
     正常登陆说明实例正常启动。
 
 ## 自启动脚本
 
-加入 /etc/init.d/oracledb 文件：
+加入 /etc/init.d/oracle 文件：
 
 #!/bin/sh -e
 
@@ -235,7 +249,7 @@ PATH=$PATH:$ORACLE_HOME/bin
 # description: Oracle 11g custom start/stop script
 
 DAEMON=oracle
-ORACLE_HOME=/app/server/oracle/product/11.2.0/db_1
+ORACLE_HOME=/lotus/oracle/product/11.2.0
 ORACLE_OWNER=oracle
 
 restart() {
@@ -269,7 +283,11 @@ exit $?
 
 
 加入自动启动:
-    $ sudo chkconfig --add oracledb
+    $ sudo chkconfig --add oracle
+
+上面内容启动不了，还需要修改文件：
+vi /lotus/oracle/servers/oracle/11.2.0/dbs/init.ora
+
 
 ## 文档约定
 
@@ -291,6 +309,8 @@ Linux-x86_64 Error: 2: No such file or directory
 $ sqlplus / as sysdba
 SQL> startup
 
+$lsnrctl start
+$lsnrctl stop
 
 
 
@@ -307,4 +327,42 @@ SQL> SELECT s.sid, s.serial# FROM v$locked_object lo, dba_objects ao, v$session 
 然后删除锁定记录
 SQL> ALTER system KILL session 'SID,serial#';  
 其中 SID填写上文中查到的SID数值，serial#填写serial#列的数值如：
-ALTER system KILL session '214,23456'; 
+ALTER system KILL session '214,23456';
+
+
+
+在CentOS上彻底删除Oracle
+
+1.用oracle用户登录
+如果要再次安装， 最好先做一些备份工作。
+包括用户的登录脚本，数据库自动启动关闭的脚本，和Listener自动启动的脚本。
+要是有可能连创建数据库的脚本也保存下来
+
+2.使用SQL*PLUS停止数据库
+[oracle@ora920 oracle]$ sqlplus / as sysdba
+
+SQL> shutdown [immediate]
+SQL> exit
+
+3.停止Listener
+$ lsnrctl stop
+
+三、用dbca命令卸载数据库实例
+四、删除/usr/local/bin下的三个文件
+# rm –rf coraenv
+# rm –rf dbhome
+# rm –rf oraenv
+五、删除/etc下的两个文件
+       ls –lt|grep ora
+       rm –f oraInst.loc
+       rm –rf oratab
+六、删除/opt下的一个目录
+       rm –rf ORCLfmap
+七、删除oracle安装文件夹下的所有文件
+       cd /home/oracle/
+       rm –rf *
+八、删除用户
+       userdel –r oracle
+九、删除组
+       groupdel oinstall
+       groupdel dba
