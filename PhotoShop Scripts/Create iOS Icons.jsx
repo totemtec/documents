@@ -112,25 +112,31 @@ try
       {"name": "iTunesArtwork@2x", "size":1024},
       {"name": "iTunesArtwork",    "size":512},
 
-//for App
+//for App Icon
+      {"name": "Icon-60@3x",       "size":180},	//iPhone 6 Plus (@3x)
+      {"name": "Icon-60@2x",       "size":120},	//iPhone 6 and iPhone 5 (@2x)
+      {"name": "Icon-76@2x",       "size":152},	//iPad and iPad mini (@2x)
+      {"name": "Icon-76@1x",       "size":76},	//iPad 2 and iPad mini (@1x)
+      
       {"name": "Icon",             "size":57},	//iPhone Non-Retina (iOS 6.1 and Prior)
       {"name": "Icon@2x",          "size":114},	//iPhone Retina (iOS 6.1 and Prior)
-      {"name": "Icon-60@2x",	   "size":120},	//iPhone Retina
-      
       {"name": "Icon-72",          "size":72},	//iPad Non-Retina (iOS 6.1 and Prior)
       {"name": "Icon-72@2x",       "size":144},	//iPad Retina (iOS 6.1 and Prior)
-      {"name": "Icon-76",          "size":76 },	//iPad Non-Retina
-      {"name": "Icon-76@2x",	   "size":152},	//iPad Retina
+      
+//for Spotlight search results icon
 
-//for Spotlight
-      {"name": "Icon-Small",       "size":29},	//iPhone Non-Retina (iOS 6.1 and Prior)
-      {"name": "Icon-Small@2x",    "size":58},	//iPhone Retina (iOS 6.1 and Prior)
-//      {"name": "Icon-Small-40@2x", "size":80},  //iPhone Retina duplicated
+      {"name": "Icon-40",    "size":40},	//iPad Non-Retina
+      {"name": "Icon-40@2x", "size":80},    //iPad Retina
+      {"name": "Icon-40@3x", "size":120},   //iPhone 6 Plus
+ 
+//for Settings icon
+  
+      {"name": "Icon-29",       "size":29},	//iPhone Non-Retina (iOS 6.1 and Prior)
+      {"name": "Icon-29@2x",    "size":58},	//iPhone Retina (iOS 6.1 and Prior)
+      {"name": "Icon-29@3x",    "size":87},	//iPhone 6 Plus
 
-      {"name": "Icon-Small-50",    "size":50},	//iPad Non-Retina (iOS 6.1 and Prior)
-      {"name": "Icon-Small-50@2x", "size":100},	//iPad Retina (iOS 6.1 and Prior)
-      {"name": "Icon-Small-40",    "size":40},	//iPad Non-Retina
-      {"name": "Icon-Small-40@2x", "size":80}	//iPad Retina
+      {"name": "Icon-50",    "size":50},	//iPad Non-Retina (iOS 6.1 and Prior)
+      {"name": "Icon-50@2x", "size":100},	//iPad Retina (iOS 6.1 and Prior)
     ];
 
     var icon;
