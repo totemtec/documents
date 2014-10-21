@@ -41,6 +41,7 @@ realm = /data/svn/repos #仓库名称
 
 启动SVN服务器：
 # svnserve -d -r /data/svn/repos
+这个命令不需要到仓库名称的地址，只需要到上一级就可以了
 
 
 启动后可以用 svn://host/repos  这样的svn协议来访问，验证服务已OK
@@ -49,6 +50,15 @@ realm = /data/svn/repos #仓库名称
 设置svn开机自启动
     编辑文件 /etc/sysconfig/rc.local
     添加一行   svnserve -d -r /var/svn/repos
+
+关闭SVN服务
+
+关闭
+查到服务的进程号：
+# ps -A | grep svn
+4094 ?        00:00:00 svnserve
+关闭进程：
+# kill 4094
 
 
 设置勾子 自动更新，必须先手动checkout，因为要输入密码
