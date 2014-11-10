@@ -25,16 +25,17 @@
     #useradd -g oinstall -G dba -d /home/oracle oracle
     #passwd oracle          //设置oracle密码
 
-3.目录准备及权限调整
+3.目录准备及权限调整，确保下列目录oracle用户有权限操作
 
     # mkdir -p /lotus/oracle/product/11.2.0  //数据库系统安装目录
     # mkdir /lotus/oracle/oradata    //数据库数据安装目录
     # mkdir /lotus/oracle/orabackup  //数据备份目录
     # mkdir /lotus/oracle/inventory //清单目录
-    # chown -R oracle:oinstall /lotus/oracle/product/11.2.0
+    # chown -R oracle:oinstall /lotus/oracle/product
     # chown -R oracle:oinstall /lotus/oracle/inventory
     # chown -R oracle:oinstall /lotus/oracle/oradata
-    # chmod -R 775 /lotus/oracle/product/11.2.0
+    # chown -R oracle:oinstall /lotus/oracle/orabackup
+    # chmod -R 775 /lotus/oracle/product
     # chmod -R 775 /lotus/oracle/oradata
 
   以上工作可通过招待 pre-install.sh 脚本完成.
@@ -98,7 +99,7 @@
 
     $vim my_db_install.rsp,按实际情况修改以下项
         oracle.install.option=INSTALL_DB_SWONLY
-        ORACLE_HOSTNAME=oracle11g.jd.com
+        ORACLE_HOSTNAME=o2odb.cplotus.com
         UNIX_GROUP_NAME=oinstall
         INVENTORY_LOCATION=/lotus/oracle/inventory/
         ORACLE_HOME=/lotus/oracle/product/11.2.0
@@ -120,7 +121,7 @@
 4.按提示切换到root用户的终端，依次执行脚本
 
     # /lotus/oracle/inventory/orainstRoot.sh
-    # /lotus//oracle/11.2.0/root.sh
+    # /lotus/oracle/product/11.2.0/root.sh
     脚本位置会提示
 
 5.切换到oracle用户的终端，敲”回车“，完成安装

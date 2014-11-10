@@ -90,6 +90,9 @@ tar命令常用参数：
 -z表示文件是经gzip压缩的
 -j表示文件是经bz2压缩的
 
+解压zip
+unzip archieve.zip
+
 
 man命令常用操作，也可以查看less命令的帮助
 [q]退出；
