@@ -1,0 +1,21 @@
+CentOS 7安装OpenVPN
+
+命令很简单，但是网上似乎没资料，只有RHEL6以下的资料。
+直接贴命令：
+# cd ~
+
+# wget http://swupdate.openvpn.org/as/openvpn-as-2.0.10-CentOS7.x86_64.rpm
+
+# rpm -Uvh openvpn-as-2.0.10-CentOS7.x86_64.rpm
+
+# ovpn-init #这步貌似可以省略
+
+之后端口啥的可以自己改。
+init之后需要修改openvpn的账户密码。
+
+# passwd openvpn
+
+然后连上Admin UI就可以了
+默认是：
+https://xxx.xxx.xxx.xxx:943/admin
+帐户默认是openvpn

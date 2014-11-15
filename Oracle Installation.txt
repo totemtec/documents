@@ -333,6 +333,11 @@ SQL> ALTER system KILL session 'SID,serial#';
 ALTER system KILL session '214,23456';
 
 
+查看Oracle字符编码
+
+SQL> select userenv('language') from dual;
+
+
 
 在CentOS上彻底删除Oracle
 
