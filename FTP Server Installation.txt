@@ -36,16 +36,21 @@ vi编辑/etc/shells，如果该文件里没有/usr/sbin/nologin或者/sbin/nolog
 #chkconfig vsftpd on
 
 如果端口没开需要打开防火墙21端口
+
 如果500错误了，需要
 
-
-# vi/etc/selinux/config
+# vi /etc/selinux/config
 SELINUX=enforcing
 替换成
 SELINUX=disabled
 
 重启机器后，就可以登录了
 $ ftp ftp://username@192.168.0.1
+
+
+修改/etc/vsftpd/vsftpd.conf, 可以设置ftp用户的根目录
+
+local_root=/data/ftp
 
 
 
