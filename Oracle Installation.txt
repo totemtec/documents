@@ -116,7 +116,7 @@
 
      $ sudo su - oracle
      $ cd /home/oracle/database/
-     $ ./runInstaller -silent -responseFile db_install.rsp
+     $ ./runInstaller -silent -responseFile /home/oracle/database/response/my_db_install.rsp
 
 4.按提示切换到root用户的终端，依次执行脚本
 
@@ -128,7 +128,7 @@
 
 6.修改oracle用户环境变量
 
-    $vim ~/.bash_profile
+    $vi ~/.bash_profile
     添加以下内容
 
 # User specific environment and startup programs
@@ -152,7 +152,7 @@ PATH=$PATH:$ORACLE_HOME/bin
 
 修改应答文件
 
-    $vim /home/oracle/database/response/my_dbca.rsp
+    $vi /home/oracle/database/response/my_dbca.rsp
     修改以下项
     OPERATION_TYPE = "createDatabase"
     GDBNAME = "orcl11g"
@@ -165,15 +165,15 @@ PATH=$PATH:$ORACLE_HOME/bin
     SYSDBAPASSWORD = "OraPwd11"
     #以上2项可选
     INSTANCENAME = "orcl11g"
-    CHARACTERSET = "ZHS16GBK" #按需求设置，建议使用UTF-8
-    NATIONALCHARACTERSET= "" #可选 "UTF8" or "AL16UTF16" 建议UTF-8
-    TOTALMEMORY = "5120" #Oracle使用的最大内存，单位M建库
+    CHARACTERSET = "UTF-8" #按需求设置，建议使用UTF-8
+    NATIONALCHARACTERSET= "UTF-8" #可选 "UTF8" or "AL16UTF16" 建议UTF-8
+    TOTALMEMORY = "4096" #Oracle使用的最大内存，单位M建库
 
-  修改好的应答文件，保存在 /vagrant/zhs16gbk/dbca.rsp 文件中，可直接使用。
+  
 
 2.使用dbca静默建库
 
-    $ dbca -silent -responseFile ~/dbca.rsp
+    $ dbca -silent -responseFile /home/oracle/database/response/my_dbca.rsp
 
 这个时候会看到提示和进度
 
@@ -191,14 +191,14 @@ Completing Database Creation
 
 1.使用netca静默方式创建监听
 
-    $ netca /silent /responsefile ~/netca.rsp
+    $ netca /silent /responsefile /home/oracle/database/response/netca.rsp
     执行完成会在 $ORACLE_HOME/network/admin目录下生成sqlnet.ora和listener.ora两个文件。
 
 提示：。。。。。。 Oracle Net Services configuration successful. The exit code is 0
 
 2.注册sid
 
-    vim $ORACLE_HOME/network/admin/listener.ora
+    vi $ORACLE_HOME/network/admin/listener.ora
     在
      LISTENER =
     (DESCRIPTION_LIST =
@@ -290,6 +290,7 @@ exit $?
 另外注意要给上面执行文件加执行权限：
 
 # chmod +x /etc/init.d/oracle
+记得要编辑 `/etc/oratab` 把 `orcl11g:/export/servers/oracle/11.2.0:N`的‘N’，改为‘Y’，这样就可以通过`dbstart`启动此实例
 
 
 ## 文档约定

@@ -3,6 +3,11 @@
 # openssl s_client -connect ec.test.bank.ecitic.com:443  -showcerts
 
 
+# openssl s_client -connect b2c.bank.ecitic.com:443  -showcerts
+
+https://b2c.bank.ecitic.com/WebDLink/cpplaceorder.do
+
+
 
 2. Import to Your Certificate Store
 
