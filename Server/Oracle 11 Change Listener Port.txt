@@ -1,0 +1,22 @@
+在Oracle 11g R2上测试OK
+
+以oracle身份连接服务器
+
+1. 查看监听器状态
+$ lsnrctl status
+
+2. 停止监听器
+$ lsnrctl stop
+
+3. 修改监听器配置文件
+修改tnsnames.ora和listener.ora中的端口
+位置: $ORACLE_HOME/network/admin/listener.ora
+
+4. 以管理员身份改变系统设置
+
+$ sqlplus / as sysdba
+
+SQL> alter system set local_listener='(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.1.14)(PORT = 7521))';
+
+5. 重新启动监听器
+$ lsnrctl start

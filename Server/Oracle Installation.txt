@@ -299,6 +299,11 @@ exit $?
     $开头的命令  说明需要用oracle用户执行
 
 
+Oracle远程命令行测试连接，这个命令只有安装了oracle数据库并正确设置好PATH后才可以用
+
+$ tnsping 192.168.1.13:7521/orcl
+
+
 Oracle启动问题
 Java提示：Could not get JDBC Connection; nested exception is org.apache.commons.dbcp.SQLNestedException: Cannot create PoolableConnectionFactory (IO 错误: The Network Adapter could not establish the connection
 Oracle提示：
