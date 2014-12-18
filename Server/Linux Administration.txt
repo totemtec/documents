@@ -184,7 +184,7 @@ centos安装是是使用linux text 模式安装没有安装xwindows界面。现�
 给阿里云服务器添加swap交换区,避免OOM Killer
 
 #cd /var/
-#dd if=/dev/zero of=swapfile bs=1024 count=4194304 #创建大小为4G的文件swapfile，bs块大小，count块数量（bs*count=文件大小） swapfile 是文件交换区
+#dd if=/dev/zero of=swapfile bs=1024 count=4096 #创建大小为4G的文件swapfile，bs块大小，count块数量（bs*count=文件大小） swapfile 是文件交换区
 #mkswap swapfile #格式化虚拟内存文件
 #swapon swapfile #激活虚拟内存文件
 
@@ -213,3 +213,30 @@ B为远程主机(即被控制的机器Server), 假如ip为172.24.253.2 ;
 回到A机器:
  代码如下	复制代码
 # ssh root@172.24.253.2 (不需要密码, 登录成功)
+
+
+
+配置服务自启动 (以MySQL为例)
+
+首先通过chkconfig命令看看MySQL在不在可管理的列表中，命令是：
+
+# chkconfig --list
+
+如果列表中没有mysqld这个，需要先用这个命令添加：
+
+# chkconfig add mysqld
+
+然后用这个命令设置开机启动：
+
+# chkconfig mysqld on
+
+最后确认一下是否设置成功，如图：
+
+如果对应mysqld对应的编号为3是on就证明已经设置成功。、
+# 0 - 停机
+# 1 - 单用户模式 
+# 2 - 多用户，没有NFS 
+# 3 - 完全多用户模式(标准的运行级) 
+# 4 - 没有用到 
+# 5 - X11(xwindow) 
+# 6 - 重新启动 

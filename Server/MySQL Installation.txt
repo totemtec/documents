@@ -38,7 +38,7 @@ service mysqld stop
 在[mysqld]中，
 把datadir=/var/lib/mysql更改为datadir=/data/mysql
 把socket=/var/lib/mysql.sock更改为socket=/data/mysql/mysql.sock
-FFF0E906-EDAD-46AB-B221-8B6FD1BC1FF7&last_id=0&page_size=1000&user_id=66
+
 [mysqld]
 datadir=/data/mysql
 socket=/data/mysql/mysql.sock

@@ -1,25 +1,28 @@
-安装Jira5.1
+安装Jira6.3
 
 2. 下载Jira最新版
-# wget http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-5.1.1-x64.bin
+# wget http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.3.10-x64.bin
 
 下载地址可以在下面网址找到，注意版本的选择
 http://www.atlassian.com/software/jira/download
 
 3. 为下载的bin文件添加执行权限
-# chmod a+x chmod a+x atlassian-jira-5.1.1-x64.bin
+# chmod a+x atlassian-jira-6.3.10-x64.bin
 
 4. 执行bin文件
-# ./atlassian-jira-5.1.1-x64.bin
+# ./chmod a+x atlassian-jira-6.3.10-x64.bin
 
-有三种安装模式：快速安装、自定义安装、升级
+有三种安装模式：快速安装、自定义安装、升级。选择2，自定义安装
+
 自定义安装可以选择安装目录，一个是程序目录，一个是数据目录，这两个不能使用同一个目录
 
-[/opt/atlassian/jira]
-[/var/atlassian/application-data/jira]
+默认程序目录 [/opt/atlassian/jira]
+	自定义为 [/data/atlassian/jira] 
+默认数据目录 [/var/atlassian/application-data/jira] 
+	自定义为 [/data/atlassian/application-data/jira
 
-自定义安装可以选择端口，默认是8080
-自定义安装可以选择是否安装为service
+自定义安装可以选择端口，默认是8080端口
+自定义安装可以选择是否安装为service，选是
 
 
 5. Jira的启动与关闭，脚本位与JIRA_HOME/bin目录下
@@ -31,10 +34,13 @@ http://localhost:8080
 
 安装向导
 
-1. 创建Jira数据库
+1. 创建Jira数据库，使用MySQL
 mysql> CREATE DATABASE jiradb CHARACTER SET utf8 COLLATE utf8_bin;
 
+2. 拷贝MySQL驱动到
+
 2. 第1次访问Jira，会出现安装向导
+http://localhost:8080
 选择外部数据库，填写数据库相关信息，下一步
 
 3. 纪录Server ID
@@ -46,3 +52,50 @@ BBGS-LKO0-PJG6-WERM
 5. 开始破解
 
 
+Jira启动故障排除
+
+1.JIRA startup failed, JIRA has been locked. 错误的处理办法：首先看 
+
+jira应用的jira-application.properties(在 /atlassian-jira/WEB-INF/classes下) 下配置的home路径如下 
+
+jira.home = /opt/jira/atlassian-jira-5.2.11-standalone 
+
+然后在其目录下找到.jira-home.lock。删掉 
+
+再重启就o了 
+
+4.jira的8005和8080端口都重新修改一下，在server.xml中，我的修改为8007和8099了 
+
+5.查询端口被占用 
+
+netstat -tln 
+
+netstat -tln | grep 端口号 
+
+lsof -i:端口号 
+
+kill -9 PID号 
+
+6.查找.jira-home.lock文件 
+
+[root@bogon ~]# find / -name '.jira-home.lock' 
+
+/data/www/jira_home/jiradata/.jira-home.lock
+
+
+故障：
+JIRA Startup Failed
+Unable to clean the cache directory: /data/atlassian/application-data/jira/plugins/.osgi-plugins/felix
+
+解决办法：
+停止Jira后，
+# rm -rf /data/atlassian/application-data/jira/plugins/.osgi-plugins/felix/
+这样Jira启动后会重建插件目录，启动比较慢
+
+
+故障：
+"Tab panel 'com.atlassian.jira.jira-projects-plugin:summary-panel' failed to render."
+
+解决办法:
+给/data/atlassian/jira/temp增加写权限
+# chmod a+w /data/atlassian/jira/temp

@@ -1,0 +1,133 @@
+°²×°Jira 6.3£¬CentOS6.5  64Î» + Oracle Java SDK 7 + MySQL 5.x
+
+2. ÏÂÔØJira×îĞÂ°æ
+# wget http://downloads.atlassian.com/software/jira/downloads/atlassian-jira-6.3.10-x64.bin
+
+ÏÂÔØµØÖ·¿ÉÒÔÔÚÏÂÃæÍøÖ·ÕÒµ½£¬×¢Òâ°æ±¾µÄÑ¡Ôñ
+http://www.atlassian.com/software/jira/download
+
+3. ÎªÏÂÔØµÄbinÎÄ¼şÌí¼ÓÖ´ĞĞÈ¨ÏŞ
+# chmod a+x atlassian-jira-6.3.10-x64.bin
+
+4. Ö´ĞĞbinÎÄ¼ş
+# ./atlassian-jira-6.3.10-x64.bin
+
+ÓĞÈıÖÖ°²×°Ä£Ê½£º1¿ìËÙ°²×°¡¢2×Ô¶¨Òå°²×°¡¢3Éı¼¶
+×Ô¶¨Òå°²×°¿ÉÒÔÑ¡Ôñ°²×°Ä¿Â¼£¬Ò»¸öÊÇ³ÌĞòÄ¿Â¼£¬Ò»¸öÊÇÊı¾İÄ¿Â¼£¬ÕâÁ½¸ö²»ÄÜÊ¹ÓÃÍ¬Ò»¸öÄ¿Â¼
+
+Ä¬ÈÏÄ¿Â¼
+[/opt/atlassian/jira]
+[/var/atlassian/application-data/jira]
+
+ĞŞ¸ÄºóÄ¿Â¼
+[/data/atlassian/jira]
+[/data/atlassian/application-data/jira]
+
+
+×Ô¶¨Òå°²×°¿ÉÒÔÑ¡Ôñ¶Ë¿Ú£¬Ä¬ÈÏÊÇ8080
+×Ô¶¨Òå°²×°¿ÉÒÔÑ¡ÔñÊÇ·ñ°²×°Îªservice
+
+
+5. JiraµÄÆô¶¯Óë¹Ø±Õ£¬½Å±¾Î»ÓëJIRA_HOME/binÄ¿Â¼ÏÂ
+# ./start-jira.sh
+# ./stop-jira.sh
+
+6. JiraµÄ·ÃÎÊ£¬Ö±½Ó·ÃÎÊ
+http://localhost:8080
+µÚ1´Î·ÃÎÊJira£¬»á³öÏÖÉèÖÃÏòµ¼£¬°´ÕÕÏòµ¼Ò»²½²½À´¾ÍºÃÁË£¬ÖĞ¼äĞèÒªÌá½»×ÊÁÏÉêÇëÒ»¸öÊÔÓÃµÄLicense
+
+ÅäÖÃÇ°ÏÈ°´ÕÕÏÂÃæ²½Öè×¼±¸JiraÊı¾İ¿â£¬ÎÒÃÇÊ¹ÓÃMySQL£¬rootÓÃ»§À´²Ù×÷
+
+1. ´´½¨JiraÊı¾İ¿â
+mysql> CREATE DATABASE jiradb CHARACTER SET utf8 COLLATE utf8_bin;
+
+2. ´´½¨JiraÊı¾İ¿â¶ÀÁ¢ÓÃ»§
+
+mysql> CREATE USER 'jira'@'localhost' IDENTIFIED BY 'YOUR_PASSWORD';
+mysql> CREATE USER 'jira'@'%' IDENTIFIED BY 'YOUR_PASSWORD';
+
+mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX on
+  jiradb.* TO 'jira'@'localhost' IDENTIFIED BY 'YOUR_PASSWORD';
+mysql> GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX on
+  jiradb.* TO 'jira'@'%' IDENTIFIED BY 'YOUR_PASSWORD';
+ 
+mysql> flush privileges;
+
+²é¿´ÓÃ»§È¨ÏŞ£º
+mysql> SHOW GRANTS FOR jira@localhost;
+
+²âÊÔÓÃ»§È¨ÏŞ£º
+# mysql \--user=jira \--password=YOUR_PASSWORD \--database=jiradb
+
+²é¿´Êı¾İ¿â
+mysql> show databases
+mysql> show tables
+
+É¾³ıÊı¾İ¿â
+mysql> drop database jira
+
+ÇĞ»»Êı¾İ¿â
+mysql> use mysql;
+
+²é¿´Êı¾İ¿âÓÃ»§ĞÅÏ¢
+mysql> select user, host from user;
+
+3. ¿½±´MySQL JDBCÇı¶¯mysql-connector-java-5.1.25-bin.jarµ½Ä¿Â¼jira°²×°Ä¿Â¼ÏÂµÄlib
+
+
+ÆÆ½âJira
+
+1. ÓÃ¹ÜÀíÔ±½øÈ¥ÔÚSystemµÄLicense²Ëµ¥Àï£¬²é¿´»úÆ÷ĞÅÏ¢²¢ÇÒ¼ÇÂ¼ÏÂÀ´£¬¿½±´ÈçÏÂ£º
+
+Organization	totem
+Date Purchased	26/Nov/14
+License Type	JIRA: Evaluation
+(Expires in 29 days, 2 hours on 26/Dec/14)
+Server ID	BLWE-4X8F-2MOK-RVAH
+Support Entitlement Number (SEN)	SEN-L4938032
+User Limit	Unlimited
+
+2. ÆÆ½âµÄºËĞÄÊÇÌæ»»2¸öLicenseÑéÖ¤Àà
+   com\atlassian\extras\decoder\v2\Version2LicenseDecoder.class
+   com\atlassian\license\LicenseManager.class
+   Õâ2¸öÀàÍ¬Ê±´æÔÚÓÚ°ü£¬±ØĞëÈ«²¿Ìæ»»²Å¿ÉÒÔ: 
+   JIRAµÄ°²×°Ä¿Â¼\atlassian-jira\WEB-INF\lib\atlassian-extras-2.2.2.jar Õâ¸ö°ü¿ÉÒÔÖ±½ÓÌæ»»jar°ü£¬nÄêÃ»±ä¹ıµÄ°üÁË
+   JIRAµÄ°²×°Ä¿Â¼\atlassian-jira\WEB-INF\classes\atlassian-bundled-plugins.zip°ü»òÕßÎÄ¼ş¼ĞÀïµÄ
+              atlassian-universal-plugin-manager-plugin-2.x.jar  2.xÊÇ°æ±¾ºÅ£¬Õâ¸ö½¨ÒéÖ»Ìæ»»2¸ö.classÎÄ¼ş
+
+3.                                                            Ìæ»»Íê³ÉºóÖØĞÂÆô¶¯
+¸üĞÂLicenseĞÅÏ¢£¬Ö±½Ó°´ÕÕÄ£°åÃ÷ÎÄ¾Í¿ÉÒÔ£¬¸ñÊ½Ò»¶¨ÒªºÍÄ£°å±£³ÖÒ»ÖÂ£¬¼ûÄ£°åºÍËµÃ÷Î
+Ä¼ş
+   
+   
+ºº»¯Jira
+
+¹ÜÀíÔ±½øÈ¥ÒÔºóÔÚAdd-on¹ÜÀíÀïÃæ£¬ÉÏ´«ÓïÑÔ°ü£¬ÉèÖÃÓïÑÔÊ¹ÓÃÖĞÎÄ¾Í¿ÉÒÔÁË
+   
+   
+
+Server ID:	
+BLWE-4X8F-2MOK-RVAH
+SEN :	SEN-L4938032
+
+AAABCw0ODAoPeNptkE9Pg0AQxe/7KTbxvAa2xLYke0BYI8qfBrB68LLiaNeUhewuxH57oTSxmh4mm
+cx785uXuap2Pc7aAdMldjzfWfvuDQ7LClPH9VAEptays7JV7CEuglcf80HsezFNUKjh2ETCApv8x
+HUJXaIvqcV1ImtQBvi7PG7zrOLFpohLjn4JzOoe/tirQweZaICFeZryIoyDZNZFbeUA88J+9m5Bm
+wlCUSqksqCEqoF/d1IfzhLRKVGuP4WS5nS0tdDM1Kxv3kDnH09mZDHiohL0ADqO2G3yzIn3srojN
+M0fSbEN7lHJMzYWSbz1YuUsKDqFHu1JHF1SLqfZ9LreCQP///YDc4d93TAsAhR3YiLTu0ehN4kxI
+KeHskk7f4xbrwIUDCUo5d6pLtYW2QN/ZVskGxhA+1s=X02dl
+
+
+
+JIRA Agile (Server): Evaluation	totem	27 Dec 2014	Request Support
+SEN :	SEN-L4937972
+
+AAABCg0ODAoPeNptkD9vgzAQxXd/Cktd2oEqOIlokDwg4oGKPxHQTl1cegFLYNDZoObbF5JUTasOt
+9zv3XtPd1c2I037iTKPrtb+9snfMhoWJWUrd0P2YCpUg1W95s9RHtCgVi3Q+wJwAnygxx7psn/zq
+ZhkO8pFSdKxewfMji8G0HDHJSHCmeylBb4YO67rMI/83HCLI5AaAXTTDwPgY6wq0AbEhzpzkZYiP
++RRIUh7Ia+z+UIYSaTSFrTUFYjPQeHpJoctObe+MEtxQGXgkplhLbUy1xa9he6XXFZWTVdpIVI+j
+xNvdmtv5zHy3fHf0CssTwOksgMeZkki8jAKYnIYsWqkgb//+AKrJYNWMCwCFFnJ0KCxjkFFgKprS
+wNrAPsORIzqAhQoDXXXdeeXRGKihEKXOw7yp8kElA==X02dl
+
+
+
