@@ -42,3 +42,10 @@ scp ~/tomcat.tar.gz root@192.168.0.2:~/upload/
 5.是否成功安装JDK验证：
 
 # java -version
+
+修改系统环境变量设置JAVA_HOME
+
+修改文件并添加一行
+# vi /etc/profile
+
+export JAVA_HOME=/usr/java/jdk1.7.0_55

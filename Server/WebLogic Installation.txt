@@ -1,0 +1,254 @@
+WebLogic 安装
+安装环境CentOS 6.4 x64
+可以搜索WebLogic Install Silent
+
+1. 下载WebLogic，需要注册oracle帐号
+地址：http://www.oracle.com/technetwork/middleware/fusion-middleware/downloads/index.html
+WebLogic现在属于Fusion Middleware里的一部分了，我们选择最小的zip下载包
+
+2. 解压
+安装zip包位于，/data/weblogic
+
+# unzip wls1213_dev.zip
+
+3. 配置weblogic，创建domain
+
+# cd /data/weblogic/wls12130
+
+# chmod 777 *.sh
+
+# ./configure.sh
+
+解压完成后，根据提示输入相关信息
+
+our environment has been set.
+Configuring WLS...
+
+BUILD SUCCESSFUL
+Total time: 1 second
+
+Do you want to configure a new domain?  [y/n]? 
+Enter username to boot WebLogic server: lotus
+Enter password to boot WebLogic server: 密码要求字母大小写加数字，至少8位
+For confirmation, please re-enter password required to boot WebLogic server:
+
+完成后，weblogic会创建一个名为mydomain的域
+
+4. 启动weblogic
+
+# cd /data/weblogic/wls12130/user_projects/domains/mydomain
+
+chmod 777 *.sh
+
+./startWeblogic.sh
+
+5. 访问weblogic管理控制台
+
+http://localhost:7001/console
+
+
+修改端口，可以在管理控制台里修改，无法访问管理控制台的话可以修改配置文件
+# vi .../domains/mydomain/config/config.xml
+
+
+
+二.启动weblogic服务，指令如下：
+
+   # cd .../domains/mydomain --指向域名
+
+   # nohup startWebLogic.sh &  --后台运行weblogic服务
+
+
+三.停止weblogic服务，指令如下：
+
+./stopWebLogic.sh 一般情况很难关闭，需要杀掉后台进程（经常这样）
+查看后台进程
+＃ps -ef|grep weblogic 如：
+root    28596 28558  2 16:10 pts/1    00:00:18 /opt/Oracle/Middleware/jr。。。。。。。。。
+root    28880 28778  0 16:22 pts/2    00:00:00 grep weblogic
+ 
+杀后台进程 ：# kill -9 28596 即可
+
+
+
+
+linux下自启动设置方法：
+
+1.       
+创建/etc/init.d/weblogic文件,文件内容如下:
+
+#!/bin/bash
+
+# chkconfig: 35 99 05
+
+#description: Weblogic Server
+
+#Please eidt the Variable
+
+export BEA_BASE=/u02/weblogic/Oracle/Middleware
+
+export BEA_HOME=$BEA_BASE/user_projects/domains/base_domain
+
+export BEA_LOG=/var/log/weblogic.log
+
+export PATH=$PATH:$BEA_HOME/bin
+
+BEA_OWNER=weblogic
+
+start(){
+
+echo -n "starting weblogic..."
+
+su - "$BEA_OWNER"<<EOO
+
+$BEA_HOME/bin/startWebLogic.sh > $BEA_LOG 2>&1 &
+
+EOO
+
+}
+
+stop(){
+
+echo -n "stop weblogic..."
+
+su - "$BEA_OWNER"<<EOO
+
+$BEA_HOME/bin/stopWebLogic.sh >> $BEA_LOG
+
+EOO
+
+}
+
+case "$1" in
+
+start)
+
+        touch /var/lock/weblogic
+
+        start
+
+        echo "OK"
+
+        ;;
+
+stop)
+
+        rm -rf /var/lock/weblogic
+
+        stop
+
+        echo "OK"
+
+        ;;
+
+restart)
+
+stop
+
+sleep 3
+
+start
+
+;;
+
+*)
+
+echo "$0{start|stop|reload|restart}"
+
+exit 1
+
+;;
+
+esac
+
+exit 0
+
+2. 添加可执行权限
+
+ # chmod 700 /etc/init.d/weblogic
+
+ # chmod +x  /etc/init.d/weblogic
+
+3. 添加weblogic为系统服务，并在35模式下启动
+
+ # chkconfig --add weblogic
+
+[root@Tester init.d]/sbin/chkconfig --add weblogic
+
+[root@Tester init.d]/sbin/chkconfig --level 35 weblogic on
+
+4. 给日志添加权限
+
+ # touch /var/log/weblogic.log
+
+ # chown weblogic.weblogic /var/log/weblogic.log
+
+5、建立服务连接：
+
+要在重新启动时停止weblogic，我们需要以下连结∶
+
+[root@js-oracle init.d]# ln -s ../init.d/weblogic /etc/rc.d/rc0.d/K01weblogic
+
+[root@js-oracle init.d]# ln -s ../init.d/weblogic /etc/rc.d/rc6.d/K01weblogic
+
+ 
+
+系统启动时启动weblogic，我们需要以下连结∶
+
+[root@js-oracle init.d]# ln -s ../init.d/weblogic /etc/rc.d/rc2.d/S99weblogic
+
+[root@js-oracle init.d]# ln -s ../init.d/weblogic /etc/rc.d/rc3.d/S99weblogic
+
+[root@js-oracle init.d]# ln -s ../init.d/weblogic /etc/rc.d/rc5.d/S99weblogic
+
+6、在
+
+/u02/weblogic/Oracle/Middleware/user_projects/domains/base_domain/servers/AdminServer/
+
+ 下创建security文件夹,在此文件夹下创建文件boot.properties
+
+boot.properties文件内容如下
+
+username=weblogic
+
+password=11111111
+
+7. 启动weblogic:
+
+ # service weblogic start
+
+8. 停止weblogic:
+
+ # service weblogic stop
+
+ 
+
+关于步骤6的解释
+
+WebLogic在开发模式下，启动是不需求输入管理员的用户名和密码的，但在生产模式下，是需要的。如何才能在生产模式下自动输入管理员的密码呢？方法如下：
+
+第一种方法：
+
+１、在WebLogic启动脚本相同目录下创建一个密码存储文件boot.properties，
+
+文件内容：
+
+username=你的WebLogic的启动用户
+
+password=你的WebLogic的启动密码
+
+２、再次启动WebLogic，此时不需要密码就可以进行系统.
+
+３、删除刚才创建的boot.properties的文件．（必须要做,不然下次启动时就又进不去了）
+
+４、再次启动WebLogic，以后就不要密码了
+
+注:
+
+安装时用的是开发模式，在console中可以更改为生产模式。
+
+另外就是D:\bea\user_projects\domains\mydomain\servers＼实例server下建立security目录，把boot.properties文件拷进去就行了．不需要进行2,3,4的步骤.
+
+注意问题一 chown –R weblogic:bea /u02
+
+把weblogic文件夹的权限给bea组下的weblogic用户 
