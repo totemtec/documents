@@ -121,8 +121,12 @@ http://localhost:7001/console
 
 8. 关闭和启动
 
-$ stop_weblogic
+
 $ start_weblogic
+显示：1[8105]
+
+$ stop_weblogic
+
 
 启动后可以用下面命令检查日志：
 $ tail -f $HOME/start_weblogic.nohup
