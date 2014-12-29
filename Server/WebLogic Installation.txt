@@ -2,54 +2,151 @@ WebLogic 安装
 安装环境CentOS 6.4 x64
 可以搜索WebLogic Install Silent
 
-1. 下载WebLogic，需要注册oracle帐号
+参考文档：
+http://g14n.info/2014/11/install-weblogic-12c/
+官方文档：
+https://docs.oracle.com/middleware/1213/core/WLSIG.pdf
+
+
+1. 下载并解压WebLogic
+需要注册oracle帐号，Oracle可以开发学习，但是生产模式必须有License
 地址：http://www.oracle.com/technetwork/middleware/fusion-middleware/downloads/index.html
 WebLogic现在属于Fusion Middleware里的一部分了，我们选择最小的zip下载包
 
-2. 解压
-安装zip包位于，/data/weblogic
 
-# unzip wls1213_dev.zip
+下载Ant
+http://mirrors.hust.edu.cn/apache//ant/binaries/apache-ant-1.9.4-bin.zip
 
-3. 配置weblogic，创建domain
 
-# cd /data/weblogic/wls12130
+2. 创建用户和组
+# groupadd weblogic
+# useradd -g weblogic weblogic
+# passwd weblogic
 
-# chmod 777 *.sh
+3、准备weblogic目录
 
-# ./configure.sh
+# mkdir /opt/weblogic
+# mkdir /opt/weblogic/mydomain
+# chown -R weblogic /opt/weblogic
 
-解压完成后，根据提示输入相关信息
 
-our environment has been set.
-Configuring WLS...
 
-BUILD SUCCESSFUL
-Total time: 1 second
+4. 拷贝并解压
 
-Do you want to configure a new domain?  [y/n]? 
-Enter username to boot WebLogic server: lotus
-Enter password to boot WebLogic server: 密码要求字母大小写加数字，至少8位
+# cp ~/wls1213_dev.zip /opt/weblogic/wls1213_dev.zip
+# cp ~/apache-ant-1.9.4-bin.zip /opt/weblogic/apache-ant-1.9.4-bin.zip
+
+# chown weblogic /opt/weblogic/wls1213_dev.zip
+# chown weblogic /opt/weblogic/apache-ant-1.9.4-bin.zip
+
+
+切换到weblogic用户
+# su weblogic
+
+在/opt/weblogic下解压文件
+$ unzip apache-ant-1.9.4-bin.zip
+$ unzip wls1213_dev.zip
+
+上述步骤要保证weblogic目录下的文件让用户weblogic有读写权限
+
+
+5. 设置环境变量
+
+切换到weblogic用户
+
+# which java  检查java路径
+
+编辑 .bash_profile 添加下面行
+
+export JAVA_HOME=/usr/java/jdk1.7.0_55
+export PATH=$PATH:$JAVA_HOME/bin
+
+export ANT_HOME=/opt/weblogic/apache-ant-1.9.4
+export PATH=$PATH:$ANT_HOME/bin
+
+# default is           -Xms256m  -Xmx512m  -XX:CompileThreshold=8000 -XX:PermSize=128m   -XX:MaxPermSize=256m
+export USER_MEM_ARGS=" -Xms1024m -Xmx2048m -XX:CompileThreshold=8000 -XX:PermSize=1024m  -XX:MaxPermSize=2048m "
+
+alias start_weblogic='nohup /opt/weblogic/mydomain/bin/startWebLogic.sh > $HOME/start_weblogic.nohup 2>&1 &'
+alias stop_weblogic='/opt/weblogic/mydomain/bin/stopWebLogic.sh'
+
+############结束
+
+使上述环境变量生效
+$ source ~/.bash_profile
+
+
+6. 安装
+
+$ export MW_HOME=/opt/weblogic/wls12130
+$ cd $MW_HOME
+$ ./configure.sh
+
+Do you want to configure a new domain?  [y/n]? n
+
+记得选择n，否则会自动创建一个mydomain，不推荐这么做
+
+
+7. 创建domain
+
+先设置环境变量，前面脚本设置的环境变量都废了，因为我们前面脚本已经停了，需要重新设置
+
+执行下面命令，找到CLASSPATH=
+$ /opt/weblogic/wls12130/wlserver/server/bin/setWLSEnv.sh
+
+设置CLASSPATH
+$ export CLASSPATH=/usr/java/jdk1.7.0_55/lib/tools.jar:/lotus/weblogic/wls12130/wlserver/server/lib/weblogic_sp.jar:/lotus/weblogic/wls12130/wlserver/server/lib/weblogic.jar:/lotus/weblogic/wls12130/oracle_common/modules/net.sf.antcontrib_1.1.0.0_1-0b3/lib/ant-contrib.jar:/lotus/weblogic/wls12130/wlserver/modules/features/oracle.wls.common.nodemanager_2.0.0.0.jar:/usr/java/jdk1.7.0_55/lib/tools.jar:/lotus/weblogic/wls12130/wlserver/server/lib/weblogic-classes.jar:/lotus/weblogic/wls12130/oracle_common/modules/net.sf.antcontrib_1.1.0.0_1-0b3/lib/ant-contrib.jar:/lotus/weblogic/wls12130/wlserver/modules/features/oracle.wls.common.nodemanager_2.0.0.0.jar:
+
+
+不变目录就创建到别的地方去了
+$ cd /opt/weblogic/mydomain
+
+$ $JAVA_HOME/bin/java $JAVA_OPTIONS -Xmx1024m -XX:MaxPermSize=256m weblogic.Server
+
+Would you like the server to create a default configuration and boot?  (y/n): y
+
+Enter username to boot WebLogic server:weblogic
+Enter password to boot WebLogic server:       注意这里密码至少8位，必须包含字符串和数字，否则会创建domain失败
 For confirmation, please re-enter password required to boot WebLogic server:
 
-完成后，weblogic会创建一个名为mydomain的域
 
-4. 启动weblogic
+成功后显示
 
-# cd /data/weblogic/wls12130/user_projects/domains/mydomain
+Server state changed to RUNNING
 
-chmod 777 *.sh
-
-./startWeblogic.sh
-
-5. 访问weblogic管理控制台
+然后你就可以访问weblogic管理控制台
 
 http://localhost:7001/console
+
+
+8. 关闭和启动
+
+$ stop_weblogic
+$ start_weblogic
+
+启动后可以用下面命令检查日志：
+$ tail -f $HOME/start_weblogic.nohup
+
+
+小提示：log4j配置
+
+可以在weblogic用户的.bash_profile配置一行，制定log4j的配置
+
+export LOG4J_CONFIG_FILE=/opt/weblogic/domain/config/log4j.xml
 
 
 修改端口，可以在管理控制台里修改，无法访问管理控制台的话可以修改配置文件
 # vi .../domains/mydomain/config/config.xml
 
+在<listen-address/>前面新增
+ <listen-port>9001</listen-port>
+
+
+-----------------------------------------------------------
+-----------------------------------------------------------
+-----------------以上内容经过测试验证
+-----------------------------------------------------------
+-----------------------------------------------------------
 
 
 二.启动weblogic服务，指令如下：
