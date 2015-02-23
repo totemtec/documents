@@ -1,6 +1,6 @@
 1. Export from Server
 
-# openssl s_client -connect ec.test.bank.ecitic.com:443  -showcerts
+# openssl s_client -connect mch.tenpay.com:443  -showcerts
 
 
 # openssl s_client -connect b2c.bank.ecitic.com:443  -showcerts
@@ -11,5 +11,5 @@ https://b2c.bank.ecitic.com/WebDLink/cpplaceorder.do
 
 2. Import to Your Certificate Store
 
-# sudo keytool -import -alias 别名 -file 文件名.cer -keystore /Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home/jre/lib/security/cacerts 
+# sudo keytool -import -alias weixin -file tenpay_ca.cer -keystore /Library/Java/JavaVirtualMachines/jdk1.7.0_71.jdk/Contents/Home/jre/lib/security/cacerts 
 

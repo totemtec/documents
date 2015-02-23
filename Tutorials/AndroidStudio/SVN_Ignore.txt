@@ -1,0 +1,16 @@
+Android Studio项目在SVN做版本管理时，应该忽略的文件
+
+.gradle			忽略整个目录
+.idea/libraries		忽略整个目录
+.idea/workspace.xml	忽略文件
+.idea			上传SVN
+build			忽略所有叫build的目录，module下面也有
+gradle			建议上传SVN
+build.gradle		上传SVN
+gradle.properties	上传SVN
+gradlew			上传SVN
+gradlew.bat		上传SVN
+local.properties	忽略文件
+*.iml			上传SVN
+settings.gradle		上传SVN
+.gitignore		忽略文件，如果使用git做版本管理，当然用这个喽

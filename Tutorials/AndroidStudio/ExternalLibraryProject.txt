@@ -1,0 +1,29 @@
+Android Studio项目中使用共享的外部库工程
+
+问题：
+    在开发中经常使用一个共用的Library库工程，其他的项目都依赖这个library库工程
+    Android Studio大家都还不熟悉，所以把这个用法整理一下
+
+环境：
+    Android Studio 1.1.0  2015年2月发布的版本
+
+项目目录：
+    Library/demo        测试演示用的Module，最先创建的，怕和实际项目冲突，可以改个名字，这里我改成了demo
+    Library/common      库工程Module，记得这个Module一定要是Library Module，可以检查它的build.gradle，看看有没有  apply plugin: 'com.android.library'
+    
+    Project/app         实际项目中的Module
+    
+
+1. 打开Project/app/settings.gradle，增加一个Module并指定其路径
+   include ':app', ':common'
+   project(':common').projectDir = new File(settingsDir, '../Library/common')
+
+2. Android Studio操作，File->Project Structure --> Dependencies  --> "+"按钮，选择Module dependency. 选中你的库Module, OK.
+
+重新编译，就完成了
+
+编译完成后，生成了common.iml和2个父文件夹，也需要上传到SVN上做管理
+
+
+参考文档：
+    http://stackoverflow.com/questions/22243269/how-to-share-a-single-library-source-across-multiple-projects

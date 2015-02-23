@@ -1,0 +1,16 @@
+因为一些Google服务和Android.com被屏蔽，所以需要做些设置，才能让Android Studio的网络加载更流畅
+
+1. 修改Hosts，加入下面几行
+
+203.208.46.146 www.google.com
+203.208.46.146 dl.google.com
+203.208.46.146 dl-ssl.google.com
+
+2. 修改Android SDK Manager设置
+
+打开Android SDK Manager -> Tools -> Options
+
+HTTP Proxy Server:  mirrors.neusoft.edu.cn
+HTTP Proxy Port:    80
+
+选中  Force https://... srouces to be fetched using http://...
