@@ -7,3 +7,23 @@ SVN忽略原则
 4. 其他全部可以忽略
 
 别人使用项目的时候，在Android Studio中，File -> Import Project
+
+
+TortoiseSVN设置项目目录的全局忽略
+
+右击项目根目录，弹出菜单里选择TortoiseSVN->Properties
+增加一个新的Property，点击按钮New...> 菜单里选择Other
+Property Name选择svn:global-ignores
+Property Value使用下列内容：
+
+.gradle
+.idea
+build
+local.properties
+.gitignore
+*.iml
+
+
+也可以增加到TortoiseSVN的全局忽略里，但是和你一起用项目仓库的同事，也需要做同样的设置
+
+
