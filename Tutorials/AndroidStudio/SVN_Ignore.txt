@@ -3,18 +3,13 @@ Android Studio项目在SVN做版本管理时，应该忽略的文件
 SVN忽略原则
 1. 检查Project目录和Module目录，其他目录下不检查
 2. 必须保留源代码目录，Android源代码目录有src libs
-3. 必须保留gradle目录，所有名字包含gradle字样的目录和文件全部保留
+3. 除了.gradle忽略，其他所有名字包含gradle字样的目录和文件全部保留
 4. 其他全部可以忽略
 
 别人使用项目的时候，在Android Studio中，File -> Import Project
 
 
-TortoiseSVN设置项目目录的全局忽略
-
-右击项目根目录，弹出菜单里选择TortoiseSVN->Properties
-增加一个新的Property，点击按钮New...> 菜单里选择Other
-Property Name选择svn:global-ignores
-Property Value使用下列内容：
+一般要忽略掉下面的内容文件和文件夹
 
 .gradle
 .idea
@@ -22,8 +17,5 @@ build
 local.properties
 .gitignore
 *.iml
-
-
-也可以增加到TortoiseSVN的全局忽略里，但是和你一起用项目仓库的同事，也需要做同样的设置
 
 
