@@ -1,0 +1,31 @@
+IntelliJ IDEA创建一个Project作为你所有工作的代码库,并为其各个组成部分单独创建一个Module。
+因此,IntelliJ IDEA的Module就像是一个Eclipse的Project,而Project则和Eclipse工作区(workspace)类似。
+虽然不完全像 Eclipse的workspace那样包含你所有的工作,但你可以在同一时间打开多个IntelliJ的多个Project
+
+IDEA创建Gradle工程时，Project目录和Module目录需要分开，不要用同一个目录
+
+Facets
+
+Facets  表示这个module有什么特征，比如 Web，Spring和Hibernate等； 
+
+Facets represent various frameworks, technologies and languages used in a module. They let IntelliJ IDEA know how to treat the module contents and thus ensure conformity with the corresponding frameworks and technologies.
+Facets 表示在一个模块中使用的各个框架，技术和语言。他们让IDEA的知道如何处理模块的内容，从而确保框架和技术的协调一致。
+
+Using facets enables you to download and configure the necessary framework components, have various descriptors generated automatically and stored in proper locations, and so on.
+使用facets能让你下载并且配置需要的框架组件，自动生成描述符并存储在适当位置等等。
+
+Most facets may be added to a module irrespective of whether other facets exist.
+大多数facets可以直接加入module，不论其他facets是否存在。
+
+There are also facets that extend other facets. Such facets are possible only if a module has their parent facet. For more information, see Available Facets and Their Dependencies.
+Facets也可以继承和扩展。
+
+
+一个module有了 Artifacts  就可以部署到应用服务器中了！
+
+在给项目配置Artifacts的时候有好多个type的选项，exploed是什么意思：
+explode 在这里你可以理解为展开，不压缩的意思。也就是war、jar等产出物没压缩前的目录结构。建议在开发的时候使用这种模式，便于修改了文件的效果立刻显现出来。
+
+默认情况下，IDEA的 Modules 和 Artifacts 的 output目录  已经设置好了，不需要更改，打成  war包  的时候会自动在 WEB-INF目录  下生产  classes目录 ，然后把编译后的文件放进去。
+
+

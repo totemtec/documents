@@ -1,0 +1,11 @@
+project.name：项目名称
+project.groupId：项目组ID，通常情况下如果你的包名为com.example.test，那么项目组ID就是com.example
+project.artifactId：项目ID，通常情况下如果你的包名为com.example.test，那么项目ID就是test
+project.packaging：包类型，Android库是aar
+project.siteUrl：项目官方网站的地址，没有的话就用Github上的地址，例如：https://github.com/xiaopansky/Sketch
+project.gitUrl：项目的Git地址，例如：https://github.com/xiaopansky/Sketch.git
+javadoc.name：生成的javadoc打开后主页显示的名称，通常跟项目名称一样即可
+
+
+Group 项目组的标识，比如Hibernate的所有包的group都是 org.hibernate
+Artifact  是maven或者Gradle中的一个概念，表示打包好的jar包或者war包，英文直译就是：人工制品，产物
