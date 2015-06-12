@@ -1,20 +1,5 @@
 因为一些Google服务和Android.com被屏蔽，所以需要做些设置，才能让Android Studio的网络加载更流畅
 
-1. 修改Hosts，加入下面几行
-
-203.208.46.146 www.google.com
-203.208.46.146 dl.google.com
-203.208.46.146 dl-ssl.google.com
-
-2. 修改Android SDK Manager设置
-
-打开Android SDK Manager -> Tools -> Options
-
-IPv4: http://ubuntu.buct.edu.cn/ 端口：80
-IPv4: http://ubuntu.buct.cn/ 端口：80
-
-选中  Force https://... srouces to be fetched using http://...
-
 
 Mac下的Android Studio包下载时只是个开发工具，不带SDK包，启动时长时间下载真的受不了，以下是优化步骤
 
@@ -24,19 +9,16 @@ Mac下的Android Studio包下载时只是个开发工具，不带SDK包，启动
 
 disable.android.first.run=true
 
-2. 设置代理
+2. 设置Android SDK的位置
 
-启动Android Studio，在欢迎界面，Configure -> 打开SDK Manager，别管加载成功和失败，切换一下窗口，让SDK Manager的主菜单出来
-点击菜单Android SDK Manger -> Preferences -> 设置如下代理：
+如果你的SDK还没有下载下来，想办法下载一个Android SDK，解压到合适的位置 Mac默认在 ~/Library/Android/sdk
 
-IPv4: http://ubuntu.buct.edu.cn/ 端口：80
-IPv4: http://ubuntu.buct.cn/ 端口：80
+启动Android Studio，在欢迎界面
 
-更多代理见 http://www.androiddevtools.cn/
+Project Defaults > Project Structure > SDK Location
 
-设置代理时，记得Clear Cache
-记得选中 Force https://... srouces to be fetched using http://...
+3. 然后开着VPN安装SDK组件吧，代理不好使
 
-3. 重启，也可以把你的禁用启动检测关掉
+4. 重启，也可以把你的禁用启动检测关掉
 
 

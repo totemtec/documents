@@ -1,0 +1,620 @@
+JPA & Hibernate注解
+
+
+@Entity
+标注为实体类
+@Table
+标注数据库表名，当数据库表名与实体类名不一致时，可以用它来指定实体类对应的数据库表名
+
+@Id
+标注为主键
+@GeneratedValue
+标注为自动生成，指定ID生成策略
+@GeneratedValue(strategy=GenerationType.AUTO) 
+@GeneratedValue(strategy=GenerationType.IDENTITY)
+@GeneratedValue(strategy=GenerationType.SEQUENCE)
+@GeneratedValue(strategy=GenerationType.TABLE)
+
+这里要注意要使用数据库支持的，比如这里MySQL我们使用IDENTITY ;
+
+
+@Column( name = "id" )
+标注映射为id的列
+
+
+@Basic：当get方法未使用其他注解时，默认使用该注解
+
+@Enumerated(EnumType.STRING)：枚举注解，存储枚举类型的String值
+
+@Enumerated(EnumType.ORDINAL)：枚举注解，存储枚举类型的顺序号，是一个int值
+
+@Temporal(TemporalType.TIMESTAMP)：指定日期存储格式，TIMESTAMP（默认）带日期和时间，DATE日期，TIME时间
+
+@Column：默认数据库表字段名与属性名一致，若不一致，则使用该注解为属性指定对应的表字段
+
+@Transient：使用该注解的方法，对应的字段不进行持久化，创建的表中不包含该字段。
+
+
+@Entity(name="EntityName")  
+必须,name为可选,对应数据库中一的个表  
+
+2、@Table(name="",catalog="",schema="")  
+可选,通常和@Entity配合使用,只能标注在实体的class定义处,表示实体对应的数据库表的信息  
+name:可选,表示表的名称.默认地,表名和实体名称一致,只有在不一致的情况下才需要指定表名  
+catalog:可选,表示Catalog名称,默认为Catalog("").  
+schema:可选,表示Schema名称,默认为Schema("").  
+
+3、@id  
+必须  
+@id定义了映射到数据库表的主键的属性,一个实体只能有一个属性被映射为主键.置于getXxxx()前.  
+
+4、@GeneratedValue(strategy=GenerationType,generator="")  
+可选  
+strategy:表示主键生成策略,有AUTO,INDENTITY,SEQUENCE 和 TABLE 4种,分别表示让ORM框架自动选择,  
+根据数据库的Identity字段生成,根据数据库表的Sequence字段生成,以有根据一个额外的表生成主键,默认为AUTO  
+generator:表示主键生成器的名称,这个属性通常和ORM框架相关,例如,Hibernate可以指定uuid等主键生成方式.  
+示例:  
+@Id  
+@GeneratedValues(strategy=StrategyType.SEQUENCE)  
+public int getPk() {  
+return pk;  
+}  
+
+5、@Basic(fetch=FetchType,optional=true)  
+可选  
+@Basic表示一个简单的属性到数据库表的字段的映射,对于没有任何标注的getXxxx()方法,默认即为@Basic  
+fetch: 表示该属性的读取策略,有EAGER和LAZY两种,分别表示主支抓取和延迟加载,默认为EAGER.  
+optional:表示该属性是否允许为null,默认为true  
+示例:  
+@Basic(optional=false)  
+public String getAddress() {  
+return address;  
+}  
+
+6、@Column  
+可选  
+@Column描述了数据库表中该字段的详细定义,这对于根据JPA注解生成数据库表结构的工具非常有作用.  
+name:表示数据库表中该字段的名称,默认情形属性名称一致  
+nullable:表示该字段是否允许为null,默认为true  
+unique:表示该字段是否是唯一标识,默认为false  
+length:表示该字段的大小,仅对String类型的字段有效  
+insertable:表示在ORM框架执行插入操作时,该字段是否应出现INSETRT语句中,默认为true  
+updateable:表示在ORM框架执行更新操作时,该字段是否应该出现在UPDATE语句中,默认为true.对于一经创建就不可以更改的字段,该属性非常有用,如对于birthday字段.  
+columnDefinition: 表示该字段在数据库中的实际类型.通常ORM框架可以根据属性类型自动判断数据库中字段的类型,但是对于Date类型仍无法确定数据库中字段类型究竟是 DATE,TIME还是TIMESTAMP.此外,String的默认映射类型为VARCHAR,如果要将String类型映射到特定数据库的BLOB或 TEXT字段类型,该属性非常有用.  
+示例:  
+@Column(name="BIRTH",nullable="false",columnDefinition="DATE")  
+public String getBithday() {  
+return birthday;  
+}  
+
+7、@Transient  
+可选  
+@Transient表示该属性并非一个到数据库表的字段的映射,ORM框架将忽略该属性.  
+如果一个属性并非数据库表的字段映射,就务必将其标示为@Transient,否则,ORM框架默认其注解为@Basic  
+示例:  
+//根据birth计算出age属性  
+@Transient  
+public int getAge() {  
+return getYear(new Date()) - getYear(birth);  
+}  
+
+8、@ManyToOne(fetch=FetchType,cascade=CascadeType)  
+可选  
+@ManyToOne表示一个多对一的映射,该注解标注的属性通常是数据库表的外键  
+optional:是否允许该字段为null,该属性应该根据数据库表的外键约束来确定,默认为true  
+fetch:表示抓取策略,默认为FetchType.EAGER  
+cascade:表示默认的级联操作策略,可以指定为ALL,PERSIST,MERGE,REFRESH和REMOVE中的若干组合,默认为无级联操作  
+targetEntity:表示该属性关联的实体类型.该属性通常不必指定,ORM框架根据属性类型自动判断targetEntity.  
+示例:  
+//订单Order和用户User是一个ManyToOne的关系  
+//在Order类中定义  
+@ManyToOne()  
+@JoinColumn(name="USER")  
+public User getUser() {  
+return user;  
+}  
+
+9、@JoinColumn  
+可选  
+@JoinColumn和@Column类似,介量描述的不是一个简单字段,而一一个关联字段,例如.描述一个@ManyToOne的字段.  
+name:该字段的名称.由于@JoinColumn描述的是一个关联字段,如ManyToOne,则默认的名称由其关联的实体决定.  
+例如,实体Order有一个user属性来关联实体User,则Order的user属性为一个外键,  
+其默认的名称为实体User的名称+下划线+实体User的主键名称  
+示例:  
+见@ManyToOne  
+
+10、@OneToMany(fetch=FetchType,cascade=CascadeType)  
+可选  
+@OneToMany描述一个一对多的关联,该属性应该为集体类型,在数据库中并没有实际字段.  
+fetch:表示抓取策略,默认为FetchType.LAZY,因为关联的多个对象通常不必从数据库预先读取到内存  
+cascade:表示级联操作策略,对于OneToMany类型的关联非常重要,通常该实体更新或删除时,其关联的实体也应当被更新或删除  
+例如:实体User和Order是OneToMany的关系,则实体User被删除时,其关联的实体Order也应该被全部删除  
+示例:  
+@OneToMany(cascade=ALL)  
+public List getOrders() {  
+return orders;  
+}  
+
+11、@OneToOne(fetch=FetchType,cascade=CascadeType)  
+可选  
+@OneToOne描述一个一对一的关联  
+fetch:表示抓取策略,默认为FetchType.LAZY  
+cascade:表示级联操作策略  
+示例:  
+@OneToOne(fetch=FetchType.LAZY)  
+public Blog getBlog() {  
+return blog;  
+}  
+
+12、@ManyToMany  
+可选  
+@ManyToMany 描述一个多对多的关联.多对多关联上是两个一对多关联,但是在ManyToMany描述中,中间表是由ORM框架自动处理  
+targetEntity:表示多对多关联的另一个实体类的全名,例如:package.Book.class  
+mappedBy:表示多对多关联的另一个实体类的对应集合属性名称  
+示例:  
+User实体表示用户,Book实体表示书籍,为了描述用户收藏的书籍,可以在User和Book之间建立ManyToMany关联  
+@Entity  
+public class User {  
+private List books;  
+@ManyToMany(targetEntity=package.Book.class)  
+public List getBooks() {  
+return books;  
+}  
+public void setBooks(List books) {  
+this.books=books;  
+}  
+}  
+
+@Entity  
+public class Book {  
+private List users;  
+@ManyToMany(targetEntity=package.Users.class, mappedBy="books")  
+public List getUsers() {  
+return users;  
+}  
+public void setUsers(List users) {  
+this.users=users;  
+}  
+}  
+两个实体间相互关联的属性必须标记为@ManyToMany,并相互指定targetEntity属性,  
+需要注意的是,有且只有一个实体的@ManyToMany注解需要指定mappedBy属性,指向targetEntity的集合属性名称  
+利用ORM工具自动生成的表除了User和Book表外,还自动生成了一个User_Book表,用于实现多对多关联  
+
+13、@MappedSuperclass  
+可选  
+@MappedSuperclass可以将超类的JPA注解传递给子类,使子类能够继承超类的JPA注解  
+示例:  
+@MappedSuperclass  
+public class Employee() {  
+....  
+}  
+
+@Entity  
+public class Engineer extends Employee {  
+.....  
+}  
+@Entity  
+public class Manager extends Employee {  
+.....  
+}  
+
+14、@Embedded  
+可选  
+@Embedded将几个字段组合成一个类,并作为整个Entity的一个属性.  
+例如User包括id,name,city,street,zip属性.  
+我们希望city,street,zip属性映射为Address对象.这样,User对象将具有id,name和address这三个属性.  
+Address对象必须定义为@Embededable  
+示例:  
+@Embeddable  
+public class Address {city,street,zip}  
+@Entity  
+public class User {  
+@Embedded  
+public Address getAddress() {  
+..........  
+}  
+}  
+
+Hibernate验证注解  
+注解  
+适用类型  
+说明  
+示例  
+@Pattern  
+String  
+通过正则表达式来验证字符串  
+@attern(regex="[a-z]{6}")  
+@Length  
+String  
+验证字符串的长度  
+@length(min=3,max=20)  
+@Email  
+String  
+验证一个Email地址是否有效  
+@email  
+@Range  
+Long  
+验证一个整型是否在有效的范围内  
+@Range(min=0,max=100)  
+@Min  
+Long  
+验证一个整型必须不小于指定值  
+@Min(value=10)  
+@Max  
+Long  
+验证一个整型必须不大于指定值  
+@Max(value=20)  
+@Size  
+集合或数组  
+集合或数组的大小是否在指定范围内  
+@Size(min=1,max=255)  
+以上每个注解都可能性有一个message属性，用于在验证失败后向用户返回的消息，还可以三个属性上使用多个注解 <!--v:3.2-->
+
+****************************************************************************************************
+
+1.@Entity  
+通过注释@Entity或者（@Entity()）表示被标示的类对应数据库中的一张表。  
+}  
+@Entity  
+public class TravelProfile {  
+...  
+}  
+上面的例子告诉O/R映射引擎，类TravelProfile是可以持久化的，同时它对应数据库中的一张表。但是它没有指明对应哪个数据库中的哪张表。  
+2.元数据映射标记  
+2.1 @Table  
+@Table()标记为实体初始化一张表，定义如下：  
+@Target({TYPE}) @Retention(RUNTIME)  
+public @interface Table {  
+String name() default "";  
+String catalog() default "";  
+String schema() default "";  
+UniqueConstraint[] uniqueConstraints() default {};  
+}  
+Name:指明表的名字。（可选）  
+Catalog:表示表的catalog.（可选）  
+Schema:表示表的schema.（可选）  
+uniqueConstraints:制定表的唯一约束。（可选）  
+因为所有的属性都是可选的，也就是说@Table可以在进行映射的时候可以不标明。当不标明的情况下表的名字就是实体的类名。表属于的schema就是所属实体单元集的schema（就是当前连接数据库的用户）。  
+下面给出的例子中，指明表为CUST,所属的schema为RECORDS：  
+@Entity  
+@Table(name="CUST", schema="RECORDS")  
+public class Customer { ... }  
+
+2.2 @UniqueConstraint标记  
+@UniqueConstraint用来指定表字段的唯一约束，定义如下：  
+@Target({}) @Retention(RUNTIME)  
+public @interface UniqueConstraint {  
+String[] columnNames();  
+}  
+columnNames：制定唯一约束的字段。  
+
+@Entity  
+@Table(  
+name="EMPLOYEE",  
+uniqueConstraints=  
+@UniqueConstraint(columnNames={"EMP_ID", "EMP_NAME"})  
+)  
+public class Employee { ... }  
+上面的例子，唯一约束标记指定字段EMP_ID和字段EMP_NAME在表中EMPLOYEE中是唯一的。  
+2.3@Column标记  
+@Column标记把实体的属性或域映射到表的字段，当没有在实体的属性或域中使用该标记那数据库的对应表的字段名就是实体的属性名或域名。其定义为：  
+@Target({METHOD, FIELD}) @Retention(RUNTIME)  
+public @interface Column {  
+String name() default "";  
+boolean unique() default false;  
+boolean nullable() default true;  
+boolean insertable() default true;  
+boolean updatable() default true;  
+String columnDefinition() default "";  
+String table() default "";  
+int length() default 255;  
+int precision() default 0; // decimal precision  
+int scale() default 0; // decimal scale  
+}  
+Name:指定字段名。  
+Unique：指明该字段是否唯一，默认为false。  
+Nullable：指明是否可以为空，默认是true。  
+Insertable：指明该字段在产生SQL INSERT语句中是否产生该字段。  
+Updatable：指明该字段在产生SQL INSERT语句中是否产生该字段。  
+columnDefinition：指定产生表的时候，使用它指定该字段一些属性。  
+Table：当一个实体对应多个表的时候，指定该字段属于哪个表。  
+Length：制定该字段的长度（只有在字段为字符类型的才有用），默认是255。  
+Precision: 指明字段的精度（在字段为decimal类型的时候使用），默认是0  
+Scale：为字段为number型指定标量，默认为0。  
+下面给出例子：  
+@Column(name="DESC", nullable=false, length=512)  
+public String getDescription() { return description; }  
+
+@Column(name="DESC",  
+columnDefinition="CLOB NOT NULL",  
+table="EMP_DETAIL")  
+@Lob  
+public String getDescription() { return description; }  
+
+@Column(name="ORDER_COST", updatable=false, precision=12, scale=2)  
+public BigDecimal getCost() { return cost; }  
+
+2.4@JoinColumn标记  
+@JoinColumn标记用来映射实体之间的关联关系，定义如下：  
+@Target({METHOD, FIELD}) @Retention(RUNTIME)  
+public @interface JoinColumn {  
+String name() default "";  
+String referencedColumnName() default "";  
+boolean unique() default false;  
+boolean nullable() default true;  
+boolean insertable() default true;  
+boolean updatable() default true;  
+String columnDefinition() default "";  
+String table() default "";  
+}  
+Name:指定外键字段名，缺省的名字是被引用实体在引用实体内部的属性标量名或域名加上下划线"_"，再加上被引用实体的主键字段名构成。  
+ReferencedColumnName：被引用表的字段，如果没有那缺省的就是该表的主键。  
+Unique：指明该字段是否唯一，默认为false。  
+Nullable：外键是否可以为空，默认是true。  
+Insertable：指明该字段在产生SQL INSERT语句中是否产生该字段。  
+Updatable：指明该字段在产生SQL INSERT语句中是否产生该字段。  
+columnDefinition：指定产生表的时候，使用它指定该字段一些属性。  
+Table：当一个实体对应多个表的时候，指定该字段属于哪个表。  
+下面例子的多对一关系中，指明了被引用实体在本实体的外键为ADDR_ID。  
+@ManyToOne  
+@JoinColumn(name="ADDR_ID")  
+public Address getAddress() { return address; }  
+
+2.5@JoinColumns标记  
+@JoinColumns标记用在符合外键的时候，这个时候属性name和referencedColumnName必须在@JoinColumn中进行初始化。例如： 
+@ManyToOne  
+@JoinColumns({  
+@JoinColumn(name="ADDR_ID", referencedColumnName="ID"),  
+@JoinColumn(name="ADDR_ZIP", referencedColumnName="ZIP")  
+})  
+public Address getAddress() { return address; }  
+
+2.6@Id标记  
+@Id标记把实体属性或域映射到表的主键。其定义如下：  
+@Target({METHOD, FIELD}) @Retention(RUNTIME)  
+public @interface Id {}  
+下面例子通过标记@Id初始化实体的主键为id，也可以通过加上标记@Column(name="PrimaryKey")自定义表的主键。  
+@Id  
+public Long getId() { return id; }  
+
+2.7@GeneratedValue标记  
+提供产生主键的策略，这就意味着它只能在出现标记@Id的情况下使用。其定义如下：  
+@Target({METHOD, FIELD}) @Retention(RUNTIME)  
+public @interface GeneratedValue {  
+GenerationType strategy() default AUTO;  
+String generator() default "";  
+}  
+
+public enum GenerationType { TABLE, SEQUENCE, IDENTITY, AUTO };  
+策略类型为枚举类型，共有四种类型分别为：TABLE, SEQUENCE, IDENTITY, AUTO。  
+TABLE：提示持久化引擎实现者，使用数据库的表来产生和维护主键。  
+SEQUENCE和IDENTITY：分别指定使用当前数据库的序列号和标识字段来产生唯一表识。  
+AUTO：制定持久化引擎实现者，为不同的数据库选择合适的策略产生唯一标识。  
+
+Generator：制定主键产生器，默认有持久化实现者提供。例如：  
+@Id  
+@GeneratedValue(strategy=SEQUENCE, generator="CUST_SEQ")  
+@Column(name="CUST_ID")  
+public Long getId() { return id; }  
+
+@Id  
+@GeneratedValue(strategy=TABLE, generator="CUST_GEN")  
+@Column(name="CUST_ID")  
+Long id;  
+
+2.8@IdClass标记  
+这个标记用来指定一个实体类作为一个另外一个实体的主键。这个时候要求实体的复合主键的每个属性或域必须和复合主键类对应的属性或域是一样的。其定义如下：  
+@Target({TYPE}) @Retention(RUNTIME)  
+public @interface IdClass {  
+Class value();  
+}  
+下面例子中，复合主键类为EmployeePK，包含域empName和birthday类型分别为String,Date。  
+@IdClass(com.jl.hr.EmployeePK.class)  
+@Entity  
+public class Employee {  
+@Id String empName;  
+@Id Date birthDay;  
+
+2.9@Transient标记  
+标记指示实体的属性或域是非持久化的。其定义如下：  
+@Target({METHOD, FIELD}) @Retention(RUNTIME)  
+public @interface Transient {}  
+
+下面的例子说明实体 Employee的域currentUser是非持久化的。  
+@Entity  
+public class Employee {  
+@Id int id;  
+@Transient User currentUser;  
+...  
+}  
+
+2.10@Version标记  
+初始化实体的乐观锁的值，这个标记在大量并发访问的实体中非常有用。如果要对实体使用这个标记那最好的策略是一个实体使用一个@Version标记，同时这个标记对应字段的类型一般为：int,Integer,short,Short,long,Long,Timestamp中的一种。其定义如下：  
+@Target({METHOD, FIELD}) @Retention(RUNTIME)  
+public @interface Version {}  
+
+给出相关的例子如下：  
+@Version  
+@Column(name="OPTLOCK")  
+protected int getVersionNum() { return versionNum; }  
+
+2.11@Lob标记  
+此标记初始化实体的属性或域映射成数据库支持的大对象类型。大对象可以是字符也可以是二进制类型。除了字符串和字符类型的默认映射成Blob类型，其它的类型根据实体属性或域的类型来决定数据库大对象的类型。例如：  
+@Lob  
+@Column(name="REPORT")  
+protected String report;  
+
+@Lob @Basic(fetch=LAZY)  
+@Column(name="EMP_PIC", columnDefinition="BLOB NOT NULL")  
+protected byte[] pic;  
+
+2.12@Enumerated标记  
+用来指定实体持久化属性的为枚举类型，其定义如下：  
+@Target({METHOD, FIELD}) @Retention(RUNTIME)  
+public @interface Enumerated {  
+EnumType value() default ORDINAL;  
+}  
+
+public enum EnumType {  
+ORDINAL,  
+STRING  
+}  
+如果标记没有显性给出或者EnumType没有指定，那枚举类型默认为ORDINAL数字标识。例如：  
+public enum EmployeeStatus {FULL_TIME, PART_TIME, CONTRACT}  
+public enum SalaryRate {JUNIOR, SENIOR, MANAGER, EXECUTIVE}  
+@Entity public class Employee {  
+...  
+public EmployeeStatus getStatus() {...}  
+@Enumerated(STRING)  
+public SalaryRate getPayScale() {...}  
+...  
+}  
+上面例子中，定义了两个枚举类型EmployeeStatus和SalaryRate。在实体两个属性status类型为EmployeeStatus，而payScale为SalaryRate类型。其中一个显性给出了标记@Enumerated(STRING)来说明枚举类型的值当成字符串使用，而默认的是从1开始的数字来标识的。也可以通过标记@Enumerated(ORDINAL)指示枚举里面类型的值是数字类型的。例如在EmployeeStatus  
+中的FULL_TIME, PART_TIME, CONTRACT分别代表的数字是1，2，3，4而SalaryRate  
+中的JUNIOR, SENIOR, MANAGER, EXECUTIVE代表的分别是字符串"JUNIOR", "SENIOR", "MANAGER", "EXECUTIVE"。  
+
+2.13@ManyToOne标记  
+当实体之间的关系是多对一的时候，该标记定义一个单值的字段与其它实体相关联。其定义如下：  
+@Target({METHOD, FIELD}) @Retention(RUNTIME)  
+public @interface ManyToOne {  
+Class targetEntity() default void.class;  
+CascadeType[] cascade() default {};  
+FetchType fetch() default EAGER;  
+boolean optional() default true;  
+}  
+
+public enum CascadeType { ALL, PERSIST, MERGE, REMOVE, REFRESH};  
+
+targetEntity：表示相关联的实体类。  
+Cascade：级联操作选项，PERSIST, MERGE, REMOVE, REFRESH分别对应增加，更新，删除和查找的联级设置选项。如果选择ALL就使得前面这些联级都生效，也就是cascade=ALL 等同于cascade={PERSIST, MERGE, REMOVE,REFRESH}  
+Fetch：制定关联实体的加载方式，包括EAGER和LAZY两种方式。当为EAGER选选项的时候，当查询实体的时候会把它相关联的实体实例也加载。当为LAZY的时候加载实体实例的时候与之相关联的实体实例不会加载,默认为EAGER。  
+Optional：指定关联实体关系是否可以为空，默认是为true。当为false的时候，那当有实体实例的存在总会有与之相关实体实例的存在。  
+例如：  
+@ManyToOne(optional=flase)  
+@JoinColumn(name="CUST_ID", nullable=false, updatable=false)  
+public Customer getCustomer() { return customer; }  
+
+2.14@OneToOne标记  
+标记定义实体一对一关系的联系，通过一个字段来进行关联。其定义如下：  
+@Target({METHOD, FIELD}) @Retention(RUNTIME)  
+public @interface OneToOne {  
+Class targetEntity() default void.class;  
+CascadeType[] cascade() default {};  
+FetchType fetch() default EAGER;  
+boolean optional() default true;  
+String mappedBy() default "";  
+}  
+前面四个选项和8.2.13中的意义是一样的。  
+mappedBy：代表这个属性或域是关系的拥有者，也就是说mappedBy选择应该是在非关系拥有者方才会出现。所谓关系的拥有者就是在表中包含了关系字段的那张表。  
+现在假设有实体Customer和实体CustomerRecoder它们之间是一对一的关系，同时实体Customer是关系的拥有者。这个时候通过标记@OneToOne来完成关联，在实体Customer相关代码如下：  
+@OneToOne(optional=false)  
+@JoinColumn(  
+name="CUSTREC_ID", unique=true, nullable=false, updatable=false)  
+public CustomerRecord getCustomerRecord() { return customerRecord; }  
+在实体CustomerRecord相关代码如下：  
+@OneToOne(optional=false, mappedBy="customerRecord")  
+public Customer getCustomer() { return customer; }  
+因为CustomerRecord是关系的非拥有者所有mappedBy只能在这边出现。  
+
+
+2.15@OneToMany标记  
+用来标记实体之间的一对多的关系，其定义如下：  
+@Target({METHOD, FIELD}) @Retention(RUNTIME)  
+public @interface OneToMany {  
+Class targetEntity() default void.class;  
+CascadeType[] cascade() default {};  
+FetchType fetch() default LAZY;  
+String mappedBy() default "";  
+}  
+值得注意的是表示关联实体的集合要使用范形来制定集合内部的关联实体，否则必须要指定targetEntity的实体类型。Fetch类型默认为LAZY而@OneToOne和ManyToOne则默认的为EAGER。  
+假设现在有实体Customer和Order它们之间的关系是一对多的关系，同时Order是关系的拥有者。  
+在实体Customer中的代码为：  
+
+@OneToMany(cascade=ALL, mappedBy="customer")  
+public Set<Order> getOrders() { return orders; }  
+
+在实体Order中的代码为：  
+
+@ManyToOne  
+@JoinColumn(name="CUST_ID", nullable=false)  
+public Customer getCustomer() { return customer; }  
+
+2.16@JoinTable标记  
+用来映射多对多和单项的一对多关系，当不是用该标记的时候会根据默认的映射原则产生关系连接表。其定义如下：  
+public @interface JoinTable {  
+String name() default "";  
+String catalog() default "";  
+String schema() default "";  
+JoinColumn[] joinColumns() default {};  
+JoinColumn[] inverseJoinColumns() default {};  
+UniqueConstraint[] uniqueConstraints() default {};  
+}  
+Name：指定连接表的名字。  
+Catalog：指定表所属的catalog。  
+Schema：指定表所属的schema。  
+joinColumns：指定关系拥有方作为外键的主键。  
+inverseJoinColumns：指定关系非拥有方作为外键的主键。  
+uniqueConstraints：指定表中的唯一约束。  
+例如：  
+@JoinTable(  
+name="CUST_PHONE",  
+joinColumns=  
+@JoinColumn(name="CUST_ID", referencedColumnName="ID"),  
+inverseJoinColumns=  
+@JoinColumn(name="PHONE_ID", referencedColumnName="ID")  
+)  
+上面例子，连接表的名字为CUST_PHONE里面有两个外键，一个来自关系拥有方的主键ID对应外键为CUST_ID；另一个是来自于关系的非拥有方的主键ID对应外键为PHONE_ID。  
+2.17@ManyToMany标记  
+标记实体之间的多对多的关系，如果不通过范形来制定集合中的关联实体类型那必须指定相应的关联实体类型。其定义如下：  
+@Target({METHOD, FIELD}) @Retention(RUNTIME)  
+public @interface ManyToMany {  
+Class targetEntity() default void.class;  
+CascadeType[] cascade() default {};  
+FetchType fetch() default LAZY;  
+String mappedBy() default "";  
+}  
+各个属性的意义和标记@OneToMany是一样的，请参照8.2.1.15。  
+如果关联是双向的两边都可以是关系的拥有方，可以通过标记@JoinTable来制定关系拥有方，请参照2.16。  
+设有实体Customer和PhoneNumber，则它们的关系映射代码如下：  
+在实体Customer中为：  
+@ManyToMany  
+@JoinTable(name="CUST_PHONES")  
+public Set<PhoneNumber> getPhones() { return phones; }  
+在实体PhoneNumber中为：  
+@ManyToMany(mappedBy="phones")  
+public Set<Customer> getCustomers() { return customers; }  
+在实际开发中，对于多对多关系我们经常使用标记@JoinTable来制定关系的拥有方，则对于上面的映射为：  
+@ManyToMany  
+@JoinTable(  
+name="CUST_PHONE",  
+joinColumns=  
+@JoinColumn(name="CUST_ID", referencedColumnName="ID"),  
+inverseJoinColumns=  
+@JoinColumn(name="PHONE_ID", referencedColumnName="ID")  
+)  
+public Set<PhoneNumber> getPhones() { return phones; }  
+
+@ManyToMany(mappedBy="phones")  
+public Set<Customer> getCustomers() { return customers; }  
+
+2.18@OrderBy标记  
+指定批量查询实例实例的时候指定排序的属性或域，其定义如下：  
+@Target({METHOD, FIELD}) @Retention(RUNTIME)  
+public @interface OrderBy {  
+String value() default "";  
+}  
+对于使用该标记对应的字段必须是可以比较的，默认的使用的是ASC也可以根据需求改变成DESC。当没有指定value的时候，那默认的就是对实体的主键进行排序，例如：  
+@Entity public class Course {  
+...  
+@ManyToMany  
+@OrderBy("lastname ASC")  
+public List<Student> getStudents() {...};  
+...  
+}  
+@Entity public class Student {  
+...  
+@ManyToMany(mappedBy="students")  
+@OrderBy // PK is assumed  
+public List<Course> getCourses() {...};  
+...  
+}

@@ -1,0 +1,216 @@
+Spring注解
+
+@Configuration
+表示这个类包含了1个或者多个@Bean注解的bean方法，这些bean由Spring容器管理
+
+@ComponentScan
+指示Spring去哪个包下寻找@Bean配置
+
+
+@EnableTransactionManagement
+打开Spring注解驱动的事务管理能力
+
+@PropertySource
+为Spring运行环境声明一组properties，可以为不同的应用程序环境使用不同的配置值
+
+@Autowired  不推荐使用，建议使用@Resource
+可以对成员变量、方法和构造函数进行标注，来完成自动装配的工作
+@Autowired是根据类型进行自动装配的
+
+@Resource（JSR-250标准注解，推荐使用它来代替Spring专有的@Autowired注解） 
+@Resource的作用相当于@Autowired，只不过@Autowired按byType自动注入，而@Resource默认按byName自动注入罢了。
+@Resource有两个属性是比较重要的，分别是name和type，Spring将@Resource注解的name属性解析为bean的名字，而type属性则解析为bean的类型。
+所以如果使用name属性，则使用byName的自动注入策略，而使用type属性时则使用byType自动注入策略。
+如果既不指定name也不指定type属性，这时将通过反射机制使用byName自动注入策略。 
+@Resource装配顺序 
+如果同时指定了name和type，则从Spring上下文中找到唯一匹配的bean进行装配，找不到则抛出异常
+如果指定了name，则从上下文中查找名称（id）匹配的bean进行装配，找不到则抛出异常
+如果指定了type，则从上下文中找到类型匹配的唯一bean进行装配，找不到或者找到多个，都会抛出异常
+如果既没有指定name，又没有指定type，则自动按照byName方式进行装配（见2）；如果没有匹配，则回退为一个原始类型（UserDao）进行匹配，如果匹配则自动装配；
+
+
+@Component（不推荐使用，推荐使用@Repository、@Service、@Controller )
+标注该元素为自动检测目标，如果是类会被Spring容器实例化并管理。
+
+只需要在对应的类上加上一个@Component注解，就将该类定义为一个Bean了： 
+Java代码  收藏代码
+@Component  
+public class UserDaoImpl extends HibernateDaoSupport implements UserDao {  
+    ...  
+}  
+
+使用@Component注解定义的Bean，默认的名称（id）是小写开头的非限定类名。如这里定义的Bean名称就是userDaoImpl。你也可以指定Bean的名称： 
+@Component("userDao") 
+@Component是所有受Spring管理组件的通用形式，Spring还提供了更加细化的注解形式：@Repository、@Service、@Controller，它们分别对应存储层Bean，业务层Bean，和展示层Bean。
+目前版本（2.5）中，这些注解与@Component的语义是一样的，完全通用，在Spring以后的版本中可能会给它们追加更多的语义。
+所以，我们推荐使用@Repository、@Service、@Controller来替代@Component。 
+
+@RequestMapping
+
+
+Spring MVC 4常用的那些注解
+    Spring从2.5版本开始在编程中引入注解，用户可以使用@RequestMapping， @RequestParam， @ModelAttribute等等这样类似的注解。到目前为止，Spring的版本虽然发生了很大的变化，但注解的特性却是一直延续下来，并不断扩展，让广大的开发人员的双手变的更轻松起来，这都离不开Annotation的强大作用，今天我们就一起来看看Spring MVC 4中常用的那些注解吧。
+
+    1. @Controller
+
+    Controller控制器是通过服务接口定义的提供访问应用程序的一种行为，它解释用户的输入，将其转换成一个模型然后将试图呈献给用户。Spring MVC 使用 @Controller 定义控制器，它还允许自动检测定义在类路径下的组件并自动注册。如想自动检测生效，需在XML头文件下引入 spring-context:
+
+
+    2. @RequestMapping
+
+    我们可以 @RequestMapping 注解将类似 “/favsoft”这样的URL映射到整个类或特定的处理方法上。一般来说，类级别的注解映射特定的请求路径到表单控制器上，而方法级别的注解只是映射为一个特定的HTTP方法请求（“GET”，“POST”等）或HTTP请求参数。
+
+@Controller
+@RequestMapping("/favsoft")
+public class AnnotationController {
+     
+    @RequestMapping(method=RequestMethod.GET)
+    public String get(){
+        return "";
+    }
+     
+    @RequestMapping(value="/getName", method = RequestMethod.GET)
+    public String getName(String userName) {
+        return userName;
+    }
+     
+    @RequestMapping(value="/{day}", method=RequestMethod.GET)
+    public String getDay(Date day){
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        return df.format(day);
+    }
+     
+    @RequestMapping(value="/addUser", method=RequestMethod.GET)
+    public String addFavUser(@Validated FavUser favUser,BindingResult result){
+        if(result.hasErrors()){
+            return "favUser";
+        }
+        //favUserService.addFavUser(favUser);
+        return "redirect:/favlist";
+    }
+ 
+    @RequestMapping("/test")
+    @ResponseBody
+    public String test(){
+        return "aa";
+    }
+     
+}
+
+    @RequestMapping 既可以作用在类级别，也可以作用在方法级别。当它定义在类级别时，标明该控制器处理所有的请求都被映射到 /favsoft 路径下。@RequestMapping中可以使用 method 属性标记其所接受的方法类型，如果不指定方法类型的话，可以使用 HTTP GET/POST 方法请求数据，但是一旦指定方法类型，就只能使用该类型获取数据。
+
+    @RequestMapping 可以使用 @Validated与BindingResult联合验证输入的参数，在验证通过和失败的情况下，分别返回不同的视图。
+
+    @RequestMapping支持使用URI模板访问URL。URI模板像是URL模样的字符串，由一个或多个变量名字组成，当这些变量有值的时候，它就变成了URI。
+
+  3. @PathVariable
+
+    在Spring MVC中，可以使用 @PathVariable 注解方法参数并将其绑定到URI模板变量的值上。如下代码所示：
+
+ String findOwner( String , Model model) {
+    FavUser favUser = favUserService.findFavUser();
+    model.addAttribute(
+     ;
+}
+
+ URI模板 “favusers/{favUserId}"指定变量的名字 favUserId ,当控制器处理这个请求的时候， favUserId的值会被设定到URI中。比如，当有一个像“favusers/favccxx”这样的请求时，favUserId的值就是 favccxx。
+
+    @PathVariable 可以有多个注解，像下面这样：
+@RequestMapping(value="/owners/{ownerId}/pets/{petId}", method=RequestMethod.GET)public String findPet(@PathVariable String ownerId, @PathVariable String petId, Model model) {
+    Owner owner = ownerService.findOwner(ownerId);
+    Pet pet = owner.getPet(petId);
+    model.addAttribute("pet", pet);    return "displayPet";
+}
+    
+    @PathVariable中的参数可以是任意的简单类型，如int, long, Date等等。Spring会自动将其转换成合适的类型或者抛出 TypeMismatchException异常。当然，我们也可以注册支持额外的数据类型。
+
+    如果@PathVariable使用Map<String, String>类型的参数时， Map会填充到所有的URI模板变量中。
+
+    @PathVariable支持使用正则表达式，这就决定了它的超强大属性，它能在路径模板中使用占位符，可以设定特定的前缀匹配，后缀匹配等自定义格式。 
+
+    @PathVariable还支持矩阵变量，因为现实场景中用的不多，这就不详细介绍了，有需要的童鞋请查看官网的文档。
+
+    4. @RequestParam
+
+    @RequestParam将请求的参数绑定到方法中的参数上，如下面的代码所示。其实，即使不配置该参数，注解也会默认使用该参数。如果想自定义指定参数的话，如果将@RequestParam的 required 属性设置为false（如@RequestParam（value="id",required=false））。
+
+    5. @RequestBody
+
+    @RequestBody是指方法参数应该被绑定到HTTP请求Body上。
+
+@RequestMapping(value = "/something", method = RequestMethod.PUT)public void handle(@RequestBody String body, Writer writer) throws IOException {
+    writer.write(body);
+}
+
+   如果觉得@RequestBody不如@RequestParam趁手，我们可以使用 HttpMessageConverter将request的body转移到方法参数上， HttMessageConverser将 HTTP请求消息在Object对象之间互相转换，但一般情况下不会这么做。事实证明，@RequestBody在构建REST架构时，比@RequestParam有着更大的优势。
+
+
+  6. @ResponseBody
+
+    @ResponseBody与@RequestBody类似，它的作用是将返回类型直接输入到HTTP response body中。@ResponseBody在输出JSON格式的数据时，会经常用到，代码见下图：
+
+@RequestMapping(value = "/something", method = RequestMethod.PUT)@ResponseBodypublic String helloWorld() {    return "Hello World";
+}
+
+    7. @RestController
+    
+    我们经常见到一些控制器实现了REST的API，只为服务于JSON，XML或其它自定义的类型内容，@RestController用来创建REST类型的控制器，与@Controller类型。@RestController就是这样一种类型，它避免了你重复的写@RequestMapping与@ResponseBody。
+
+@RestController
+public class FavRestfulController {
+
+	@RequestMapping(value="/getUserName",method=RequestMethod.POST)
+	public String getUserName(@RequestParam(value="name") String name){
+		return name;
+	}
+}
+
+    8. HttpEntity
+
+    HttpEntity除了能获得request请求和response响应之外，它还能访问请求和响应头，如下所示：
+@RequestMapping("/something")public ResponseEntity<String> handle(HttpEntity<byte[]> requestEntity) throws UnsupportedEncodingException {
+    String requestHeader = requestEntity.getHeaders().getFirst("MyRequestHeader"));    byte[] requestBody = requestEntity.getBody();    // do something with request header and body
+
+    HttpHeaders responseHeaders = new HttpHeaders();
+    responseHeaders.set("MyResponseHeader", "MyValue");    return new ResponseEntity<String>("Hello World", responseHeaders, HttpStatus.CREATED);
+}
+
+    9. @ModelAttribute
+    @ModelAttribute可以作用在方法或方法参数上，当它作用在方法上时，标明该方法的目的是添加一个或多个模型属性（model attributes）。该方法支持与@RequestMapping一样的参数类型，但并不能直接映射成请求。控制器中的@ModelAttribute方法会在@RequestMapping方法调用之前而调用，示例如下：
+@ModelAttribute
+public Account addAccount(@RequestParam String number) {
+    return accountManager.findAccount(number);
+}
+
+@ModelAttribute
+public void populateModel(@RequestParam String number, Model model) {
+    model.addAttribute(accountManager.findAccount(number));    
+    // add more ...
+}
+
+    @ModelAttribute方法用来在model中填充属性，如填充下拉列表、宠物类型或检索一个命令对象比如账户（用来在HTML表单上呈现数据）。
+
+    @ModelAttribute方法有两种风格：一种是添加隐形属性并返回它。另一种是该方法接受一个模型并添加任意数量的模型属性。用户可以根据自己的需要选择对应的风格。
+
+    @ModelAttribute作用在方法参数上
+
+    当@ModelAttribute作用在方法参数上时，表明该参数可以在方法模型中检索到。如果该参数不在当前模型中，该参数先被实例化然后添加到模型中。一旦模型中有了该参数，该参数的字段应该填充所有请求参数匹配的名称中。这是Spring MVC中重要的数据绑定机制，它省去了单独解析每个表单字段的时间。
+
+    @ModelAttribute是一种很常见的从数据库中检索属性的方法，它通过@SessionAttributes使用request请求存储。在一些情况下，可以很方便的通过URI模板变量和类型转换器检索属性。
+
+    注解的出现终结了XML配置文件漫天飞的年代，它让程序拥有更高的可读性，可配置性与灵活性。当然，也有一些人说注解不如配置文件显的结构清晰，个人觉得所谓的结构应该是一个统一的规范，而不是将一堆文件结构糅合在一起。这就好比是面向对象与面向结构，你能说面向对象的逻辑不清晰吗？
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
