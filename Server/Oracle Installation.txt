@@ -188,6 +188,7 @@ Completing Database Creation
 100% complete
 
 #### 配置监听
+***  Windows下请使用网络配置助手(Net Configuration Assistant)直接配置
 
 1.使用netca静默方式创建监听
 
@@ -313,7 +314,7 @@ ORA-27101: shared memory realm does not exist
 Linux-x86_64 Error: 2: No such file or directory
 
 解决办法：
-使用Oracle用户执行命令
+使用Oracle用户执行下面命令，重启数据库实例和监听控制器
 
 $ sqlplus / as sysdba
 SQL> startup
@@ -322,6 +323,15 @@ $lsnrctl start
 $lsnrctl stop
 
 
+Oracle链接不上，tns或者listener问题
+*** Windows下请使用网络配置助手(Net Configuration Assistant)直接配置
+*** Linux可以修改listener.ora或者tnsname.ora配置文件
+然后重启数据库实例和监听控制器
+
+
+修改用户密码
+$ sqlplus / as sysdba
+SQL> ALTER USER 用户名 IDENTIFIED BY 新密码;
 
 
 Oracle表死锁的问题
