@@ -1,0 +1,23 @@
+Gradle
+
+Gradle是新一代的Java应用编译打包系统
+
+Gradle需要Java运行环境，最好是JDK7以上
+
+下载安装Gradle
+
+1. 下载 http://www.gradle.org/downloads
+
+2. 解压Gradle到指定的目录里
+
+3. 把GRADLE_HOME/bin目录，添加到环境变量PATH里面
+   在命令行里运行一下命令gradle，检查PATH是否设置正确
+   
+
+使用Gradle
+
+Gradle项目会有几个配置文件，最关键的是build.gradle，其中内容由Groovy语言写成，熟悉后再学习
+
+在IDEA集成开发环境里，菜单View -> Tool Windows -> Gradle可以打开Gradle窗口，可以查看Gradle任务，修改build.gradle文件后，必须在这里刷新一下
+
+在命令行下，进入build.gradle所在的目录，敲命令 ...> gradle war  这样可以直接用Gradle打包编译出war包，其中的war是个任务名称，就是编译打包一个war包
