@@ -1,0 +1,24 @@
+CodeStyle.jar文件为图腾泰科公司推荐的代码风格设置文件
+
+在IDEA或者Android Studio里面
+
+菜单 File -> Import Settings 导入代码风格设置文件CodeStyle.jar
+
+格式化代码，可以查看效果
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+以下内容已废弃
+在Eclipse下，可以设置代码格式化，导入code_formatter.xml配置文件实现上面效果
+     
