@@ -1,0 +1,17 @@
+反变异Android APK
+
+1. 工具准备
+apktool
+dex2jar  能把apk里的dex转为jar包
+CFR 反编译器，几个常见的反编译器内核：http://www.javadecompilers.com/
+
+
+dex2jar用法：
+$ ./d2j-dex2jar.sh  ../test.apk
+
+
+CFR反编译器用法：
+$ java -jar cfr_0_105.jar ./test.jar --outputdir /tmp/putithere
+            反编译器jar    目标jar     指定结果存放的目录           
+
+
