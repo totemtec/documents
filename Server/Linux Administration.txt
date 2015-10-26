@@ -1,3 +1,55 @@
+查看和修改主机名，需要修改下面2个文件
+查看主机名
+$ hostnamectl
+$ hostnamectl status
+
+设置主机名
+# hostnamectl set-hostname dev.totemtec.com
+
+
+
+
+
+设置系统当前时区为香港，然后检查系统时区设置
+
+timedatectl set-timezone Asia/Hong_Kong
+timedatectl
+
+
+
+修正警告：
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+
+消除上述警告的方法：
+# vi /etc/environment
+添加下面2行
+LANG=en_US.utf-8
+LC_ALL=en_US.utf-8
+
+
+
+启动关闭防火墙
+# systemctl start firewalld         # 启动,
+# systemctl enable firewalld        # 开机启动
+# systemctl stop firewalld          # 关闭
+# systemctl disable firewalld       # 取消开机启动
+
+防火墙打开端口
+查看Zone
+# firewall-cmd --get-active-zones
+
+打开public zone下的端口
+# firewall-cmd --zone=public --add-port=8080/tcp --permanent
+# firewall-cmd --zone=public --add-service=http --permanent
+
+重新加载防火墙
+# firewall-cmd --reload
+
+
+
+
+#############   以下内容未在CentOS 7.0上进行测试 ###################
+
 
 配置网卡，网络，网关
 
@@ -131,16 +183,6 @@ Linux防火墙设置配置
 -A INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT
 
 
-
-修正警告：
--bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
-
-消除上述警告的方法：
-# sudo vi /etc/sysconfig/i18n
-添加一行： LC_CTYPE="en_US.UTF-8"
-
-保存退出后：执行命令使设置生效：
-# source /etc/sysconfig/i18n
 
 
 

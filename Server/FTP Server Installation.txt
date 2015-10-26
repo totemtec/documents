@@ -1,3 +1,39 @@
+VSFTPD 安装与配置
+
+1. 安装
+# yum install vsftpd
+
+2. 修改配置
+# vi /etc/vsftpd/vsftpd.conf
+
+###################################
+anonymous_enable=NO
+#anonymous_enable=YES
+
+chroot_local_user=YES
+#去掉前面的注释
+
+#chroot_list_enable=YES
+#chroot_list_file=/etc/vsftpd/chroot_list
+#不受限制的用户列表，用不用都OK
+
+allow_writeable_chroot=YES
+#加上这行解决了无法登陆的问题
+
+###################################
+
+
+3. 配置防火墙开启FTP服务端口
+
+# firewall-cmd --permanent --add-service=ftp
+# firewall-cmd --reload
+
+4. 启动nginx并设为开机自启
+
+# systemctl start vsftpd.service
+# systemctl enable vsftpd.service
+
+
 FTP 服务器安装
 
 抄自阿里云

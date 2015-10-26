@@ -1,3 +1,70 @@
+Tomcat安装在/data/tomcat
+
+1. 创建用户和组
+# sudo groupadd tomcat
+# mkdir /home/tomcat
+# sudo useradd -M -s /bin/nologin -g tomcat -d /home/tomcat tomcat
+
+2. 下载Tomcat
+
+# wget http://mirrors.cnnic.cn/apache/tomcat/tomcat-8/v8.0.28/bin/apache-tomcat-8.0.28.tar.gz
+
+
+3. 创建Tomcat目录并解压
+
+# mkdir /data/tomcat
+# tar xvf apache-tomcat-8.0.28.tar.gz -C /data/tomcat --strip-components=1
+
+4. 更新/data/tomcat下文件权限
+# chgrp -R tomcat conf
+# chmod g+rwx conf
+# chmod g+r conf/*
+# chown -R tomcat work/ temp/ logs/
+
+5. 把Tomcat安装为系统服务
+# vi /etc/systemd/system/tomcat.service
+
+############################################################
+
+# Systemd unit file for tomcat
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+Environment=JAVA_HOME=/opt/jdk1.8.0_65
+Environment=CATALINA_PID=/data/tomcat/temp/tomcat.pid
+Environment=CATALINA_HOME=/data/tomcat
+Environment=CATALINA_BASE=/data/tomcat
+Environment='CATALINA_OPTS=-Xms512M -Xmx2048M -server -XX:+UseParallelGC'
+Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+
+ExecStart=/data/tomcat/bin/startup.sh
+ExecStop=/bin/kill -15 $MAINPID
+
+User=tomcat
+Group=tomcat
+
+[Install]
+WantedBy=multi-user.target
+
+############################################################
+
+6. 重新加载Systemd
+# systemctl daemon-reload
+
+7. 启动Tomcat
+# systemctl start tomcat
+
+8. 设置开机启动Tomcat
+# systemctl enable tomcat
+
+
+
+
+
 Tomcat安装在/data/tomcat7
 
 下载压缩包

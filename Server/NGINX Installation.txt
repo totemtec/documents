@@ -1,0 +1,70 @@
+1. 安装EPEL源
+
+# yum -y install epel-release.noarch
+
+2. 手动进行系统更新
+
+# yum -y update
+
+3. 设置系统当前时区为香港，然后检查系统时区设置
+
+# timedatectl set-timezone Asia/Hong_Kong
+# timedatectl
+
+1. 添加nginx官方库
+
+在http://nginx.org/packages/centos/7/noarch/RPMS/查看最新库信息
+# rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+
+2. 安装nginx
+
+# yum -y install nginx
+
+
+3. 编辑nginx主配置文件
+
+# vi /etc/nginx/nginx.conf
+
+# CPU核心数
+worker_processes 4;
+
+# 打开gzip
+gzip on;
+
+# 隐藏nginx版本号
+server_tokens off;
+
+4. 编辑默认站点配置文件：
+
+# vi /etc/nginx/conf.d/default.conf
+
+把server {}段注释，再添加以下内容（用于屏蔽80端口空主机头访问）
+
+ server {
+  listen 80 default; 
+  return 500; 
+ }
+
+5. 配置防火墙开启HTTP服务端口
+
+# firewall-cmd --permanent --add-service=http
+# firewall-cmd --reload
+
+6. 启动nginx并设为开机自启
+
+# systemctl start nginx.service
+# systemctl enable nginx.service
+
+7. 如果Apache服务在运行会出现冲突，关闭并移除Apache
+
+systemctl stop httpd.service
+systemctl disable httpd.service
+yum -y remove httpd
+
+
+
+nginx主配置文件：/etc/nginx/nginx.conf
+nginx默认配置文件目录：/etc/nginx/conf.d/
+nginx默认站点主目录：/usr/share/nginx/html/
+nginx默认日志目录：/var/log/nginx/
+

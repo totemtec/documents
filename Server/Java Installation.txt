@@ -1,3 +1,33 @@
+在CentOS 7.0 x64 测试
+
+1.下载对应版本的JDK到Linux机器上：  
+
+# cd /opt/
+# wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u65-b17/jdk-8u65-linux-x64.tar.gz"
+
+# tar xzf jdk-8u65-linux-x64.tar.gz
+
+
+2.设置java环境:
+# alternatives --install /usr/bin/java java /opt/jdk1.8.0_65/bin/java 2000
+# alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_65/bin/jar 2000
+# alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_65/bin/javac 2000
+# alternatives --set jar /opt/jdk1.8.0_65/bin/jar
+# alternatives --set javac /opt/jdk1.8.0_65/bin/javac 
+
+
+3. 修改系统环境变量设置JAVA_HOME
+
+# vi /etc/profile
+export JAVA_HOME=/opt/jdk1.8.0_65
+export JRE_HOME=/opt/jdk1.8.0_65/jre
+export PATH=$PATH:/opt/jdk1.8.0_65/bin:/opt/jdk1.8.0_65/jre/bin
+
+
+##################################  完成 ###################################
+
+
+
 在CentOS 6.3 x64 测试
 
 1.下载对应版本的JDK到Linux机器上：  
