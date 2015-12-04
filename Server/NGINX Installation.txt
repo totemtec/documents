@@ -62,9 +62,32 @@ systemctl disable httpd.service
 yum -y remove httpd
 
 
+8. 查看nginx版本信息
+# ./nginx -v
+# ./nginx -V
+
 
 nginx主配置文件：/etc/nginx/nginx.conf
 nginx默认配置文件目录：/etc/nginx/conf.d/
 nginx默认站点主目录：/usr/share/nginx/html/
 nginx默认日志目录：/var/log/nginx/
+
+
+No Input File Specifed.
+是因为SELinux的权限问题
+只需要设置一下，让httpd对新的www的目录具有访问权限就可以，如下：
+
+关闭SELinux
+# setenforce 0
+
+打开SELinux
+# setenforce 1
+
+# chcon -Rt httpd_sys_content_t /data/www
+
+如果需要把内容写入www目录，则需要使用下面的命令，包含了写权限
+# chcon -Rt httpd_sys_content_rw_t /data/www          
+
+
+
 

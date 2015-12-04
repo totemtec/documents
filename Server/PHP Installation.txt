@@ -1,0 +1,72 @@
+4. 安装PHP（php-fpm模式）
+
+4.1 安装php（php-fpm模式）及相关支持
+
+# yum -y install php-fpm php-cli php-mysql php-gd php-ldap php-odbc php-pdo php-pecl-memcache php-pear php-mbstring php-xml php-xmlrpc php-mbstring php-snmp php-soap
+
+4.2 安装APC支持（pecl install apc后会出现配置提示，所有选择项全部输入回车）
+
+# yum -y install php-devel
+# yum -y groupinstall 'Development Tools'
+# pecl channel-update pecl.php.net
+# pecl install apc
+
+4.3 修改php配置文件
+
+# vi /etc/php.ini
+
+查找expose_php，修改为以下内容（隐藏php版本号）：
+expose_php = Off
+
+查找cgi.fix_pathinfo和date.timezone，修改为以下内容：
+cgi.fix_pathinfo = 0
+date.timezone = "Asia/Shanghai"
+
+查找Dynamic Extensions，在该配置区块插入以下内容：
+extension=apc.so
+
+4.4 修改php-fpm配置文件
+
+先新增用户和组
+
+# group add nginx
+# useradd -d '/home/nginx' -s /sbin/nologin nginx
+
+
+# vi /etc/php-fpm.d/www.conf
+
+查找listen = 127.0.0.1:9000，修改为以下内容
+listen = /var/run/php-fpm/php-fpm.sock
+
+查找user = apache，修改为以下内容
+user = nginx
+
+查找group = apache，修改为以下内容
+group = nginx
+
+4.5 启动php-fpm并设置为开机自启
+
+systemctl enable php-fpm.service
+systemctl start php-fpm.service
+
+Nigix使用PHP的配置
+server节点里面，配置如下：
+        location ~ \.php$ {
+            try_files  $uri =404;
+            root           /data/app;
+            fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
+            fastcgi_index  index.php;
+            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+            include        fastcgi_params;
+        }
+
+
+
+No Input File Specifed.
+是因为SELinux的权限问题
+只需要设置一下，让httpd对新的www的目录具有访问权限就可以，如下：
+
+# chcon -Rt httpd_sys_content_t /data/www
+# chcon -Rt httpd_sys_content_rw_t /data/www
+
+

@@ -1,7 +1,7 @@
 Tomcat安装在/data/tomcat
 
 1. 创建用户和组
-# sudo groupadd tomcat
+# groupadd tomcat
 # mkdir /home/tomcat
 # sudo useradd -M -s /bin/nologin -g tomcat -d /home/tomcat tomcat
 
@@ -19,9 +19,10 @@ Tomcat安装在/data/tomcat
 # chgrp -R tomcat conf
 # chmod g+rwx conf
 # chmod g+r conf/*
-# chown -R tomcat work/ temp/ logs/
+# chown -R tomcat webapps/ work/ temp/ logs/
 
-5. 把Tomcat安装为系统服务
+5. 把Tomcat安装为系统服务，注意配置里面的路径和变量
+
 # vi /etc/systemd/system/tomcat.service
 
 ############################################################
@@ -61,162 +62,4 @@ WantedBy=multi-user.target
 8. 设置开机启动Tomcat
 # systemctl enable tomcat
 
-
-
-
-
-Tomcat安装在/data/tomcat7
-
-下载压缩包
-wget下载 或者 scp上传
-
-解压缩包
-tar -xvzf apache-tomcat-7.0.53.tar.gz
-
-重命名解压出来的目录
-mv apache-tomcat-7.0.53 tomcat7
-
-
-进入webapps目录清空该目录
-
-# rm -rf docs/
-# rm -rf examples/
-# rm -rf host-manager/
-# rm -rf manager/
-
-
-运行Tomcat
-./startup.sh
-
-停止Tomcat
-./shutdown.sh
-
-新增用户tomcat/tomcat专门管理Tomcat的
-$ sudo adduser tomcat
-passwd tomcat 回车然后修改密码同用户名也是tomcat
-
-
-尝试使用用户tomcat启动和关闭服务
-如果权限不够，需要用root用户变更权限：
-sudo chown -R tomcat /data/tomcat7
-sudo chmod -R u+rw /data/tomcat7
-
-
-
-安装Tomcat成自启动服务
-
-1. 新建启动文件/etc/init.d/tomcat
-https://gist.github.com/valotas/1000094
-
-======内容开始，有些设置要修改 ====
-#!/bin/bash
-#
-# tomcat7     This shell script takes care of starting and stopping Tomcat
-#
-# chkconfig: - 80 20
-#
-### BEGIN INIT INFO
-# Provides: tomcat7
-# Required-Start: $network $syslog
-# Required-Stop: $network $syslog
-# Default-Start:
-# Default-Stop:
-# Description: Release implementation for Servlet 2.5 and JSP 2.1
-# Short-Description: start and stop tomcat
-### END INIT INFO
- 
-## Source function library.
-#. /etc/init.d/tomcat
-export JAVA_HOME=/usr/java/default
-export JAVA_OPTS="-Dfile.encoding=UTF-8 \
-  -Dcatalina.logbase=/var/log/tomcat7 \
-  -Dnet.sf.ehcache.skipUpdateCheck=true \
-  -XX:+DoEscapeAnalysis \
-  -XX:+UseConcMarkSweepGC \
-  -XX:+CMSClassUnloadingEnabled \
-  -XX:+UseParNewGC \
-  -XX:MaxPermSize=128m \
-  -Xms512m -Xmx1024m"
-export PATH=$JAVA_HOME/bin:$PATH
-TOMCAT_HOME=/data/tomcat7
-SHUTDOWN_WAIT=20
- 
-tomcat_pid() {
-  echo `ps aux | grep org.apache.catalina.startup.Bootstrap | grep -v grep | awk '{ print $2 }'`
-}
- 
-start() {
-  pid=$(tomcat_pid)
-  if [ -n "$pid" ] 
-  then
-    echo "Tomcat is already running (pid: $pid)"
-  else
-    # Start tomcat
-    echo "Starting tomcat"
-    ulimit -n 100000
-    umask 007
-    /bin/su -p -s /bin/sh tomcat $TOMCAT_HOME/bin/startup.sh
-  fi
- 
- 
-  return 0
-}
- 
-stop() {
-  pid=$(tomcat_pid)
-  if [ -n "$pid" ]
-  then
-    echo "Stoping Tomcat"
-    /bin/su -p -s /bin/sh tomcat $TOMCAT_HOME/bin/shutdown.sh
- 
-    let kwait=$SHUTDOWN_WAIT
-    count=0;
-    until [ `ps -p $pid | grep -c $pid` = '0' ] || [ $count -gt $kwait ]
-    do
-      echo -n -e "\nwaiting for processes to exit";
-      sleep 1
-      let count=$count+1;
-    done
- 
-    if [ $count -gt $kwait ]; then
-      echo -n -e "\nkilling processes which didn't stop after $SHUTDOWN_WAIT seconds"
-      kill -9 $pid
-    fi
-  else
-    echo "Tomcat is not running"
-  fi
- 
-  return 0
-}
- 
-case $1 in
-start)
-  start
-;; 
-stop)   
-  stop
-;; 
-restart)
-  stop
-  start
-;;
-status)
-  pid=$(tomcat_pid)
-  if [ -n "$pid" ]
-  then
-    echo "Tomcat is running with pid: $pid"
-  else
-    echo "Tomcat is not running"
-  fi
-;; 
-esac    
-exit 0
-======内容结束====
-
-2. 添加执行权限
-chmod +x /etc/init.d/tomcat
-
-3. 随系统启动
-chkconfig --add tomcat
-
-4. 重启检查测试一下
+9. 访问http://localhost:8080查看安装启动是否正常

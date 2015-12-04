@@ -1,0 +1,126 @@
+CKEditor，富文本编辑器
+CKFinder，图片文件上传和管理系统
+
+
+安装CKEditor
+
+1. 下载CKEditor
+
+http://ckeditor.com/download
+
+2. 解压放在www目录下
+
+/www/ckeditor/...
+
+3. 修改config.js，设置里图片上传使用了CKFinder
+
+CKEDITOR.editorConfig = function( config ) {
+        // Define changes to default configuration here. For example:
+        // config.language = 'fr';
+        // config.uiColor = '#AADC6E';
+
+    config.language = 'zh-cn';
+    config.image_previewText = '外链图片请直接输入图片地址。';
+
+    //The base href URL used to resolve relative and absolute URLs in the editor content.
+    config.baseHref = 'http://localhost/';
+
+    config.filebrowserBrowseUrl = '/ckfinder';
+    config.filebrowserImageBrowseUrl = '/ckfinder?type=Images';
+    config.filebrowserFlashBrowseUrl ='/ckfinder?type=Flash';
+    config.filebrowserUploadUrl = '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files';
+    config.filebrowserImageUploadUrl = '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images';
+    config.filebrowserFlashUploadUrl = '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash';
+    config.filebrowserWindowWidth ='1000';
+    config.filebrowserWindowHeight = '700';
+
+};
+
+4. 新增文件index.html来测试CKEditor
+
+# vi /www/ckeditior/index.html
+
+################################   HTML Begin   #############################################
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+
+    <title>CKEditor Sample</title>
+    <script src="/ckeditor/ckeditor.js""></script>
+</head>
+
+<body>
+
+<form>
+    标题: <input type="text" name="title"/><br/>
+    内容: <br/>
+    <textarea name="rich_text_editor" id="rich_text_editor" rows="10" cols="80">
+         This is my textarea to be replaced with CKEditor.
+    </textarea>
+    <script>
+        CKEDITOR.replace('rich_text_editor');
+    </script>
+</form>
+
+
+</body>
+</html>
+
+###################################   HTML End   ##########################################
+
+5. 访问CKEditor来进行测试
+
+http://localhost/ckeditor
+
+
+
+
+
+安装CKFinder
+
+1. 下载CKFinder
+
+https://cksource.com/ckfinder
+
+2. 解压放在www目录下
+
+/www/ckfinder/...
+
+3. 将ckfinder.php重命名为index.php
+
+访问http://localhost/ckfinder就可以访问了CKFinder了
+
+也可以不做这步，直接访问http://localhost/ckfinder/ckfinder.php
+
+4. 修改config.php，设置为不需要验证登录
+
+$config['authentication'] = function () {
+    return true;
+};
+
+
+5. 修改config.php，设置上传文件存储目录和访问路径
+
+/*=================================== Backends ========================================*/
+// http://docs.cksource.com/ckfinder3-php/configuration.html#configuration_options_backends
+
+$config['backends'][] = array(
+    'name'         => 'default',
+    'adapter'      => 'local',
+    'baseUrl'      => '/userfiles/',
+    'root'         => '/data/app/userfiles', // Can be used to explicitly set the CKFinder user files directory.
+    'chmodFiles'   => 0777,
+    'chmodFolders' => 0755,
+    'filesystemEncoding' => 'UTF-8',
+);
+
+
+
+
+如果访问有问题，可能需要修改目录权限
+如果访问有问题，可能需要关闭SELinux或者设置SELinux权限，见PHP安装部分
+
+
+
