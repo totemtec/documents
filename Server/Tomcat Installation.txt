@@ -63,3 +63,80 @@ WantedBy=multi-user.target
 # systemctl enable tomcat
 
 9. 访问http://localhost:8080查看安装启动是否正常
+
+
+
+
+安装Tomcat Native Library，生产环境必须的
+
+1. 安装依赖包
+
+# yum install apr-devel openssl-devel apr apr-util
+
+2. 安装 tomcat-native
+
+# yum install tomcat-native
+上面yum安装我没有安装成功
+
+如果上面没安装成功，也可以自己下载源代码编译安装
+
+a. 下载源代码，网址可以在http://tomcat.apache.org/native-doc/找到
+# wget http://apache.fayea.com/tomcat/tomcat-connectors/native/1.2.2/source/tomcat-native-1.2.2-src.tar.gz
+
+b. 解压源代码
+# tar xvf tomcat-native-1.2.2-src.tar.gz
+
+c. 配置编译安装，不建议改动配置，安装路径在安装后会有提示
+# cd tomcat-native-1.2.2-src/native
+# ./configure && make && make install
+
+
+3. 安装成功后还需要对tomcat设置环境变量，
+
+新增文件bin/setenv.sh
+# vi setenv.sh
+
+新增下面1行内容，制定APR库路径
+
+ CATALINA_OPTS="-Djava.library.path=/usr/local/apr/lib"
+
+4. 重新启动tomcat之后，查看日志会有这一行信息，说明已经是APR模式启动了
+
+INFO: APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true].
+
+
+
+Tomcat优化
+
+1. 修改server.xml，使用如下配置
+
+<Connector port="8080"
+           protocol="org.apache.coyote.http11.Http11AprProtocol"
+           connectionTimeout="20000"
+           redirectPort="8443"
+           maxThreads="500"
+           minSpareThreads="20"
+           acceptCount="1000"
+           enableLookups="false"
+           URIEncoding="UTF-8" />
+
+2. 修改setenv.sh，修改JAVA_OPTS
+
+-Xms JVM初始化堆内存大小
+-Xmx JVM堆的最大内存
+-Xss 线程栈大小
+-XX:PermSize JVM非堆区初始内存分配大小
+-XX:MaxPermSize JVM非堆区最大内存
+建议和注意事项:
+-Xms和-Xmx选项设置为相同堆内存分配，以避免在每次GC 后调整堆的大小，堆内存建议占内存的60%~80%;非堆内存是不可回收内存，大小视项目而定;线程栈大小推荐256k.
+
+32G内存配置如下：
+
+JAVA_OPTS="-Xms20480m -Xmx20480m -Xss1024K -XX:PermSize=512m -XX:MaxPermSize=2048m"
+
+
+
+
+
+
+
