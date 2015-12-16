@@ -1,0 +1,57 @@
+安装参考下文
+
+http://www.server-world.info/en/note?os=CentOS_7&p=mariadb&f=1
+
+修改数据目录
+
+1. 查看一下SELinux配置
+
+# ls -lZ /var/lib/mysql
+-rw-rw----. mysql mysql system_u:object_r:mysqld_db_t:s0 aria_log.00000001
+-rw-rw----. mysql mysql system_u:object_r:mysqld_db_t:s0 aria_log_control
+-rw-rw----. mysql mysql system_u:object_r:mysqld_db_t:s0 ibdata1
+-rw-rw----. mysql mysql system_u:object_r:mysqld_db_t:s0 ib_logfile0
+-rw-rw----. mysql mysql system_u:object_r:mysqld_db_t:s0 ib_logfile1
+drwx------. mysql mysql system_u:object_r:mysqld_db_t:s0 mysql
+drwx------. mysql mysql system_u:object_r:mysqld_db_t:s0 performance_schema
+
+2. 停止数据库服务
+
+# systemctl stop mariadb
+
+3. 转移目录
+
+# cp -R /var/lib/mysql /data
+
+4. 改变目录所有者
+
+# chown -R mysql:mysql /data/mysql
+
+查看一下SELinux配置
+
+# ls -lZ /data/mysql
+-rw-r-----. root root unconfined_u:object_r:unlabeled_t:s0 aria_log.00000001
+-rw-r-----. root root unconfined_u:object_r:unlabeled_t:s0 aria_log_control
+-rw-r-----. root root unconfined_u:object_r:unlabeled_t:s0 ibdata1
+-rw-r-----. root root unconfined_u:object_r:unlabeled_t:s0 ib_logfile0
+-rw-r-----. root root unconfined_u:object_r:unlabeled_t:s0 ib_logfile1
+drwx------. root root unconfined_u:object_r:unlabeled_t:s0 mysql
+drwx------. root root unconfined_u:object_r:unlabeled_t:s0 performance_schema
+
+5. 修改数据库配置
+
+# vi /etc/my.cnf
+
+[mysqld]
+datadir=/data/mysql
+socket=/data/mysql/mysql.sock
+
+6. 修改SELinux配置
+
+# chcon -R -u system_u -r object_r -t mysqld_db_t /data/mysql
+
+修改完成了验证一下：
+# ls -lZ /data/mysql
+
+7. 启动数据库
+systemctl start mariadb

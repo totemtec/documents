@@ -1,42 +1,30 @@
-4. 安装PHP（php-fpm模式）
+使用
+https://webtatic.com/packages/php56/
 
-4.1 安装php（php-fpm模式）及相关支持
+这个方法可以保证安装上最新的PHP
 
-# yum -y install php-fpm php-cli php-mysql php-gd php-ldap php-odbc php-pdo php-pecl-memcache php-pear php-mbstring php-xml php-xmlrpc php-mbstring php-snmp php-soap
 
-4.2 安装APC支持（pecl install apc后会出现配置提示，所有选择项全部输入回车）
+1. 使用第三方的源
 
-# yum -y install php-devel
-# yum -y groupinstall 'Development Tools'
-# pecl channel-update pecl.php.net
-# pecl install apc
+# rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+# rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
 
-4.3 修改php配置文件
+2. 安装
+# yum install php56w php56w-opcache
 
-# vi /etc/php.ini
+如果是老版本，可以如下方式更新
+# yum install yum-plugin-replace
+# yum replace php-common --replace-with=php56w-common
 
-查找expose_php，修改为以下内容（隐藏php版本号）：
-expose_php = Off
-
-查找cgi.fix_pathinfo和date.timezone，修改为以下内容：
-cgi.fix_pathinfo = 0
-date.timezone = "Asia/Shanghai"
-
-查找Dynamic Extensions，在该配置区块插入以下内容：
-extension=apc.so
-
-4.4 修改php-fpm配置文件
-
-先新增用户和组
-
-# group add nginx
-# useradd -d '/home/nginx' -s /sbin/nologin nginx
-
+3. 修改php-fpm配置文件
 
 # vi /etc/php-fpm.d/www.conf
 
 查找listen = 127.0.0.1:9000，修改为以下内容
 listen = /var/run/php-fpm/php-fpm.sock
+
+listen.owner = nginx
+listen.group = nginx
 
 查找user = apache，修改为以下内容
 user = nginx
@@ -44,7 +32,7 @@ user = nginx
 查找group = apache，修改为以下内容
 group = nginx
 
-4.5 启动php-fpm并设置为开机自启
+4 启动php-fpm并设置为开机自启
 
 systemctl enable php-fpm.service
 systemctl start php-fpm.service
@@ -68,5 +56,3 @@ No Input File Specifed.
 
 # chcon -Rt httpd_sys_content_t /data/www
 # chcon -Rt httpd_sys_content_rw_t /data/www
-
-

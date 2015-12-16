@@ -183,21 +183,38 @@ Linux防火墙设置配置
 -A INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT
 
 
+挂载机械硬盘
 
+1. 查看数据盘
+# df -h
 
+在没有分区和格式化数据盘之前，使用 “df –h”命令，是无法看到数据盘的，可以使用“fdisk -l”命令查看
+# fdisk -l
 
-挂载分区         
-1. 创建目录：
+2. 对数据盘进行分区
+# fdisk  /dev/sdb
+
+根据提示，依次输入n、p、1，两次回车，wq，分区就开始了，很快就会完成。
+
+3. 查看分好的区
+# fdisk -l
+可以看到分区/dev/sdb1已经建立完成了
+
+4. 格式化新分区
+# mkfs.ext4 /dev/sdb1
+
+5. 编辑分区信息，启动自动挂载
+# vi /etc/fstab
+/dev/sdb1               /data                   ext4    defaults        0 0
+这一行的意思是把分区/dev/sdb1挂载到/data目录
+
+需要创建目录/data：
 # mkdir /data
 
-2. 手动挂载
-mount /dev/sdb1 /data    # 将sdb这个硬盘挂载成为/data
-
-3. 启动自动挂载
-修改文件 /etc/fstab
-例如：echo '/dev/sdb1               /data                   ext3    defaults        0 0' >> /etc/fstab
-
-
+6. 挂载新分区
+# mount -a
+然后可以查看
+# df -h
 
 
 安装中文支持

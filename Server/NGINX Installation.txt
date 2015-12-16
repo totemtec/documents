@@ -11,7 +11,7 @@
 # timedatectl set-timezone Asia/Hong_Kong
 # timedatectl
 
-1. 添加nginx官方库
+1. 添加nginx官方源，否则装的版本比较老
 
 在http://nginx.org/packages/centos/7/noarch/RPMS/查看最新库信息
 # rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
