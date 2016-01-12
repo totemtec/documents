@@ -1,0 +1,40 @@
+创建多Module的Java Web工程，使用Gradle构建
+
+IDEA 14.1
+
+1. 
+菜单，File >>> New >>> Project
+
+2.
+选择Gradle，选中Java库
+下一步Next
+
+3.
+GroupId: com.totemtec.cms  工程包名
+ArtifactId: admin  Module模块名，也是此模块的war包名
+Version: 1.0   不填也行
+下一步Next
+
+4.
+选中 Use default gradle wrapper(recommended)
+下一步Next
+
+5. 
+Project name: cms   工程名称
+Project Location: ~/project/cms      cms项目的磁盘路径
+
+Module name: admin   admin是cms工程下一个模块名
+Content root: ~/project/cms/admin    admin模块的内容根目录，一般放在cms的目录里，每个模块一个目录
+Module file location: ~/project/cms/admin  admin工程的磁盘路径，一般放在cms的目录里，每个模块一个目录
+
+下一步Next
+
+
+
+
+
+
+
+
+
+

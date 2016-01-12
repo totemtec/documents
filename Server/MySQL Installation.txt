@@ -26,14 +26,37 @@ Red Hat Enterprise Linux or CentOS
 
 # yum install mysql
 
-5. 安装完成后，没有密码，需要重置root密码：
+5. 启动MySQL
+# systemctl start mysqld
+
+设置为开机启动
+# systemctl enable mysqld
+
+
+6. 安装完成后，没有密码，需要重置root密码：
 
 # mysql -u root
 
 mysql> use mysql;
 mysql> update user set password=PASSWORD("GIVE-NEW-ROOT-PASSWORD") where User='root';
 mysql> flush privileges;
-mysql> quit
+
+7. 创建数据库
+mysql> CREATE DATABASE database CHARACTER SET utf8 COLLATE utf8_bin;
+
+8. 创建数据库用户
+mysql> CREATE USER username IDENTIFIED BY 'password';
+
+9. 授予权限
+
+mysql> GRANT ALL PRIVILEGES ON database.* TO 'username'@'%' IDENTIFIED BY 'password';
+mysql> FLUSH PRIVILEGES;
+
+
+10. 如果需要为mysql打开防火墙，请参考Linux管理文档
+
+
+
 
 
 
@@ -43,35 +66,6 @@ mysql> quit
 #########################################################
 ############  以下内容适用CentOS 6.x 64位 ################
 #########################################################
-
-安装MySQL 5.x
-
-1. 安装
-#yum install mysql-server
-卸载：yum -y remove mysql-server
-
-2. 启动
-#service mysqld start
-#service mysqld stop
-
-3. 修改root密码，默认为空
-#mysqladmin -u root password 'YourPassword'
-
-4. 以root身份连接数据，会提示要求输入密码
-#mysql -u root -p
-
-5. 创建数据库示例
-mysql> CREATE DATABASE jiradb CHARACTER SET utf8 COLLATE utf8_bin;
-
-删除数据库
-mysql> drop database jiradb;
-
-6. 切换数据库
-mysql> use jiradb;
-
-7. 退出
-mysql> quit
-
 
 修改MySQL数据目录
 
