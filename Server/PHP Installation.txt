@@ -1,5 +1,5 @@
 使用
-https://webtatic.com/packages/php56/
+https://webtatic.com/packages/php70/
 
 这个方法可以保证安装上最新的PHP
 
@@ -10,11 +10,12 @@ https://webtatic.com/packages/php56/
 # rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
 
 2. 安装
-# yum install php56w php56w-opcache
+
+# yum install php70w php70w-common php70w-gd php70w-mysql php70w-fpm php70w-opcache
 
 如果是老版本，可以如下方式更新
 # yum install yum-plugin-replace
-# yum replace php-common --replace-with=php56w-common
+# yum replace php-common --replace-with=php70w-common
 
 3. 修改php-fpm配置文件
 
