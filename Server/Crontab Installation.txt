@@ -1,29 +1,25 @@
+CentOS 7.1 测试通过
+
 1. 确认crontab是否安装：
 执行 crontab 命令如果报 command not found，就表明没有安装
+
 2. 安装 crontab
-#yum install -y vixie-cron
-3. 确认是否安装成功:
-执行 crontab -l
-4. 看是否设置了开机自动启动
-#chkconfig --list crond
-5. 启动crontab
-#service crond start
+# yum install cronie
+
+3. 启动crontab
+# systemctl start crond.service
 
 
-查看crontab服务状态：#service crond status
+查看crontab服务状态：
+# systemctl status crond.service
 
-手动启动crontab服务：#service crond start
+在CentOS系统中加入开机自动启动:
+# systemctl enable crond.service
 
-查看crontab服务是否已设置为开机启动，执行命令：#ntsysv
-
-在CentOS系统中加入开机自动启动:chkconfig --level 35 crond on
-
-
-
-/sbin/service crond start //启动服务
-/sbin/service crond stop //关闭服务
-/sbin/service crond restart //重启服务
-/sbin/service crond reload //重新载入配置
+# systemctl start crond.service //启动服务
+# systemctl stop crond.service //关闭服务
+# systemctl restart crond.service //重启服务
+# systemctl reload crond.service //重新载入配置
 
 
 
@@ -118,17 +114,7 @@ crontab不能正常执行的五种原因
 
 1 crond服务未启动
 
-crontab不是Linux内核的功能，而是依赖一个crond服务，这个服务可以启动当然也可以停止。如果停止了就无法执行任何定时任务了，解决的方法是打开它:
-
-crond
-
-或
-
-service crond start
-
-如果提示crond命令不存在，可能被误删除了，CentOS下可以通过这个命令重新安装：
-
-yum -y install crontabs
+crontab不是Linux内核的功能，而是依赖一个crond服务，这个服务可以启动当然也可以停止。如果停止了就无法执行任何定时任务了，解决的方法是启动crond服务:
 
 2 权限问题
 
