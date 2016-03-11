@@ -1,20 +1,19 @@
-1. 安装EPEL源
+参考文档
+https://www.nginx.com/resources/wiki/start/topics/tutorials/install/
 
-# yum -y install epel-release.noarch
+1. 增加yum仓库
+# vi /etc/yum.repos.d/nginx.repo
 
-2. 手动进行系统更新
+[nginx]
+name=nginx repo
+baseurl=http://nginx.org/packages/centos/7/x86_64/
+gpgcheck=0
+enabled=1
 
-# yum -y update
+在http://nginx.org/packages/centos/查看最新版本信息
 
-3. 设置系统当前时区为香港，然后检查系统时区设置
-
-# timedatectl set-timezone Asia/Hong_Kong
-# timedatectl
-
-1. 添加nginx官方源，否则装的版本比较老
-
-在http://nginx.org/packages/centos/7/noarch/RPMS/查看最新库信息
-# rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+nginx直接被安装在 /usr/sbin/nginx
+配置文件位于 /etc/nginx
 
 2. 安装nginx
 

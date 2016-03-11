@@ -48,6 +48,12 @@ LC_ALL=en_US.utf-8
 
 
 
+解决You have new mail in /var/spool/mail/root
+编辑~/.bashrc
+加入下面一行就好
+unset MAILCHECK
+
+
 #############   以下内容未在CentOS 7.0上进行测试 ###################
 
 
