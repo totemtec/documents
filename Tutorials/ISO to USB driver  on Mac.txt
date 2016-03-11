@@ -1,0 +1,28 @@
+把ISO光盘镜像文件映射到U盘上
+
+参考网址：
+http://www.ubuntu.com/download/desktop/create-a-usb-stick-on-mac-osx
+
+1. 格式先转换为dmg格式，是的dmg格式
+# hdiutil convert -format UDRW -o ~/path/to/target.img ~/path/to/ubuntu.iso
+
+2. 获取当前设备列表
+# diskutil list
+
+3. 插入U盘后，再次获取当前设备列表
+# diskutil list
+
+取得U盘的设备名称如  /dev/disk2
+
+4. 卸载硬盘
+# diskutil unmountDisk /dev/disk2
+
+5. 执行dd命令，把dmg格式文件映射到U盘上
+# sudo dd if=/path/to/downloaded.img of=/dev/rdisk2 bs=1m
+
+你没看错，是/dev/rdisk2，这样会快很多
+发生错误: dd: Invalid number '1m', 请将命令中的1m大写为1M
+发生错误: dd: /dev/diskN: Resource busy，请确认步骤4成功卸载了硬盘
+
+6. 弹出U盘
+# diskutil eject /dev/disk2
