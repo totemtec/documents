@@ -2,26 +2,25 @@
 
 1.下载对应版本的JDK到Linux机器上：  
 
-# cd /opt/
-# wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u65-b17/jdk-8u65-linux-x64.tar.gz"
+# curl -LO -H "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u71-b15/jdk-8u71-linux-x64.rpm"
 
-# tar xzf jdk-8u65-linux-x64.tar.gz
+2. 安装JDK
 
-
-2.设置java环境:
-# alternatives --install /usr/bin/java java /opt/jdk1.8.0_65/bin/java 2000
-# alternatives --install /usr/bin/jar jar /opt/jdk1.8.0_65/bin/jar 2000
-# alternatives --install /usr/bin/javac javac /opt/jdk1.8.0_65/bin/javac 2000
-# alternatives --set jar /opt/jdk1.8.0_65/bin/jar
-# alternatives --set javac /opt/jdk1.8.0_65/bin/javac 
+# rpm -Uvh jdk-8u71-linux-x64.rpm 
 
 
-3. 修改系统环境变量设置JAVA_HOME
+3. 设置环境变量
 
 # vi /etc/profile
-export JAVA_HOME=/opt/jdk1.8.0_65
-export JRE_HOME=/opt/jdk1.8.0_65/jre
-export PATH=$PATH:/opt/jdk1.8.0_65/bin:/opt/jdk1.8.0_65/jre/bin
+
+# 最后加上下面3行
+export JAVA_HOME=/usr/java/default
+export PATH=$PATH:$JAVA_HOME/bin
+export CLASSPATH=.:$JAVA_HOME/jre/lib:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar
+
+4. 应用配置
+
+# source /etc/profile
 
 
 ##################################   以下为旧内容，仅供参考   ###################################

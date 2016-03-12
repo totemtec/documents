@@ -54,6 +54,26 @@ LC_ALL=en_US.utf-8
 unset MAILCHECK
 
 
+
+yum加速下载
+参考：http://www.ha97.com/621.html
+
+1. yum install axel
+2. 下载配置文件axelget.conf与axelget.py到yum里：
+cd /etc/yum/pluginconf.d/
+wget http://www.ha97.com/code/axelget.conf
+
+cd /usr/lib/yum-plugins/
+wget http://www.ha97.com/code/axelget.py
+
+最后确认 /etc/yum.conf中plugins=1
+
+3. 测试并安装mysql-server插件：
+
+yum install mysql-server
+
+
+
 #############   以下内容未在CentOS 7.0上进行测试 ###################
 
 
