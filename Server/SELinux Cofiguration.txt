@@ -1,0 +1,116 @@
+SELinux in RHEL7
+
+参考文档：
+https://linux.cn/article-6339-1.html
+https://wiki.centos.org/es/HowTos/SELinux
+
+SELinux 模式
+
+Enforcing: 强制模式，SELinux 基于其策略规则来拒绝访问，这些规则是用以控制安全引擎的一系列准则；
+Permissive: 宽容模式，SELinux 不会拒绝访问，但对于那些如果运行在强制模式下会被拒绝访问的行为进行记录；
+Disabled: 关闭，不运行SELinux
+
+查询SELinux当前模式
+# getenforce
+
+临时关闭SELinux
+# setenforce  0
+
+临时打开SELinux
+# setenforce  1
+
+为了使得在登出和重启后上面的设置还能保持作用，你需要编辑 /etc/selinux/config 文件
+并将 SELINUX 变量的值设为 enforcing，permissive，disabled 中之一，重启生效
+
+通常情况下，你应该使用 setenforce 来在 SELinux 模式间进行切换（从强制模式到宽容模式，或反之），以此来作为你排错的第一步。
+假如 SELinux 当前被设置为强制模式，而你遇到了某些问题，但当你把 SELinux 切换为宽容模式后问题不再出现了，则你可以确信你遇到了一个 SELinux 权限方面的问题。
+
+
+SELinux Policy 策略
+
+targeted: 有目的的策略，针对网络服务限制较多，针对本机限制较少，默认策略
+strict: 严格策略，完整的SELinux限制，限制较为严格
+
+查看当前策略
+# sestatus
+
+SELinux 上下文
+一个 SELinux Context(上下文)由一个访问控制环境所组成，在这个环境中，决定的做出将基于 SELinux 的用户，角色和类型（和可选的级别）：
+    user: 一个 SELinux 用户是通过将一个常规的 Linux 用户账户映射到一个 SELinux 用户账户来实现的，反过来，在一个会话中，这个 SELinux 用户账户在 SELinux 上下文中被进程所使用，以便能够明确定义它们所允许的角色和级别。
+    role: 角色的概念是作为域和处于该域中的 SELinux 用户之间的媒介，它定义了 SELinux 可以访问到哪个进程域和哪些文件类型。这将保护您的系统免受提权漏洞的攻击。
+    type: 类型则定义了一个 SELinux 文件类型或一个 SELinux 进程域。在正常情况下，进程将会被禁止访问其他进程正使用的文件，并禁止对其他进程进行访问。这样只有当一个特定的 SELinux 策略规则允许它访问时，才能够进行访问。
+
+查看文件安全上下文
+# ls -lZ /data/www
+
+输出为，安全性上下文(SELinux security context fields)由冒号分为3个栏位
+-rw-r--r--. root root unconfined_u:object_r:httpd_sys_rw_content_t:s0 index.html
+-rw-r--r--. root root unconfined_u:object_r:httpd_sys_rw_content_t:s0 index.php
+-rw-r--r--. root root unconfined_u:object_r:httpd_sys_rw_content_t:s0 test.php
+
+_u 为用户，system_u通常代表程序，user_u代表用户, unconfined_u自由，不受保护
+_r 为角色，object_r代表档案或目录，system_r代表程序
+_t 为类型，最重要，程序的domain要和文件的type匹配才能访问
+
+查看进程的安全上下文字段
+# ps axZ | grep httpd
+
+
+
+semanage命令
+
+查看网络端口所有域
+# semanage port -l
+
+查看http网络端口相关域
+# semanage port -l | grep http
+
+增加800端口到http网络端口域
+# semanage port -a -t http_port_t -p tcp 800
+
+查看http文件上下文映射
+# semanage fcontext -l | grep http
+
+
+查看SELinux日志
+# tail /var/log/messages
+# sealert -l xxxxxxxxxxxxxxxxxxxx
+# sealert -a /var/log/audit/audit.log
+
+
+
+案例1: 修改ssh端口
+# vi /etc/ssh/sshd_config
+Port 9998
+保存退出
+增加端口999到ssh_port_t的上下文
+# semanage port -a -t ssh_port_t -p tcp 9998
+重启sshd
+# systemctl restart sshd
+
+案例2: 允许httpd访问sendmail
+
+查看boolean值
+# semanage boolean -l | grep httpd_can_sendmail
+
+设置boolean，-P重启后亦生效，持久化
+# setsebool -P httpd_can_sendmail 1
+
+
+案例3: 指定目录提供http服务
+# ls -lZ /data/www
+会看到文件和文件夹都是default_t，web服务不能访问这种目录
+
+# chcon -Rv --reference=/var/www/html  /data/www
+或者
+# chcon -Rv --type=httpd_sys_rw_content_t /data/www
+
+更常用的做法是，把目录加入httpd_sys_rw_content_t域
+# semanage fcontext -a -t httpd_sys_rw_content_t "/data/www(/.*)?"
+
+把端口加入http_port_t域
+# semanage port -a -t http_port_t -p tcp 81
+
+
+重置整个目录的安全上下文
+# restorecon -R -v /data/www

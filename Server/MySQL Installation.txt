@@ -60,7 +60,7 @@ mysql> FLUSH PRIVILEGES;
 
 1、移动data目录，好象停止服务前拷贝能保留几个sock和pid临时文件
 
-cp /var/lib/mysql  /data
+cp -R /var/lib/mysql  /data
 chown -R mysql:root /data/mysql
 
 2. 停止服务
