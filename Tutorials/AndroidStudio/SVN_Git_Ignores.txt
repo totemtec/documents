@@ -1,10 +1,7 @@
 Android Studio项目在SVN做版本管理时，应该忽略的文件
 
 SVN忽略原则
-1. 检查Project目录和Module目录，其他目录下不检查
-2. 必须保留源代码目录，Android源代码目录有src libs
-3. 除了.gradle忽略，其他所有名字包含gradle字样的目录和文件全部保留
-4. 其他全部可以忽略
+保留代码和gradle配置文件，其他都可以忽略
 
 别人使用项目的时候，在Android Studio中，File -> Import Project
 
@@ -12,12 +9,19 @@ SVN忽略原则
 一般要忽略掉下面的内容文件和文件夹
 
 .DS_Store
-.gradle/
-.idea/
+/.gradle/
+/.idea/
 build/
 *.iml
-local.properties
-.gitignore
-gradle.properties
+/local.properties
+/.gitignore
+.svn
+/.git
+/gradle.properties
 gradlew
 gradlew.bat
+
+
+更详细的内容请查阅
+
+https://github.com/github/gitignore
