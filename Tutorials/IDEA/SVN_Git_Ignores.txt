@@ -1,0 +1,19 @@
+IDEA Gradle项目在做代码版本管理时，应该忽略的文件
+
+别人使用项目的时候，在Android Studio中，File -> Import Project -> 选择build.gradle就好了
+
+
+一般要忽略掉下面的内容文件和文件夹
+
+.DS_Store
+.gradle
+.idea
+build/
+local.properties
+.gitignore
+*.iml
+gradlew
+gradlew.bat
+gradlew.sh
+
+

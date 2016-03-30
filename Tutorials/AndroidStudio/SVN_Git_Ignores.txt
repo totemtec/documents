@@ -11,11 +11,13 @@ SVN忽略原则
 
 一般要忽略掉下面的内容文件和文件夹
 
-.gradle
-.idea
-build
+.DS_Store
+.gradle/
+.idea/
+build/
+*.iml
 local.properties
 .gitignore
-*.iml
-
-
+gradle.properties
+gradlew
+gradlew.bat
