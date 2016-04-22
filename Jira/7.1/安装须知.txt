@@ -1,0 +1,116 @@
+我自己安装在CentOS7.0，Jira版本7.1.4
+
+参考文档 http://www.codexiu.cn/linux/blog/3575/
+
+Centos 6.7下 jira7.1.1+confluence5.96+mysql结合（破解）
+
+jira+confluence+mysql结合
+
+一.安装java环境
+
+  略
+
+二.安装jira
+
+去官网下载atlassian-jira-software-7.1.4-jira-7.1.4-x64.bin安装包，可能需要翻墙
+
+官方安装文档
+https://confluence.atlassian.com/jira/installing-jira-on-linux-191501165.html
+
+
+1. 修改权限
+# chmod a+x atlassian-jira-software-7.1.4-jira-7.1.4-x64.bin
+
+2. 执行.bin
+# ./atlassian-jira-software-7.1.4-jira-7.1.4-x64.bin
+
+3. This will install JIRA Software 7.1.4 on your computer.
+OK [o, Enter], Cancel [c]
+回车
+选择 Express Install 快速安装
+
+一路向下。。。。。
+
+
+4. 安装数据库以及驱动
+
+创建并配置MySQL数据库
+
+创建一个数据库（如jiradb）来存储JIRA的问题，数据库必须有一个UTF8的字符集。在MySQL命令客户端输入以下命令：
+CREATE DATABASE jiradb CHARACTER SET utf8 COLLATE utf8_bin;
+
+确保该用户拥有连接数据库以及创建和写入表的权限。授权命令如下：
+GRANT all on jiradb.* to 'jira'@'localhost' identified by '123456';
+flush privileges;
+
+为了确认权限是否被授予成功，用jira用户登录到DB服务器并运行一下命令：
+show grants for jira@localhost;
+
+
+5. 安装MYSQL JDBC驱动
+
+注：到添加数据库时，需要先下载mysql驱动
+把下载好的mysql驱动复制到jira/lib目录下，在配置数据就没问题了。
+
+ cp mysql-connector-java-5.1.38-bin.jar /opt/atlassian/jira/lib
+
+安装过程中会提示需要重启，如果找不到mysql java驱动了就重启一下吧
+
+开启和关闭Jira服务的命令
+# service jira start
+# service jira stop
+
+
+6. 安装完后打开网页开始配置jira 
+
+http://localhost:8080
+
+选择自己配置，选择MySQL数据库，填入数据库连接参数，测试一下连接
+
+一直下一步到需要申请个License时，注册个账号去申请试用key，申请完后把key黏贴进去，然后激活
+
+，激活完毕后关闭jira页面。开始破解jira
+
+用破解的atlassian-extras-3.1.2.jar替换掉原来的jar文件 
+
+cp atlassian-extras-3.1.2.jar /opt/atlassian/jira/atlassian-jira/WEB-INF/lib/
+
+然后重启jira。
+
+
+
+关键一步，安装官方包之后, 进IE到了有服务号需要申请License的那一步，申请到试用License之后, 千万不要进行下一步，让License框就空在那里，这时候停止JIRA服务,
+将文件复制到 Atlassian\JIRA\atlassian-jira\WEB-INF\lib 覆盖同名文件,
+然后重启JIRA，再次进入IE访问一步步来到License录入界面，然后再把刚申请到的License拷贝进去继续下一步，直到部署完成， 仅供学习使用, 商业使用请购买授权
+
+
+
+
+三.安装confluence
+
+直接执行下载好的.bin文件
+
+./atlassian-confluence-5.9.6-x64.bin
+
+http://localhost:8090
+
+配置confluence和jira差不多都需要申请试用key，成功后，开始关联jira,完毕后关闭confluence,
+
+用破解的jar文件把原来的jar文件替换掉。
+
+cp atlassian-extras-decoder-v2-3.2.jar /opt/atlassian/confluence/confluence/WEB-INF/lib/
+
+重启confluence，激活成功。
+
+后续：截的图一直粘贴不上来，不知道是什么鬼。结合过程不难，除了破解的jar文件外。因弄到破解的jar文件比较费劲，所以这里就不免费赠送给大家了，可以去下载，嘿嘿。
+
+  有些地方可能不够详细，请见谅，不懂的可以联系我，肯定解答。
+
+jira破解文件：http://down.51cto.com/data/2194422
+包里已经有了
+
+confluence破解文件：http://down.51cto.com/data/2194424
+包里已经有了
+
+中文包可以用6版本的，可以到这下载，中文包要在服务器本地上传才有效
+https://translations.atlassian.com/dashboard/download?lang=zh_CN
