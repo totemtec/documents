@@ -9,9 +9,9 @@ http://sharadchhetri.com/2015/07/05/install-redis-3-0-from-source-on-ubuntu-14-0
 
 下载解压编译安装
 
-# wget http://download.redis.io/releases/redis-3.0.6.tar.gz
-# tar xzf redis-3.0.6.tar.gz
-# cd redis-3.0.6
+# wget http://download.redis.io/releases/redis-stable.tar.gz
+# tar xvzf redis-stable.tar.gz
+# cd redis-stable
 # make
 # make install
 # cd utils
@@ -46,8 +46,8 @@ Successfully added to chkconfig!
 Successfully added to runlevels 345!
 Starting Redis server...
 Installation successful!
-You have new mail in /var/spool/mail/root
 
+脚本会自动把redis-server安装为服务并开机启动
 
 启动Redis数据库
 
