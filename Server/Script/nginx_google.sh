@@ -1,8 +1,9 @@
 #! /bin/bash
+
 function envir_check()
 {
   [ $UID != 0 ] && echo 必须使用root用户运行脚本 && exit 1
-  BUILD=`dpkg -l | grep build-essential`
+  BUILD=`yum grouplist | grep "Development Tools"`
   if [[ -z $BUILD ]]
   then
     BUILD='NEEDINSTALL'
@@ -16,22 +17,25 @@ function envir_check()
   else
   GIT='INSTALLED'
   fi
-  [ -e /opt/nginx-1.8.1/sbin/nginx ] && NGINX='EXIST'
+  [ -e /usr/local/nginx/sbin/nginx ] && NGINX='EXIST'
   NGINXPID=`pidof nginx`
 }
+
 function install_nginx()
 {
   if [[ $BUILD == 'NEEDINSTALL' ]]
   then
-    apt-get update
-    apt-get install build-essential << EOF
+    echo "yum group intall Development Tools"
+    yum update
+    yum group install "Development Tools" << EOF
 y
 EOF
-    [ $? != 0 ] && echo build-essential未安装成功,请检查错误输出信息. && exit 2
+    [ $? != 0 ] && echo Development Tools 未安装成功,请检查错误输出信息. && exit 2
   fi
   if [[ $GIT == 'NEEDINSTALL' ]]
   then
-    apt-get install git << EOF
+    echo "yum install git"
+    yum install git << EOF
 y
 EOF
   [ $? != 0 ] && echo git 未安装成功,请检查错误输出信息. && exit 3
@@ -50,7 +54,6 @@ EOF
   [ $? != 0 ] && echo "filter module 下载失败,详细信息请检查错误输出。" && exit 9 
   cd nginx-1.8.1
   ./configure \
-  --prefix=/opt/nginx-1.8.1 \
   --with-pcre=../pcre-8.38 \
   --with-openssl=../openssl-1.0.2g \
   --with-zlib=../zlib-1.2.8 \
@@ -61,9 +64,10 @@ EOF
   make install
   [ $? != 0 ] && echo "安装失败,请检查错误输出。" && exit 11
 }
+
 function config_nginx()
 {
-  cd /opt/nginx-1.8.1/conf
+  cd /usr/local/nginx/conf
   cat nginx.conf.default | head -n 93 | \
                            sed "s/server_name  localhost/server_name  $domain/g" | \
                            sed 's/#charset koi8-r/return 301 https:\/\/$host$request_uri/g' | \
@@ -79,10 +83,13 @@ function config_nginx()
                            sed 's/#        root   html/google on/g;s/#        index  index.html index.htm;//g' | \
                            tr -d '#' >> nginx.conf
 }
-echo 注意：仅适用于Debian系操作系统 在Ubuntu14.04中测试通过
-echo       不适用Redhat CentOS
+
+
+echo 注意：仅适用于Redhat CentOS系操作系统 在CentOS 7.0中测试通过
+echo       不适用Debian Ubuntu
 echo 为避免风险请不要在运行重要服务的机器里运行这个脚本 脚本作者不负责由此造成的数据丢失等责任 请谨慎使用！
 echo "继续吗(yes/no)？"
+
 read con
 if [[ $con != "yes" ]]
   then
@@ -102,6 +109,8 @@ if [[ -n $NGINXPID ]]
         exit 14
     fi
 fi
+
+
 if [[ $NGINX == "EXIST" ]]
   then
     echo "已安装过nginx,确定重新安装吗(yes/no)?"
@@ -111,7 +120,7 @@ if [[ $NGINX == "EXIST" ]]
         rm -rf ./ngx_http_google_filter_module 2> /dev/null
         rm -rf ./ngx_http_substitutions_filter_module 2> /dev/null
         install_nginx
-        echo 安装完成 请手动执行/opt/nginx-1.8.1/sbin/nginx
+        echo 安装完成 请手动执行/usr/local/nginx/sbin/nginx
     fi
   else
     echo "请输入您网站证书的绝对路径:"
@@ -128,7 +137,7 @@ if [[ $NGINX == "EXIST" ]]
             rm -rf ./ngx_http_substitutions_filter_module 2> /dev/null
             install_nginx
             config_nginx
-            echo "安装完毕,请手动执行/opt/nginx-1.8.1/sbin/nginx,如果您的私钥有密码保护,请输入您的私钥密码。"
+            echo "安装完毕,请手动执行/usr/local/nginx/sbin/nginx,如果您的私钥有密码保护,请输入您的私钥密码。"
         else
           echo "找不到私钥文件,请核对路径后重新运行脚本再次输入。"
           exit 12
