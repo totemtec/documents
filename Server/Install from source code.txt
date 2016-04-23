@@ -1,0 +1,31 @@
+CentOS 7 使用源代码编译并安装软件
+
+1. 确保有编译开发环境
+
+# yum group list
+
+看看是否有 Development Tools
+
+没有的话需要安装
+
+# yum group install "Development Tools"
+
+2. wget下载源代码包
+
+# wget http://server/abc.tar.gz
+
+3. 解压缩
+
+# tar -zxvf  abc.tar.gz     #解包gzip压缩的tarball
+# tar -jxvf  abc.tar.bz2  #解开bzip2压缩的tarball
+
+4. 进入源代码目录
+
+# cd abc
+
+5. 
+# ./configure
+
+# make
+
+# make install

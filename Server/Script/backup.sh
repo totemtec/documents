@@ -8,10 +8,10 @@
 PROJECT_NAME="cestlavie"
 
 # 数据库备份需要用到的参数
-DB_HOST="host name or ip address"
-DB_NAME="database_name"
-DB_USER="user_name"
-DB_PASSWORD="password"
+DB_HOST="182.92.111.111"
+DB_NAME="cestlavie"
+DB_USER="cestlavie"
+DB_PASSWORD="XXXXXXXX"
 
 # 需要打包备份的目录
 
