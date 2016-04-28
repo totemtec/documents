@@ -10,7 +10,9 @@ baseurl=http://nginx.org/packages/centos/7/x86_64/
 gpgcheck=0
 enabled=1
 
+
 在http://nginx.org/packages/centos/查看最新版本信息
+CentOS6上为  http://nginx.org/packages/centos/6/x86_64/
 
 nginx直接被安装在 /usr/sbin/nginx
 配置文件位于 /etc/nginx
@@ -53,6 +55,10 @@ server_tokens off;
 
 # systemctl start nginx.service
 # systemctl enable nginx.service
+
+CentOS6上面为
+# service nginx start
+# chkconfig nginx on
 
 7. 如果Apache服务在运行会出现冲突，关闭并移除Apache
 

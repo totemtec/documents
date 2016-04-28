@@ -3,6 +3,9 @@ https://webtatic.com/packages/php70/
 
 这个方法可以保证安装上最新的PHP
 
+# groupadd nginx
+# useradd -g nginx nginx
+
 
 1. 使用第三方的源
 
@@ -11,7 +14,7 @@ https://webtatic.com/packages/php70/
 
 2. 安装
 
-# yum install php70w php70w-common php70w-gd php70w-mysql php70w-fpm php70w-opcache
+# yum install php56w php56w-common php56w-gd php56w-mysql php56w-fpm php56w-opcache
 
 如果是老版本，可以如下方式更新
 # yum install yum-plugin-replace
@@ -57,3 +60,26 @@ No Input File Specifed.
 
 # chcon -Rt httpd_sys_content_t /data/www
 # chcon -Rt httpd_sys_content_rw_t /data/www
+
+
+
+CentOS6安装PHP5.6
+
+# rpm -Uvh https://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+# rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
+
+# yum install php56w php56w-common php56w-gd php56w-mysql php56w-fpm php56w-opcache
+
+跟上面一样修改配置文件
+
+vi /etc/php.ini
+
+cgi.fix_pathinfo=0
+
+设置开机启动
+# chkconfig php-fpm on
+
+打开php-fpm服务
+# service php-fpm start
+
+
