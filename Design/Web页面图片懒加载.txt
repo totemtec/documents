@@ -1,0 +1,36 @@
+https://css-tricks.com/snippets/javascript/lazy-loading-images/
+https://varvy.com/pagespeed/defer-images.html
+http://developer.telerik.com/featured/lazy-loading-images-on-the-web/
+http://www.appelsiini.net/projects/lazyload
+
+
+
+
+https://varvy.com/pagespeed/defer-images.html
+https://github.com/aFarkas/lazysizes/blob/gh-pages/README.md
+https://css-tricks.com/snippets/javascript/lazy-loading-images/
+
+
+
+
+http://developer.telerik.com/featured/lazy-loading-images-on-the-web/
+1. 原生js方式：
+
+
+2. Lazy Load Plugin for jQuery
+http://www.appelsiini.net/projects/lazyload
+
+3. bLazy 不依赖jQuery
+http://dinbror.dk/blazy/
+
+4. UNVEIL
+http://luis-almeida.github.io/unveil/
+
+5. Lazy Load XT
+
+Telerik Platform – Responsive Images Service
+
+
+
+
+ 
