@@ -114,3 +114,6 @@ Port 9998
 
 重置整个目录的安全上下文
 # restorecon -R -v /data/www
+
+允许http应用比如Nginx或者Apache httpd访问网络，Nginx转发需要这个权限
+# setsebool httpd_can_network_connect on -P

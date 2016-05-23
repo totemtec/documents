@@ -91,7 +91,11 @@ No Input File Specifed.
 # chcon -Rt httpd_sys_content_t /data/www
 
 如果需要把内容写入www目录，则需要使用下面的命令，包含了写权限
-# chcon -Rt httpd_sys_content_rw_t /data/www          
+# chcon -Rt httpd_sys_content_rw_t /data/www      
+
+
+Nginx如果需要配置转发，同样需要权限
+# setsebool httpd_can_network_connect on -P    
 
 
 

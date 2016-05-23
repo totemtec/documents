@@ -146,9 +146,34 @@ export LOG4J_CONFIG_FILE=/opt/weblogic/domain/config/log4j.xml
  <listen-port>9001</listen-port>
 
 
+解决Weblogic Console访问慢的问题
+
+修改Linux上Weblogic使用的jdk $JAVA_HOME/jre/lib/security/Java.security 文件
+　　将securerandom.source=file:/dev/urandom 修改为
+　　securerandom.source=file:/dev/./urandom
+
+
+错误解决
+<Error> <Server> <BEA-002606> <The server is unable to create a server socket for listening on channel "Default". 
+The address 61.149.195.0 might be incorrect or another process is using port 9999: java.net.BindException: Cannot assign requested address>
+解决方法
+1) 查看weblogic是否正在运行
+   # ps -ef | grep weblogic
+2) 查看端口是否被占用
+   # netstat -an | grep 9999
+3) 清空缓存目录重启试试
+   直接删掉mydomain/servers/myserver目录下的
+   cache  data  tmp
+4) 检查文件/etc/hosts里的ip地址
+5) 检查mydomain/config/config.xml里的监听地址listen-address
+6) 检查mydomain/nodemanager/nodemanager.properties
+
+一般情况下listen-address修改为localhost或主机名就好
+
+
 -----------------------------------------------------------
 -----------------------------------------------------------
------------------以上内容经过测试验证
+-----------------以上内容经过测试验证 CentOS 7 Weblogic 12c 12.1.3
 -----------------------------------------------------------
 -----------------------------------------------------------
 
