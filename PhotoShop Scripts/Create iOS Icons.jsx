@@ -124,6 +124,7 @@ try
 //for Spotlight search results icon
 
       {"name": "Icon-40@2x", "size":80},    //iPhone 4S (@2x)
+      {"name": "Icon-40@3x", "size":120},    //iOS 7-9 (@3x)
       {"name": "Icon-60",    "size":60},	//iPad Non-Retina
  
 //for Settings icon
