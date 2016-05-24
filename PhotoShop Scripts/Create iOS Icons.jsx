@@ -104,30 +104,27 @@ try
     doc.info = null;  // delete metadata
 
 //References:
-//http://developer.apple.com/library/ios/#documentation/UserExperience/Conceptual/MobileHIG/IconsImages/IconsImages.html%23//apple_ref/doc/uid/TP40006556-CH14-SW2    
+//https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/MobileHIG/IconMatrix.html
 
     var icons = [
     
-//for Ad Hoc Only
-      {"name": "iTunesArtwork@2x", "size":1024},
-      {"name": "iTunesArtwork",    "size":512},
-
 //for App Icon
       {"name": "Icon-60@3x",       "size":180},	//iPhone 6 Plus (@3x)
       {"name": "Icon-60@2x",       "size":120},	//iPhone 6 and iPhone 5 (@2x)
       {"name": "Icon-76@2x",       "size":152},	//iPad and iPad mini (@2x)
       {"name": "Icon-76",          "size":76},	//iPad 2 and iPad mini (@1x)
+      {"name": "Icon-83.5@2x",     "size":167},	//iPad Pro (@2x)
       
-      {"name": "Icon",             "size":57},	//iPhone Non-Retina (iOS 6.1 and Prior)
-      {"name": "Icon@2x",          "size":114},	//iPhone Retina (iOS 6.1 and Prior)
-      {"name": "Icon-72",          "size":72},	//iPad Non-Retina (iOS 6.1 and Prior)
-      {"name": "Icon-72@2x",       "size":144},	//iPad Retina (iOS 6.1 and Prior)
+      
+//       {"name": "Icon",             "size":57},	//iPhone Non-Retina (iOS 6.1 and Prior)
+//       {"name": "Icon@2x",          "size":114},	//iPhone Retina (iOS 6.1 and Prior)
+//       {"name": "Icon-72",          "size":72},	//iPad Non-Retina (iOS 6.1 and Prior)
+//       {"name": "Icon-72@2x",       "size":144},	//iPad Retina (iOS 6.1 and Prior)
       
 //for Spotlight search results icon
 
-      {"name": "Icon-40",    "size":40},	//iPad Non-Retina
-      {"name": "Icon-40@2x", "size":80},    //iPad Retina
-      {"name": "Icon-40@3x", "size":120},   //iPhone 6 Plus
+      {"name": "Icon-40@2x", "size":80},    //iPhone 4S (@2x)
+      {"name": "Icon-60",    "size":60},	//iPad Non-Retina
  
 //for Settings icon
   
@@ -135,8 +132,8 @@ try
       {"name": "Icon-29@2x",    "size":58},	//iPhone Retina (iOS 6.1 and Prior)
       {"name": "Icon-29@3x",    "size":87},	//iPhone 6 Plus
 
-      {"name": "Icon-50",    "size":50},	//iPad Non-Retina (iOS 6.1 and Prior)
-      {"name": "Icon-50@2x", "size":100},	//iPad Retina (iOS 6.1 and Prior)
+//      {"name": "Icon-50",    "size":50},	//iPad Non-Retina (iOS 6.1 and Prior)
+//      {"name": "Icon-50@2x", "size":100},	//iPad Retina (iOS 6.1 and Prior)
     ];
 
     var icon;

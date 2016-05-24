@@ -55,10 +55,15 @@ server_tokens off;
 
 # systemctl start nginx.service
 # systemctl enable nginx.service
+# systemctl reload nginx.service
 
 CentOS6上面为
 # service nginx start
 # chkconfig nginx on
+# service nginx reload
+
+启动失败的话，可以用下面命令检查配置
+# nginx -t
 
 7. 如果Apache服务在运行会出现冲突，关闭并移除Apache
 

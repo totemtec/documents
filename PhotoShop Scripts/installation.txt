@@ -1,4 +1,14 @@
-Copy to path: 
+1. Copy to path: 
 
 MAC: /Applications/Adobe Photoshop CS5/Presets/Scripts
 PC: c:\program files\Adobe Photoshop CS5\Presets\Scripts
+
+2. 重启Photoshop
+
+3. 文件菜单 -> 脚本 -> Create iOS Icons
+
+4. 选择1024的icon图片
+
+5. 选择生成目录
+
+6. 提示完成
