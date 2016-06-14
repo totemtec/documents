@@ -63,6 +63,10 @@ systemctl stop redis_6379
 ## To restart the Redis Server
 systemctl restart redis_6379
 
+有时候重启不好使，直接杀死
+
+# ps -ef|grep redis
+
 
 登录进入Redis数据库
 
@@ -70,6 +74,7 @@ systemctl restart redis_6379
 127.0.0.1:6379>
 127.0.0.1:6379> exit
 
+使用了redis-cli记得敲exit，否则就会重启不了
 
 
 判断6379是否在监听
@@ -87,7 +92,22 @@ PONG
 PONG就是通讯成功了
 
 
+设置访问密码
+# vi /etc/redis/6379.conf
+增加一行
+requirepass YOUR_PASSWORD
+重启
 
-启动Redis
+下面做法立即生效
+redis 127.0.0.1:6379> config set requirepass YOUR_PASSWORD
+查询访问密码
+redis 127.0.0.1:6379> config get requirepass
+
+
+
+
+
+
+
 
 
