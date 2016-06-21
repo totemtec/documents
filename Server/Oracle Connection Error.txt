@@ -1,0 +1,85 @@
+连接不上
+
+使用Oracle用户
+
+# su oracle
+
+1. 排查监听器问题
+
+$ lsnrctl status
+
+显示下面为成功：
+
+Services Summary...
+Service "orcl" has 1 instance(s).
+  Instance "orcl", status UNKNOWN, has 1 handler(s) for this service...
+Service "orcl11g" has 1 instance(s).
+  Instance "orcl", status READY, has 1 handler(s) for this service...
+Service "orclXDB" has 1 instance(s).
+  Instance "orcl", status READY, has 1 handler(s) for this service...
+The command completed successfully
+
+如果没有READY状态的服务，则需要
+排查 /etc/hosts 主机名 设置问题
+排查 listener.ora 设置问题
+排查 tnsnames.ora 设置问题
+
+看看监听器是否启动
+$ lsnrctl status
+$ lsnrctl stop
+$ lsnrctl start
+$ lsnrctl reload
+
+
+2. 查看数据库实例是否启动
+
+看看本机是否能连接上:
+
+$ sqlplus / as sysdba
+
+如果能连接上，会进入sqlplus命令模式
+
+SQL*Plus: Release 11.2.0.1.0 Production on Mon Jun 20 14:00:45 2016
+
+Copyright (c) 1982, 2009, Oracle.  All rights reserved.
+
+Connected to an idle instance.
+
+SQL>
+
+看看是否能查询：
+
+SQL> select status from v$instance;
+
+如果不能查询，启动数据库实例
+
+SQL> startup
+
+提示下面说明启动成功
+
+ORACLE instance started.
+
+Total System Global Area 3273641984 bytes
+Fixed Size		    2217792 bytes
+Variable Size		 2013268160 bytes
+Database Buffers	 1241513984 bytes
+Redo Buffers		   16642048 bytes
+Database mounted.
+Database opened.
+
+3. 查看远程能否连接上
+
+如果本地能连上，远程连不上，一般是网络和防火墙问题
+
+启动关闭防火墙
+# systemctl start firewalld         # 启动,
+# systemctl enable firewalld        # 开机启动
+# systemctl stop firewalld          # 关闭
+# systemctl disable firewalld       # 取消开机启动
+
+打开public zone下的端口
+# firewall-cmd --zone=public --add-port=1521/tcp --permanent
+
+重新加载防火墙
+# firewall-cmd --reload
+
