@@ -104,10 +104,66 @@ redis 127.0.0.1:6379> config set requirepass YOUR_PASSWORD
 redis 127.0.0.1:6379> config get requirepass
 
 
+Unable to set the max number of files limit to 100032 (Invalid argument), setting the max clients configuration to 10112.
+修改文件和线程句柄最大值，类似安装Oracle的设置
+
+# 修改文件/etc/sysctl.conf
+```bash
+    [root@dev ~]# vi /etc/sysctl.conf
+```
+
+增加下列内容，内容类似安装Oracle
+```bash
+    fs.aio-max-nr = 1048576
+    fs.file-max = 6815744
+    kernel.shmall = 2097152
+    kernel.shmmax = 1987162112
+    kernel.shmmni = 4096
+    kernel.sem = 250 32000 100 128
+    net.ipv4.ip_local_port_range = 9000 65500
+    net.core.rmem_default = 262144
+    net.core.rmem_max = 4194304
+    net.core.wmem_default = 262144
+    net.core.wmem_max = 1048586
+```
+
+检查并应用新值
+```bash
+    [root@dev ~]# sysctl -p
+```
+
+检查并应用新值
+```bash
+    [root@dev ~]# sysctl -p
+    [root@dev ~]# sysctl -a
+```
+    
+增大oracle用户限制
+```bash
+    [root@dev ~]# vi /etc/security/limits.conf
+```
+
+增加下列内容
+```bash
+    root soft nproc 2047
+    root hard nproc 16384
+    root soft nofile 1024
+    root hard nofile 65536
+    root soft stack 10240
+```
+
+修改配置文件/etc/pam.d/login
+```bash
+    [root@dev ~]# vi /etc/pam.d/login
+```
+
+增加下列内容
+```bash
+    session    required     pam_limits.so
+```
 
 
-
-
-
+# ulimit -Sn 65536
+# sysctl -w fs.file-max=100000
 
 
