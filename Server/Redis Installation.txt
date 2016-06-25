@@ -49,18 +49,24 @@ Installation successful!
 
 脚本会自动把redis-server安装为服务并开机启动
 
-启动Redis数据库
+启动关闭Redis数据库
 
-## To check status of Redis Server
+# /etc/init.d/redis_6379 start
+
+# redis-cli shutdown
+
+# redis-cli -a PASSWODRD
+127.0.0.1:6379> shutdown SAVE
+not connected> 
+
+如果想用systemctl打开关闭，需要把redis设置为非守护模式
+
+# /etc/redis/6379.conf
+# daemonize yes  记得注释掉
+
 systemctl stop redis_6379
-
-## To start Redis Server
 systemctl start redis_6379
-
-## To stop Redis Server
 systemctl stop redis_6379
-
-## To restart the Redis Server
 systemctl restart redis_6379
 
 有时候重启不好使，直接杀死
