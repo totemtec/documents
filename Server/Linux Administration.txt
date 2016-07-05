@@ -123,10 +123,11 @@ passwd 用户名
 #cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c
 
 查看系统内核
-#uname -a
+# uname -a
 
-查看系统信息
-#cat /etc/issue
+查看系统版本
+# lsb_release -a
+
 
 
 为用户添加sudo权限
