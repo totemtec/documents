@@ -1,0 +1,58 @@
+OpenCV在Centos7上的编译安装
+
+官方网站
+http://opencv.org/
+
+参考文档：
+http://docs.opencv.org/2.4/doc/tutorials/introduction/linux_install/linux_install.html
+
+编译环境准备
+# yum install build-essential
+# yum install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+# yum install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
+
+如果需要生成jar包的话，还需要配置Ant和Java
+# wget http://mirrors.cnnic.cn/apache//ant/binaries/apache-ant-1.9.7-bin.zip
+# unzip apache-ant-1.9.7-bin.zip
+# cd apache-ant-1.9.7
+# export PATH=$PATH:/root/download/apache-ant-1.9.7/bin
+
+确认Ant配置好了
+# ant
+
+
+
+下载OpenCV源代码，注意要下载对应的Linux版本
+例如：https://github.com/Itseez/opencv/archive/2.4.13.zip
+
+源代码托管在
+https://github.com/Itseez/opencv
+所以可以也可以用git
+git clone https://github.com/Itseez/opencv.git --branch 2.4.13 --single-branch --depth=1
+
+下载目录
+~/downloads/opencv-2.4.13.zip
+
+解压
+# unzip opencv-2.4.13.zip
+
+准备编译目录
+# cd opencv-2.4.13
+# mkdir release
+# cd release
+
+编译安装配置
+# cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local ..
+
+编译并安装，时间较长5-10分钟看机器配置了
+# make
+# sudo make install
+
+
+
+
+
+
+
+
+
