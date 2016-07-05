@@ -48,6 +48,12 @@ git clone https://github.com/Itseez/opencv.git --branch 2.4.13 --single-branch -
 # make
 # sudo make install
 
+安装过程中注意安装路径
+
+-- Installing: /usr/local/share/OpenCV/java/opencv-2413.jar
+-- Installing: /usr/local/share/OpenCV/java/libopencv_java2413.so
+
+在 /usr/local/lib 也可以找到已安装的库文件
 
 
 
