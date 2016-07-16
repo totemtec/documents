@@ -1,5 +1,5 @@
 WebLogic 安装
-安装环境CentOS 6.4 x64
+安装环境CentOS 7.2 x64
 可以搜索WebLogic Install Silent
 
 参考文档：
@@ -8,14 +8,24 @@ http://g14n.info/2014/11/install-weblogic-12c/
 https://docs.oracle.com/middleware/1213/core/WLSIG.pdf
 
 
+
+准备
+
+1. 安装Java 8(省略)
+
+2. 安装Ant
+# cd /root/downloads
+# wget http://mirrors.cnnic.cn/apache/ant/binaries/apache-ant-1.9.7-bin.zip
+# unzip apache-ant-1.9.7-bin.zip
+# cd apache-ant-1.9.7
+# export PATH=$PATH:/root/download/apache-ant-1.9.7/bin
+
+安装
+
 1. 下载并解压WebLogic
 需要注册oracle帐号，Oracle可以开发学习，但是生产模式必须有License
 地址：http://www.oracle.com/technetwork/middleware/fusion-middleware/downloads/index.html
 WebLogic现在属于Fusion Middleware里的一部分了，我们选择最小的zip下载包
-
-
-下载Ant
-http://mirrors.hust.edu.cn/apache//ant/binaries/apache-ant-1.9.4-bin.zip
 
 
 2. 创建用户和组
@@ -30,53 +40,20 @@ http://mirrors.hust.edu.cn/apache//ant/binaries/apache-ant-1.9.4-bin.zip
 # chown -R weblogic /opt/weblogic
 
 
-
 4. 拷贝并解压
-
 # cp ~/wls1213_dev.zip /opt/weblogic/wls1213_dev.zip
-# cp ~/apache-ant-1.9.4-bin.zip /opt/weblogic/apache-ant-1.9.4-bin.zip
-
 # chown weblogic /opt/weblogic/wls1213_dev.zip
-# chown weblogic /opt/weblogic/apache-ant-1.9.4-bin.zip
-
 
 切换到weblogic用户
 # su weblogic
 
 在/opt/weblogic下解压文件
-$ unzip apache-ant-1.9.4-bin.zip
 $ unzip wls1213_dev.zip
 
 上述步骤要保证weblogic目录下的文件让用户weblogic有读写权限
 
 
 5. 设置环境变量
-
-切换到weblogic用户
-
-# which java  检查java路径
-
-编辑 .bash_profile 添加下面行
-
-export JAVA_HOME=/usr/java/jdk1.7.0_55
-export PATH=$PATH:$JAVA_HOME/bin
-
-export ANT_HOME=/opt/weblogic/apache-ant-1.9.4
-export PATH=$PATH:$ANT_HOME/bin
-
-# default is           -Xms256m  -Xmx512m  -XX:CompileThreshold=8000 -XX:PermSize=128m   -XX:MaxPermSize=256m
-export USER_MEM_ARGS=" -Xms1024m -Xmx2048m -XX:CompileThreshold=8000 -XX:PermSize=1024m  -XX:MaxPermSize=2048m "
-
-alias start_weblogic='nohup /opt/weblogic/mydomain/bin/startWebLogic.sh > $HOME/start_weblogic.nohup 2>&1 &'
-alias stop_weblogic='/opt/weblogic/mydomain/bin/stopWebLogic.sh'
-
-############结束
-
-使上述环境变量生效
-$ source ~/.bash_profile
-
-
-6. 安装
 
 $ export MW_HOME=/opt/weblogic/wls12130
 $ cd $MW_HOME
@@ -89,19 +66,13 @@ Do you want to configure a new domain?  [y/n]? n
 
 7. 创建domain
 
-先设置环境变量，前面脚本设置的环境变量都废了，因为我们前面脚本已经停了，需要重新设置
+执行Weblogic环境变量设置脚本
+$ source $MW_HOME/wlserver/server/bin/setWLSEnv.sh
 
-执行下面命令，找到CLASSPATH=
-$ /opt/weblogic/wls12130/wlserver/server/bin/setWLSEnv.sh
-
-设置CLASSPATH
-$ export CLASSPATH=/usr/java/jdk1.7.0_55/lib/tools.jar:/lotus/weblogic/wls12130/wlserver/server/lib/weblogic_sp.jar:/lotus/weblogic/wls12130/wlserver/server/lib/weblogic.jar:/lotus/weblogic/wls12130/oracle_common/modules/net.sf.antcontrib_1.1.0.0_1-0b3/lib/ant-contrib.jar:/lotus/weblogic/wls12130/wlserver/modules/features/oracle.wls.common.nodemanager_2.0.0.0.jar:/usr/java/jdk1.7.0_55/lib/tools.jar:/lotus/weblogic/wls12130/wlserver/server/lib/weblogic-classes.jar:/lotus/weblogic/wls12130/oracle_common/modules/net.sf.antcontrib_1.1.0.0_1-0b3/lib/ant-contrib.jar:/lotus/weblogic/wls12130/wlserver/modules/features/oracle.wls.common.nodemanager_2.0.0.0.jar:
-
-
-不变目录就创建到别的地方去了
+变更目录到域主目录，否则就创建到别的目录去了
 $ cd /opt/weblogic/mydomain
 
-$ $JAVA_HOME/bin/java $JAVA_OPTIONS -Xmx1024m -XX:MaxPermSize=256m weblogic.Server
+$ java $JAVA_OPTIONS -Xmx1024m -XX:MaxPermSize=256m weblogic.Server
 
 Would you like the server to create a default configuration and boot?  (y/n): y
 
@@ -109,6 +80,7 @@ Enter username to boot WebLogic server:weblogic
 Enter password to boot WebLogic server:       注意这里密码至少8位，必须包含字符串和数字，否则会创建domain失败
 For confirmation, please re-enter password required to boot WebLogic server:
 
+创建过程非常慢，我这里等了1个半小时
 
 成功后显示
 
@@ -121,15 +93,28 @@ http://localhost:7001/console
 
 8. 关闭和启动
 
+$ vi ~/.bash_profile
+alias startWeblogic='nohup /opt/weblogic/mydomain/bin/startWebLogic.sh > $HOME/weblogic.nohup 2>&1 &'
+alias stopWeblogic='/opt/weblogic/mydomain/bin/stopWebLogic.sh'
 
-$ start_weblogic
+
+$ startWeblogic
 显示：1[8105]
 
-$ stop_weblogic
+$ stopWeblogic
 
 
 启动后可以用下面命令检查日志：
-$ tail -f $HOME/start_weblogic.nohup
+$ tail -f $HOME/weblogic.nohup
+
+
+修改Weblogic内存使用
+# vi /opt/weblogic/mydomain/bin/setDomainEnv.sh
+WLS_MEM_ARGS_64BIT="-Xms2048m -Xmx4096m"
+
+MEM_PERM_SIZE_64BIT="-XX:PermSize=512m"
+MEM_MAX_PERM_SIZE_64BIT="-XX:MaxPermSize=1024m"
+
 
 
 小提示：log4j配置
@@ -148,9 +133,12 @@ export LOG4J_CONFIG_FILE=/opt/weblogic/domain/config/log4j.xml
 
 解决Weblogic Console访问慢的问题
 
-修改Linux上Weblogic使用的jdk $JAVA_HOME/jre/lib/security/Java.security 文件
+1. 修改Linux上Weblogic使用的jdk $JAVA_HOME/jre/lib/security/java.security 文件
 　　将securerandom.source=file:/dev/urandom 修改为
-　　securerandom.source=file:/dev/./urandom
+　　  securerandom.source=file:/dev/./urandom
+2. 登录进入管理后台，点击左侧 mydomain >>> Configuration >>> General
+取消选中 Enable on-demand deployment of internal applications
+保存
 
 
 错误解决

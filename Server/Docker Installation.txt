@@ -1,0 +1,149 @@
+Docker的安装
+
+参考文档：
+https://docs.docker.com/engine/installation/linux/centos/
+
+环境：CentOS 7.1 x86_64
+
+前提条件，查看系统信息
+# uname -r
+3.10.0-327.el7.x86_64
+
+必须是64位Linux，即x86_64
+内核版本必须大于3.10，也就是CentOS 7系统
+
+
+
+
+1. 升级系统：
+# yum update
+
+2. 增加yum仓库
+# vi /etc/yum.repos.d/docker.repo
+
+添加如下内容：
+
+[dockerrepo]
+name=Docker Repository
+baseurl=https://yum.dockerproject.org/repo/main/centos/7/
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.dockerproject.org/gpg
+
+
+3. 安装Docker引擎
+# yum install docker-engine
+
+
+4. 启动Docker
+# systemctl start docker
+
+5. 验证Docker安装成功，运行一个测试镜像
+
+# docker run hello-world
+
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+c04b14da8d14: Pull complete 
+Digest: sha256:0256e8a36e2070f7bf2d0b0763dbabdd67798512411de4cdcf9431a1feb60fd9
+Status: Downloaded newer image for hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker Hub account:
+ https://hub.docker.com
+
+For more examples and ideas, visit:
+ https://docs.docker.com/engine/userguide/
+ 
+6. 设置Docker服务开机启动
+
+# systemctl enable docker
+
+
+镜像的操作
+
+1. 查看镜像
+# docker images
+
+2. 拉取镜像，仓库:TAG
+# docker pull centos:7.2.1511
+
+
+容器的查看
+
+1. 查看容器列表
+# docker ps -a
+-a 现实全部
+不加-a只显示正在运行
+
+2. 查看容器详细信息
+# docker inspect ffff
+# docker inspect -f '{{.NetworkSettings.IPAddress}}' ffff
+
+创建交互式容器
+
+1. 创建并运行一个交互式容器，适合临时任务
+# docker run -it centos:7.2.1511 /bin/bash
+
+2. 退出并关闭交互式容器
+# exit
+
+3. 退出不关闭
+Ctrl + P
+Ctrl + Q
+
+4. 再次进入未关闭的交互式容器
+# docker attach ffff
+
+
+创建守护式容器
+
+1. 创建并运行一个守护式容器 -d 仓库:TAG
+# docker run -d centos:7.2.1511
+
+可以使用 --name 指定容器名称
+-d只是后台运行，命令运行完成后，容器依然会停止
+
+停止一个容器
+# docker stop ffff
+# docker kill ffff
+
+删除一个容器
+# docker rm ffff
+
+查看容器日志
+# docker logs [-f][-t][--tail] ffff
+-f 跟随日志
+-t 显示时间
+
+查看容器内进程
+# docker top ffff
+
+在运行的容器内启动新进程
+# docker exec [d][i][-t] ffff [COMMAND][ARG...]
+
+
+
+
+
+
+
+
+
+
+
+
+
