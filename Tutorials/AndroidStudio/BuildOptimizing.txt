@@ -1,0 +1,29 @@
+Android Studio编译太慢，编译的时候CPU就上去了，风扇呼呼的
+
+优化建议：
+
+1. 
+工程中的gradle.properties里，增加下面几行，如果有了可以去掉注释使其生效
+
+org.gradle.daemon=true
+org.gradle.jvmargs=-Xmx2048m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+org.gradle.parallel=true
+org.gradle.configureondemand=true
+
+这些参数也可以配置到/Users/<username>/.gradle/gradle.properties文件里，那样就不是针对一个项目生效，而是针对所有项目生效
+
+也可以在IDEA设置里直接设置
+
+Gradle设置，开启offline模式。
+勾选 Offline work
+
+勾选 Compile independent modules in parallel
+VM Options:  -Xmx2048 -XX:MaxPermSize=512m
+Command-line Options: --offline
+
+2. 去掉多余的插件
+
+3. 关闭Instant Run
+
+
+

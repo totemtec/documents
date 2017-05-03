@@ -110,6 +110,13 @@ redis 127.0.0.1:6379> config set requirepass YOUR_PASSWORD
 redis 127.0.0.1:6379> config get requirepass
 
 
+如果本地可以连接，远程无法连接，请检查防火墙设置，并且修改端口监听设置
+
+# vi /etc/redis/6379.conf
+原来是：bind 127.0.0.1
+修改为：bind 0.0.0.0
+重启生效
+
 Unable to set the max number of files limit to 100032 (Invalid argument), setting the max clients configuration to 10112.
 修改文件和线程句柄最大值，类似安装Oracle的设置
 
