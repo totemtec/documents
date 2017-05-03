@@ -1,57 +1,49 @@
+CentOS 7.3  Tomcat 8.5
 Tomcat安装在/data/tomcat
 
-1. 创建用户和组
-# groupadd tomcat
-# mkdir /home/tomcat
-# sudo useradd -M -s /bin/nologin -g tomcat -d /home/tomcat tomcat
+1. 确保安装好了JDK
 
-2. 下载Tomcat
+2. 下载解压安装
+[root@dlp ~]# wget http://mirrors.ocf.berkeley.edu/apache/tomcat/tomcat-8/v8.5.14/bin/apache-tomcat-8.5.14.tar.gz
+[root@dlp ~]# tar zxvf apache-tomcat-8.5.14.tar.gz
+[root@dlp ~]# mkdir /data
+[root@dlp ~]# mv apache-tomcat-8.5.14 /data/tomcat 
 
-# wget http://mirrors.cnnic.cn/apache/tomcat/tomcat-8/v8.0.28/bin/apache-tomcat-8.0.28.tar.gz
+3. 新增tomcat用户和组
+[root@dlp ~]# useradd -M -d /data/tomcat tomcat 
+
+以后需要运行TOMCAT/bin/startup.sh 和 shutdown.sh 的时候，必须是用tomcat用户
 
 
-3. 创建Tomcat目录并解压
+4. 修改文件夹权限
+[root@dlp ~]# chown -R tomcat. /data/tomcat
 
-# mkdir /data/tomcat
-# tar xvf apache-tomcat-8.0.28.tar.gz -C /data/tomcat --strip-components=1
-
-4. 更新/data/tomcat下文件权限
-# chgrp -R tomcat conf
-# chmod g+rwx conf
-# chmod g+r conf/*
-# chown -R tomcat webapps/ work/ temp/ logs/
 
 5. 把Tomcat安装为系统服务，注意配置里面的路径和变量
 
-# vi /etc/systemd/system/tomcat.service
+[root@dlp ~]# vi /usr/lib/systemd/system/tomcat.service
 
-############################################################
+#########################################################
 
-# Systemd unit file for tomcat
+# create new
 [Unit]
-Description=Apache Tomcat Web Application Container
-After=syslog.target network.target
+Description=Apache Tomcat 8
+After=network.target
 
 [Service]
-Type=forking
-
-Environment=JAVA_HOME=/opt/jdk1.8.0_65
-Environment=CATALINA_PID=/data/tomcat/temp/tomcat.pid
-Environment=CATALINA_HOME=/data/tomcat
-Environment=CATALINA_BASE=/data/tomcat
-Environment='CATALINA_OPTS=-Xms512M -Xmx2048M -server -XX:+UseParallelGC'
-Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
-
+Type=oneshot
 ExecStart=/data/tomcat/bin/startup.sh
-ExecStop=/bin/kill -15 $MAINPID
-
+ExecStop=/data/tomcat/bin/shutdown.sh
+RemainAfterExit=yes
 User=tomcat
 Group=tomcat
 
 [Install]
 WantedBy=multi-user.target
 
-############################################################
+#########################################################
+
+
 
 6. 重新加载Systemd
 # systemctl daemon-reload
@@ -67,28 +59,58 @@ WantedBy=multi-user.target
 
 
 
-安装Tomcat Native Library，生产环境必须的
 
-1. 安装依赖包
 
-# yum install apr-devel openssl-devel apr apr-util
 
-2. 安装 tomcat-native
+生产环境的优化，需要安装Tomcat Native，这个原生库依赖OpenSSL和APR
 
-# yum install tomcat-native
-上面yum安装我没有安装成功
+参考文档：https://github.com/biezhi/java-bible/blob/master/learn_server/optimization-tomcat8.md
 
-如果上面没安装成功，也可以自己下载源代码编译安装
+未安装会在日志中提示：
+INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent
+The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found
+on the java.library.path: /usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib
 
-a. 下载源代码，网址可以在http://tomcat.apache.org/native-doc/找到
-# wget http://apache.fayea.com/tomcat/tomcat-connectors/native/1.2.2/source/tomcat-native-1.2.2-src.tar.gz
 
-b. 解压源代码
-# tar xvf tomcat-native-1.2.2-src.tar.gz
+1. 安装OpenSSL，CentOS 7.3上OpenSSL版本太低，最低要求1.0.2，据说CentOS7.4会升级OpenSSL
 
-c. 配置编译安装，不建议改动配置，安装路径在安装后会有提示
-# cd tomcat-native-1.2.2-src/native
-# ./configure && make && make install
+官方网址: https://www.openssl.org/
+
+# wget https://www.openssl.org/source/openssl-1.0.2k.tar.gz
+# tar -zxf openssl-1.0.2k.tar.gz
+# cd openssl-1.0.2k
+
+################ 注意: 这里需要加入 -fPIC参数，否则后面在安装tomcat native 组件会出错
+################ 注意: 不要按照提示去运行 make depend
+# ./config --prefix=/usr/local/openssl -fPIC
+
+# make
+# make install
+# mv /usr/bin/openssl /usr/bin/openssl.bak
+# ln -s /usr/local/openssl/bin/openssl /usr/bin/openssl
+# openssl version
+OpenSSL 1.0.2k  26 Jan 2017
+
+
+2. 安装APR (Apache Portable Runtime), 官方网址：http://apr.apache.org/
+
+# wget http://mirrors.tuna.tsinghua.edu.cn/apache//apr/apr-1.5.2.tar.gz
+# tar xvf apr-1.5.2.tar.gz
+# cd apr-1.5.2
+# ./configure
+# make
+# make install
+
+
+3. 安装Tomcat Native Library，生产环境必须的
+
+进入Tomcat的bin目录. 找到native源代码包并解压
+# cd /data/tomcat/bin
+# tar xvf tomcat-native.tar.gz
+# cd tomcat-native-1.2.12-src/native
+# ./configure --with-apr=/usr/local/apr --with-ssl=/usr/local/openssl
+# make
+# make install
 
 
 3. 安装成功后还需要对tomcat设置环境变量，
@@ -96,44 +118,54 @@ c. 配置编译安装，不建议改动配置，安装路径在安装后会有�
 新增文件bin/setenv.sh
 # vi setenv.sh
 
-新增下面1行内容，制定APR库路径
+###################################
 
- CATALINA_OPTS="-Djava.library.path=/usr/local/apr/lib"
+export CATALINA_HOME=/data/tomcat
+export CATALINA_BASE=/data/tomcat
+
+export JAVA_OPTS="$JAVA_OPTS\
+ -server\
+ -Xms768m\
+ -Xmx2048m\
+ -Xss512k\
+ -Djava.awt.headless=true\
+ -Dfile.encoding=utf-8\
+ -Djava.net.preferIPv4Stack=true\
+ -Djava.security.egd=file:/dev/./urandom"
+
+
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/apr/lib
+export LD_LIBRARY_PATH
+
+#####################################
+
+修改文件所有者为tomcat
+
+# chown tomcat. setenv.sh
 
 4. 重新启动tomcat之后，查看日志会有这一行信息，说明已经是APR模式启动了
 
-INFO: APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true].
+INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded APR based Apache Tomcat Native library 1.2.12 using APR version 1.5.2.
+INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true].
+INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+[main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized (OpenSSL 1.0.2k  26 Jan 2017)
+
+5. 优化server.xml
+
+<Connector  port="8080" 
+		maxThreads="8000"
+       	minSpareThreads="215"
+       	maxSpareThreads="2048"
+        connectionTimeout="20000"
+        redirectPort="8443"
+		acceptCount="100"
+        debug="0"
+		enableLookups="false"
+		disableUploadTimeout="true" URIEncoding="UTF-8" useBodyEncodingForURI="true" />
 
 
-
-Tomcat优化
-
-1. 修改server.xml，使用如下配置
-
-<Connector port="8080"
-           protocol="org.apache.coyote.http11.Http11AprProtocol"
-           connectionTimeout="20000"
-           redirectPort="8443"
-           maxThreads="500"
-           minSpareThreads="20"
-           acceptCount="1000"
-           enableLookups="false"
-           URIEncoding="UTF-8" />
-
-2. 修改setenv.sh，修改JAVA_OPTS
-
--Xms JVM初始化堆内存大小
--Xmx JVM堆的最大内存
--Xss 线程栈大小
--XX:PermSize JVM非堆区初始内存分配大小
--XX:MaxPermSize JVM非堆区最大内存
-建议和注意事项:
--Xms和-Xmx选项设置为相同堆内存分配，以避免在每次GC 后调整堆的大小，堆内存建议占内存的60%~80%;非堆内存是不可回收内存，大小视项目而定;线程栈大小推荐256k.
-
-32G内存配置如下：
-
-JAVA_OPTS="-Xms20480m -Xmx20480m -Xss1024K -XX:PermSize=512m -XX:MaxPermSize=2048m"
-
+<Connector 	port="8080" 
+            protocol="org.apache.coyote.http11.Http11AprProtocol"/>
 
 
 

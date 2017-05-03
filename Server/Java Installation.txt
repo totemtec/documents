@@ -1,82 +1,18 @@
-在CentOS 7.0 x64 测试
+在CentOS 7.3 x64 测试
 
-1.下载对应版本的JDK到Linux机器上：  
-
-# curl -LO -H "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u91-b14/jdk-8u91-linux-x64.rpm"
-
-2. 安装JDK
-
-# rpm -Uvh jdk-8u91-linux-x64.rpm 
+[root@dlp ~]# curl -LO -H "Cookie: oraclelicense=accept-securebackup-cookie" \
+"http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.rpm"
+[root@dlp ~]# rpm -Uvh jdk-8u131-linux-x64.rpm
 
 
-3. 设置环境变量
+[root@dlp ~]# vi /etc/profile
 
-# vi /etc/profile
 
-# 最后加上下面4行
+# add follows to the end
 export JAVA_HOME=/usr/java/default
-export JRE_HOME=$JAVA_HOME/jre
 export PATH=$PATH:$JAVA_HOME/bin
 export CLASSPATH=.:$JAVA_HOME/jre/lib:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar
 
 
-4. 应用配置
+[root@dlp ~]# source /etc/profile
 
-# source /etc/profile
-
-
-##################################   以下为旧内容，仅供参考   ###################################
-
-
-
-在CentOS 6.3 x64 测试
-
-1.下载对应版本的JDK到Linux机器上：  
-
-#
-wget --no-cookies \
---no-check-certificate \
---header "Cookie: oraclelicense=accept-securebackup-cookie" \
-"http://download.oracle.com/otn-pub/java/jdk/7u55-b13/jdk-7u55-linux-x64.rpm" \
--O /opt/jdk-7u55-linux-x64.rpm
-
-如果网速太慢，超过30分钟会被服务器断掉
-可以自己先下载了，然后使用scp再传上服务器
-
-远程加密传输文件
-scp local_file user_name@remote_server:path
-scp ~/tomcat.tar.gz root@192.168.0.2:~/upload/
-
-
-2.赋权限：
-
-# chmod +x /opt/jdk-7u55-linux-x64.rpm
-
-3.安装：
-
-# rpm -Uvh /opt/jdk-7u55-linux-x64.rpm
-
-4.设置java环境:
-# alternatives --install /usr/bin/java java /usr/java/jdk1.7.0_55/jre/bin/java 20000
-# alternatives --install /usr/bin/jar jar /usr/java/jdk1.7.0_55/bin/jar 20000
-# alternatives --install /usr/bin/javac javac /usr/java/jdk1.7.0_55/bin/javac 20000
-# alternatives --install /usr/bin/javaws javaws /usr/java/jdk1.7.0_55/jre/bin/javaws 20000
-# alternatives --set java /usr/java/jdk1.7.0_55/jre/bin/java
-# alternatives --set javaws /usr/java/jdk1.7.0_55/jre/bin/javaws
-# alternatives --set javac /usr/java/jdk1.7.0_55/bin/javac
-# alternatives --set jar /usr/java/jdk1.7.0_55/bin/jar
-
-检查一下配置：
-
-# ls -lA /etc/alternatives/{jar,java*}
-
-5.是否成功安装JDK验证：
-
-# java -version
-
-修改系统环境变量设置JAVA_HOME
-
-修改文件并添加一行
-# vi /etc/profile
-
-export JAVA_HOME=/usr/java/jdk1.7.0_55
