@@ -1,16 +1,17 @@
-安装Jira6.3
+安装Jira7.3 on CentOS 7.3
 
-2. 下载Jira最新版
-# wget http://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-6.3.10-x64.bin
+1. 下载Jira最新版
+# wget https://downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-7.3.6-x64.bin
 
 下载地址可以在下面网址找到，注意版本的选择
 http://www.atlassian.com/software/jira/download
 
-3. 为下载的bin文件添加执行权限
-# chmod a+x atlassian-jira-6.3.10-x64.bin
+2. 为下载的bin文件添加执行权限
+# chmod a+x atlassian-jira-software-7.3.6-x64.bin
 
-4. 执行bin文件
-# ./chmod a+x atlassian-jira-6.3.10-x64.bin
+
+3. 执行bin文件
+# ./atlassian-jira-software-7.3.6-x64.bin
 
 有三种安装模式：快速安装、自定义安装、升级。选择2，自定义安装
 
@@ -22,34 +23,36 @@ http://www.atlassian.com/software/jira/download
 	自定义为 [/data/atlassian/application-data/jira
 
 自定义安装可以选择端口，默认是8080端口
-自定义安装可以选择是否安装为service，选是
+自定义安装可以选择是否安装为service，选y是
 
 
-5. Jira的启动与关闭，脚本位与JIRA_HOME/bin目录下
+4. Jira的启动与关闭，脚本位与JIRA_HOME/bin目录下
 # ./start-jira.sh
 # ./stop-jira.sh
 
-6. Jira的访问，直接访问
+5. Jira的访问，直接访问
 http://localhost:8080
 
 安装向导
 
 1. 创建Jira数据库，使用MySQL
 mysql> CREATE DATABASE jiradb CHARACTER SET utf8 COLLATE utf8_bin;
+mysql> CREATE USER jirauser IDENTIFIED BY 'naUmCA3kipD78oQL';
+mysql> GRANT ALL PRIVILEGES ON jiradb.* TO 'jirauser'@'%' IDENTIFIED BY 'naUmCA3kipD78oQL';
+mysql> FLUSH PRIVILEGES;
 
-2. 拷贝MySQL驱动到
+2. 拷贝MySQL驱动到JIRA_HOME/lib目录下
 
-2. 第1次访问Jira，会出现安装向导
-http://localhost:8080
+3. 启动JIRA访问 http://localhost:8080
+第1次访问Jira，会出现安装向导
 选择外部数据库，填写数据库相关信息，下一步
 
-3. 纪录Server ID
-BBGS-LKO0-PJG6-WERM
+4. 申请试用License，继续完成配置和安装
 
-4. 关闭Jira
+5. 关闭Jira
 # ./stop-jira.sh
 
-5. 开始破解
+6. 开始破解
 
 
 Jira启动故障排除
