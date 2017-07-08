@@ -9,45 +9,20 @@ https://webtatic.com/packages/php70/
 
 1. 使用第三方的源
 
-# rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+# yum -y install epel-release
 # rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
 
 2. 安装
 
-# yum install php70w-fpm php70w-opcache php70w-gd php70w-mysql
+# yum -y install php71w-fpm php71w-cli php71w-gd php71w-mcrypt php71w-mysql php71w-pear php71w-xml php71w-mbstring php71w-pdo php71w-json php71w-pecl-apcu php71w-pecl-apcu-devel
 
 
-php70w-bcmath php70w-cli php70w-common php70w-dba php70w-devel php70w-embedded php70w-enchant php70w-fpm php70w-gd
-php70w-imap
-php70w-interbase
-php70w-intl
-php70w-ldap
-php70w-mbstring
-php70w-mcrypt
-php70w-mysql
-php70w-mysqlnd
-php70w-odbc
-php70w-opcache
-php70w-pdo
-php70w-pdo_dblib
-php70w-pear
-php70w-pecl-apcu	
-php70w-pecl-imagick	
-php70w-pecl-xdebug	
-php70w-pgsql
-php70w-phpdbg
-php70w-process
-php70w-pspell
-php70w-recode
-php70w-snmp	
-php70w-soap	
-php70w-tidy	
-php70w-xml
-php70w-xmlrpc
+安装完成后，可以使用命令查看安装的版本
+# php -v
 
 如果是老版本，可以如下方式更新
 # yum install yum-plugin-replace
-# yum replace php-common --replace-with=php70w-common
+# yum replace php-common --replace-with=php71w-common
 
 3. 修改php-fpm配置文件
 
@@ -89,26 +64,4 @@ No Input File Specifed.
 
 # chcon -Rt httpd_sys_content_t /data/www
 # chcon -Rt httpd_sys_content_rw_t /data/www
-
-
-
-CentOS6安装PHP5.6
-
-# rpm -Uvh https://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-# rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
-
-# yum install php56w php56w-common php56w-gd php56w-mysql php56w-fpm php56w-opcache
-
-跟上面一样修改配置文件
-
-vi /etc/php.ini
-
-cgi.fix_pathinfo=0
-
-设置开机启动
-# chkconfig php-fpm on
-
-打开php-fpm服务
-# service php-fpm start
-
 
