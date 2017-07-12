@@ -1,0 +1,142 @@
+CentOS7源代码编译安装Nginx
+
+参考文档
+https://segmentfault.com/a/1190000005180585
+https://www.nginx.com/resources/admin-guide/installing-nginx-open-source/
+
+
+比较：
+a, yum安装，安装配置非常快
+b, 源代码编译安装，可以安装一些可选的模块
+
+a, mainline版本，更新
+b, stable版本，更稳定
+
+1. 安装编译工具
+# yum -y install gcc gcc-c++ autoconf automake
+
+2. 新建匿名用户和用户组
+# groupadd nginx
+# useradd -s /sbin/nologin -g nginx -r nginx
+
+3. 安装依赖
+
+a. PCRE库，正则表达式库，Nginx Core和 Rewrite模块都需要，请安装最新版
+    网址: http://pcre.org/
+    下载地址：ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.41.tar.gz
+
+# wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.41.tar.gz
+# tar -zxf pcre-8.41.tar.gz
+# cd pcre-8.41
+# ./configure
+# make
+# make install
+
+
+b. zlib库，Gzip模块需要用到它
+
+# wget http://zlib.net/zlib-1.2.11.tar.gz
+# tar -zxf zlib-1.2.11.tar.gz
+# cd zlib-1.2.11
+# ./configure
+# make
+# make install
+
+c. OpenSSL库，https协议需要
+# wget wget https://www.openssl.org/source/openssl-1.0.2-latest.tar.gz
+# tar -zxf openssl-1.0.2-latest.tar.gz
+# cd openssl-1.0.2l
+# ./config --prefix=/usr/local/openssl
+# make
+# make install
+
+移除openssl旧版本
+# mv /usr/bin/openssl /usr/bin/openssl.bak
+# ln -s /usr/local/openssl/bin/openssl /usr/bin/openssl
+
+查看新版本
+# openssl version
+OpenSSL 1.0.2l  25 May 2017
+
+4. 下载安装Nginx
+
+最新包地址：http://nginx.org/en/download.html
+
+# wget http://nginx.org/download/nginx-1.12.1.tar.gz
+# tar zxf nginx-1.12.1.tar.gz
+# cd nginx-1.12.1
+
+5. 配置，路径配置模拟yum安装路径
+
+$ ./configure \
+--prefix=/usr/local/nginx \
+--sbin-path=/usr/sbin/nginx \
+--conf-path=/etc/nginx/nginx.conf \
+--pid-path=/var/run/nginx.pid \
+--error-log-path=/var/log/nginx/error.log \
+--http-log-path=/var/log/nginx/access.log \
+--user=nginx \
+--group=nginx \
+--with-openssl=/source_code/openssl-1.0.2l \
+--with-http_ssl_module \
+--with-threads \
+--with-file-aio \
+--with-stream \
+--with-stream_ssl_module \
+--with-http_secure_link_module \
+--with-http_auth_request_module \
+--with-http_realip_module
+
+
+6. 编译安装
+# make
+# make install
+
+
+
+7. 打开防火墙
+# firewall-cmd --permanent --zone=public --add-service=http 
+# firewall-cmd --permanent --zone=public --add-service=https
+# firewall-cmd --reload
+
+
+9. nginx命令讲解
+nginx -V = displays Nginx modules and configurations
+nginx -h = help options
+nginx = start Nginx process
+nginx -s stop = stop Nginx process
+nginx -s reload = reload Nginx process
+
+10. 创建服务
+
+# vi /usr/lib/systemd/system/nginx.service
+
+
+[Unit]
+Description=nginx - high performance web server
+Documentation=http://nginx.org/en/docs/
+After=network-online.target remote-fs.target nss-lookup.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+PIDFile=/run/nginx.pid
+ExecStartPre=/usr/sbin/nginx -t -c /etc/nginx/nginx.conf
+ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+
+
+11. 设置开机启动
+
+# systemctl start nginx
+# systemctl stop nginx
+# systemctl enable nginx
+# systemctl reload nginx
+
+
+
+
