@@ -19,12 +19,17 @@ b, stable版本，更稳定
 # groupadd nginx
 # useradd -s /sbin/nologin -g nginx -r nginx
 
+# cd /
+# makedir /download
+# cd /download
+
 3. 安装依赖
 
 a. PCRE库，正则表达式库，Nginx Core和 Rewrite模块都需要，请安装最新版
     网址: http://pcre.org/
     下载地址：ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.41.tar.gz
 
+# cd /download
 # wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.41.tar.gz
 # tar -zxf pcre-8.41.tar.gz
 # cd pcre-8.41
@@ -35,6 +40,7 @@ a. PCRE库，正则表达式库，Nginx Core和 Rewrite模块都需要，请安�
 
 b. zlib库，Gzip模块需要用到它
 
+# cd /download
 # wget http://zlib.net/zlib-1.2.11.tar.gz
 # tar -zxf zlib-1.2.11.tar.gz
 # cd zlib-1.2.11
@@ -43,10 +49,12 @@ b. zlib库，Gzip模块需要用到它
 # make install
 
 c. OpenSSL库，https协议需要
+
+# cd /download
 # wget wget https://www.openssl.org/source/openssl-1.0.2-latest.tar.gz
 # tar -zxf openssl-1.0.2-latest.tar.gz
 # cd openssl-1.0.2l
-# ./config --prefix=/usr/local/openssl
+# ./config --prefix=/usr/local/openssl -fPIC
 # make
 # make install
 
@@ -62,6 +70,7 @@ OpenSSL 1.0.2l  25 May 2017
 
 最新包地址：http://nginx.org/en/download.html
 
+# cd /download
 # wget http://nginx.org/download/nginx-1.12.1.tar.gz
 # tar zxf nginx-1.12.1.tar.gz
 # cd nginx-1.12.1
@@ -72,12 +81,12 @@ $ ./configure \
 --prefix=/usr/local/nginx \
 --sbin-path=/usr/sbin/nginx \
 --conf-path=/etc/nginx/nginx.conf \
---pid-path=/var/run/nginx.pid \
+--pid-path=/run/nginx.pid \
 --error-log-path=/var/log/nginx/error.log \
 --http-log-path=/var/log/nginx/access.log \
 --user=nginx \
 --group=nginx \
---with-openssl=/source_code/openssl-1.0.2l \
+--with-openssl=/download/openssl-1.0.2l \
 --with-http_ssl_module \
 --with-threads \
 --with-file-aio \
@@ -86,6 +95,8 @@ $ ./configure \
 --with-http_secure_link_module \
 --with-http_auth_request_module \
 --with-http_realip_module
+
+--with-debug  可以在配置文件中进行调试
 
 
 6. 编译安装
@@ -129,6 +140,11 @@ ExecStop=/bin/kill -s QUIT $MAINPID
 [Install]
 WantedBy=multi-user.target
 
+
+
+编辑完成后重新载入 systemd，扫描新的或有变动的单元：
+
+# systemctl daemon-reload
 
 11. 设置开机启动
 

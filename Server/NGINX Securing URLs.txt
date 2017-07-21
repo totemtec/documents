@@ -1,0 +1,11 @@
+NGINX 防盗链
+
+参考文档
+https://www.nginx.com/blog/securing-urls-secure-link-module-nginx-plus/
+
+1. URL变换来防护
+
+2. 过期时间加MD5来防护
+
+
+
