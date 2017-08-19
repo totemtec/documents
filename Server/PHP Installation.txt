@@ -1,5 +1,7 @@
+yum安装PHP7.1，使用第三方源
 使用
 https://webtatic.com/packages/php70/
+https://webtatic.com/packages/php71/
 
 这个方法可以保证安装上最新的PHP
 
@@ -9,13 +11,12 @@ https://webtatic.com/packages/php70/
 
 1. 使用第三方的源
 
-# yum -y install epel-release
+# rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 # rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
 
 2. 安装
 
-# yum -y install php71w-fpm php71w-cli php71w-gd php71w-mcrypt php71w-mysql php71w-pear php71w-xml php71w-mbstring php71w-pdo php71w-json php71w-pecl-apcu php71w-pecl-apcu-devel
-
+# yum -y install php71w-fpm php71w-common php71w-opcache php71w-cli php71w-gd php71w-mcrypt php71w-mysqlnd php71w-pdo php71w-pdo_dblib php71w-pear php71w-xml php71w-mbstring php71w-json php71w-pecl-apcu php71w-pecl-apcu-devel
 
 安装完成后，可以使用命令查看安装的版本
 # php -v
@@ -40,6 +41,11 @@ user = nginx
 查找group = apache，修改为以下内容
 group = nginx
 
+pm.max_children = 32
+pm.start_servers = 32
+pm.min_spare_servers = 32
+pm.max_spare_servers = 32
+
 4 启动php-fpm并设置为开机自启
 
 systemctl enable php-fpm.service
@@ -58,7 +64,7 @@ server节点里面，配置如下：
 
 
 
-No Input File Specifed.
+No Input File Specifed. 或者 File not found.
 是因为SELinux的权限问题
 只需要设置一下，让httpd对新的www的目录具有访问权限就可以，如下：
 

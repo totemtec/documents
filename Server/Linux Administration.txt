@@ -42,9 +42,14 @@ LC_ALL=en_US.utf-8
 # firewall-cmd --zone=public --add-port=8080/tcp --permanent
 # firewall-cmd --zone=public --add-service=http --permanent
 
-重新加载防火墙
-# firewall-cmd --reload
+查看public zone下的端口
+# firewall-cmd --zone=public --list-all
 
+删除public zone下的服务端口
+# firewall-cmd --zone=public --remove-service=http --permanent
+
+重新加载防火墙，重新加载才能生效
+# firewall-cmd --reload
 
 
 

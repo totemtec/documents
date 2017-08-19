@@ -1,7 +1,7 @@
 SVN服务器的安装和配置
 
 一、安装Subversion
-#yum install subversion
+# yum install subversion
 
 
 二，基本的SVN服务器配置
