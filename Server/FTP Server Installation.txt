@@ -8,17 +8,24 @@ VSFTPD 安装与配置
 
 ###################################
 anonymous_enable=NO
-#anonymous_enable=YES
 
 chroot_local_user=YES
-#去掉前面的注释
+chroot_list_enable=YES
+chroot_list_file=/etc/vsftpd/chroot_list
 
-#chroot_list_enable=YES
-#chroot_list_file=/etc/vsftpd/chroot_list
-#不受限制的用户列表，用不用都OK
+listen_ipv6=NO
+
+
+#最下面加入下面配置
+pam_service_name=vsftpd
+userlist_enable=YES
+tcp_wrappers=YES
+
+#/www是目录名
+local_root=/www
+use_localtime=YES
 
 allow_writeable_chroot=YES
-#加上这行解决了无法登陆的问题
 
 ###################################
 
@@ -28,65 +35,25 @@ allow_writeable_chroot=YES
 # firewall-cmd --permanent --add-service=ftp
 # firewall-cmd --reload
 
+如果是阿里云配置安全规则，记得端口20和21，入方向和出方向都允许
+
 4. 启动nginx并设为开机自启
 
 # systemctl start vsftpd.service
 # systemctl enable vsftpd.service
 
 
-FTP 服务器安装
-
-抄自阿里云
-
-一、Redhat/CentOS安装vsftp软件
-1.更新yum源
-首先需要更新系统的yum源，便捷工具下载地址：http://help.aliyun.com/manual?spm=0.0.0.0.zJ3dBU&helpId=1692
-2.安装vsftp
-使用yum命令安装vsftp
-#yum install vsftpd -y
-3.添加ftp帐号和目录
-先检查一下nologin的位置，通常在/usr/sbin/nologin或者/sbin/nologin下。
-使用下面的命令创建帐户，该命令指定了/alidata/www/wwwroot为用户pwftp的家目录，您可以自己定义帐户名和目录：
-#useradd -d /alidata/www/wwwroot -s /sbin/nologin pwftp
+创建用户
+#useradd -d /www -s /sbin/nologin www
 修改该帐户密码:
-#passwd pwftp
+#passwd www
 修改指定目录的权限
-#chown -R pwftp.pwftp /alidata/www/wwwroot
-4.配置vsftp
-编辑vsftp配置文件，命令如下：
-#vi /etc/vsftpd/vsftpd.conf
-将配置文件中”anonymous_enable=YES “改为 “anonymous_enable=NO”
-取消如下配置前的注释符号：
-local_enable=YES
-write_enable=YES
-chroot_local_user=YES
-保存修改，按ESC键，输入：wq
-5.修改shell配置
-vi编辑/etc/shells，如果该文件里没有/usr/sbin/nologin或者/sbin/nologin（具体看当前系统配置）则追加进去
-6.启动vsftp服务并测试登录
-使用命令启动vsftp服务：
-#service vsftpd start
-然后用帐号pwftp测试下是否可以登陆ftp。目录是/alidata/www/wwwroot。
+#chown -R www.www /www
 
-设置开机启动
-#chkconfig vsftpd on
-
-如果端口没开需要打开防火墙21端口
-
-如果500错误了，需要
-
-# vi /etc/selinux/config
-SELINUX=enforcing
-替换成
-SELINUX=disabled
-
-重启机器后，就可以登录了
-$ ftp ftp://username@192.168.0.1
+将www用户加入文件中
+vi /etc/vsftpd/chroot_list
+www
 
 
-修改/etc/vsftpd/vsftpd.conf, 可以设置ftp用户的根目录
-
-local_root=/data/ftp
-
-
-
+******************************************************
+如果使用FileZilla，记得把传输模式改为主动模式，默认是被动模式
