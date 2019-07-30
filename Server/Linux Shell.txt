@@ -1,2 +1,10 @@
 转换文本文件编码
 $ iconv -f GBK -t UTF-8 inputfilename > outputfilename
+
+wget批量爬取
+
+wget -i test.txt -x --header="Referer: https://cd-nt.lianlianlvyou.com/?v=182&i=wx3ed1ccc70f9740b4&a=18632828"
+
+test.txt中每行一个URL
+-x 会根据路径在本地创建目录
+-w 2  会在中间每个等待2秒
