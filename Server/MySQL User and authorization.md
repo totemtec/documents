@@ -67,4 +67,10 @@ DROP USER username@localhost;
 ```
 mysql> SELECT User, Host FROM user;
 ```
+
+修改用户密码
+```
+ALTER USER 'username' IDENTIFIED BY 'password';
+FLUSH PRIVILEGES;
+```
 **user表中还包含很多其它例如用户密码、权限设置等很多内容，操作时候尤其需要小心。**
