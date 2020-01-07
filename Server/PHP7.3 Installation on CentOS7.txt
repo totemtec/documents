@@ -1,0 +1,72 @@
+yum安装PHP7.3，使用第三方源
+
+
+1. 使用第三方的源
+
+# yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+# yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+# yum install yum-utils
+# yum-config-manager --enable remi-php73
+
+
+2. 安装
+
+# yum -y install php php-mcrypt php-devel php-cli php-gd php-pear php-curl php-fpm php-mysql php-ldap php-zip php-fileinfo
+
+安装完成后，可以使用命令查看安装的版本
+# php -v
+
+3. 修改php-fpm配置文件
+
+# vi /etc/php-fpm.d/www.conf
+
+查找listen = 127.0.0.1:9000，修改为以下内容
+listen = /run/php-fpm/php-fpm.sock
+
+listen.owner = nginx
+listen.group = nginx
+
+查找user = apache，修改为以下内容
+user = nginx
+
+查找group = apache，修改为以下内容
+group = nginx
+
+pm.max_children = 32
+pm.start_servers = 32
+pm.min_spare_servers = 32
+pm.max_spare_servers = 32
+
+4 启动php-fpm并设置为开机自启
+
+systemctl enable php-fpm.service
+systemctl start php-fpm.service
+
+Nigix使用PHP的配置
+server节点里面，配置如下：
+        
+server {
+    listen       80;
+    server_name im.totemtec.com;
+
+    root   /www;
+    index  index.php;
+
+    location ~ \.php$ {
+        try_files  $uri =404;
+        fastcgi_pass   unix:/run/php-fpm/php-fpm.sock;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        include        fastcgi_params;
+    }
+}
+
+
+
+No Input File Specifed. 或者 File not found.
+是因为SELinux的权限问题
+只需要设置一下，让httpd对新的www的目录具有访问权限就可以，如下：
+
+# chcon -Rt httpd_sys_content_t /data/www
+# chcon -Rt httpd_sys_content_rw_t /data/www
+
