@@ -1,4 +1,5 @@
 yum安装PHP7.3，使用第三方源
+也可安装PHP5.6，任意版本
 
 
 1. 使用第三方的源
@@ -7,6 +8,7 @@ yum安装PHP7.3，使用第三方源
 # yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 # yum install yum-utils
 # yum-config-manager --enable remi-php73
+# yum-config-manager --enable remi-php56  这里随便选择版本
 
 
 2. 安装
@@ -21,7 +23,7 @@ yum安装PHP7.3，使用第三方源
 # vi /etc/php-fpm.d/www.conf
 
 查找listen = 127.0.0.1:9000，修改为以下内容
-listen = /run/php-fpm/php-fpm.sock
+listen = /var/run/php-fpm/php-fpm.sock
 
 listen.owner = nginx
 listen.group = nginx
@@ -35,7 +37,7 @@ group = nginx
 pm.max_children = 32
 pm.start_servers = 32
 pm.min_spare_servers = 32
-pm.max_spare_servers = 32
+pm.max_spare_servers = 128
 
 4 启动php-fpm并设置为开机自启
 
@@ -54,13 +56,16 @@ server {
 
     location ~ \.php$ {
         try_files  $uri =404;
-        fastcgi_pass   unix:/run/php-fpm/php-fpm.sock;
+        fastcgi_pass   unix:/var/run/php-fpm/php-fpm.sock;
         fastcgi_index  index.php;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
         include        fastcgi_params;
     }
 }
 
+5. 修改了php运行用户后，要记得修改权限
+需要修改/var/lib/php/整个目录所有者，否则会无法写入session，用户无法登录
+# chown -R nginx:nginx /var/lib/php
 
 
 No Input File Specifed. 或者 File not found.
