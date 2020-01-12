@@ -1,22 +1,29 @@
 参考文档
-https://www.nginx.com/resources/wiki/start/topics/tutorials/install/
+http://nginx.org/en/linux_packages.html#RHEL-CentOS
 
-1. 增加yum仓库
+# yum install yum-utils
 # vi /etc/yum.repos.d/nginx.repo
 
-[nginx]
-name=nginx repo
-baseurl=http://nginx.org/packages/mainline/centos/7/$basearch/
-gpgcheck=0
+[nginx-stable]
+name=nginx stable repo
+baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
+gpgcheck=1
 enabled=1
+gpgkey=https://nginx.org/keys/nginx_signing.key
+module_hotfixes=true
+
+[nginx-mainline]
+name=nginx mainline repo
+baseurl=http://nginx.org/packages/mainline/centos/$releasever/$basearch/
+gpgcheck=1
+enabled=0
+gpgkey=https://nginx.org/keys/nginx_signing.key
+module_hotfixes=true
 
 
-nginx直接被安装在 /usr/sbin/nginx
-配置文件位于 /etc/nginx
+# yum-config-manager --enable nginx-mainline
 
-2. 安装nginx
-
-# yum -y install nginx
+# yum install nginx
 
 
 3. 编辑nginx主配置文件
