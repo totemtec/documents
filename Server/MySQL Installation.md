@@ -93,8 +93,12 @@ systemctl stop mysqld
 
 ### 2、移动data目录，好象停止服务前拷贝能保留几个sock和pid临时文件
 ```
-cp -R /var/lib/mysql  /data
-chown -R mysql:root /data/mysql
+rsync -av /var/lib/mysql /data  后面不能加斜线/，移动后目录是/data/mysql/...
+```
+
+备份老文件
+```
+mv /var/lib/mysql /var/lib/mysql.bak
 ```
 
 ### 3、修改配置文件
@@ -113,30 +117,34 @@ socket=/data/mysql/mysql.sock
 socket=/data/mysql/mysql.sock
 ```
 
-### 4. 修改SELinux配置
-
-装个工具
+修改完后尝试启动
 ```
-# yum install policycoreutils-python
+# systemctl start mysqld
 ```
 
-设置权限
+### 4. 如果无法启动，修改SELinux配置
+
+检查SELinux权限
 ```
-# semanage fcontext -a -t mysqld_db_t "/data/mysql(/.*)?"
+# ls -lZ /var/lib/mysql
+```
+必须是下面设置才行
+drwxr-xr-x. mysql mysql system_u:object_r:mysqld_db_t:s0 mysql
+
+Ensure the user:group is mysql:mysql
+Set the SELinux tag to mysqld_db_t
+Set the SELinux user to system_u
+
+```
+# chcon -Rt mysqld_db_t /data/mysql
+# chcon -Ru system_u /data/mysql
+# chown -R mysql:mysql /data/mysql
 ```
 
-应用权限
-```
-# restorecon -R -v /data/mysql
-```
-提示：restorecon reset /data/mysql context system_u:object_r:default_t:s0->system_u:object_r:mysqld_db_t:s0
-
-不行了再敲下面这句，反复来几次，SELinux权限愁人死了
+或者只使用下面一句
 ```
 # chcon -R -u system_u -r object_r -t mysqld_db_t /data/mysql
 ```
-
-如果实在搞不定SELinux权限，mysqld无法正常启动，网上找个办法直接关掉SELinux吧
 
 
 ### 5. 重启试试
