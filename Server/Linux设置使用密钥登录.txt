@@ -1,0 +1,41 @@
+1. 在本地生成密钥对
+
+# ssh-keygen -t rsa
+
+执行完后，生成的密钥在
+.ssh/id_rsa			私钥
+.ssh/id_rsa.pub		公钥
+
+2. 在服务器上设置公钥
+
+检查~/.ssh/authorized_keys 文件是否存在
+
+# mkdir .ssh
+# vi ~/.ssh/authorized_keys
+
+将id_rsa.pub的内容追加到authorized_keys
+   
+# cat id_rsa.pub >> ~/.ssh/authorized_keys
+
+修改目录和文件权限
+
+# chmod 700 ~/.ssh
+# chmod 600 ~/.ssh/authorized_keys
+
+
+3. 修改sshd服务配置
+
+# vi /etc/ssh/sshd_config
+
+RSAAuthentication yes
+PubkeyAuthentication yes
+AuthorizedKeysFile      .ssh/authorized_keys
+
+
+这里有一点很重要，在你配置密钥登录成功之前，千万不要太自信将
+PasswordAuthentication 设置no，否则你密钥登录不了，然后又禁止密码登录，就悲剧了
+在密钥登录设置成功之后，可以将PasswordAuthentication 设置为no，禁用密码登录了，比较安全
+
+
+4. 重启sshd服务
+# systemctl restart sshd
