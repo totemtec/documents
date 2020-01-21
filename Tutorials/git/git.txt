@@ -1,0 +1,28 @@
+查看当前工作区状态
+# git status
+
+查看修改情况
+# git diff
+
+生成patch文件
+# git diff --no-prefix -u . > path/file_name.diff
+
+-u 生成一个diff文件，默认选项
+
+应用patch
+# cd DIR_makePatch
+# patch -p0 -i path/file_name.diff
+
+
+--no-prefix
+当比较的文件在同一个目录，可以使用此选项
+生成的diff文件中，两个文件路径不加前缀，可以看看diff文件中的路径
+应用patch时，进入打patch的目录，使用-p0参数
+
+不使用--no-prefix选项，生成的diff文件中，两个比较文件目录分别以a和b开头
+
+应用patch时，得提供-p1参数告诉程序应用patch的参考目录，例如：
+# cd DIR_makePatch
+# patch -p1 < path/file_name.diff
+
+
