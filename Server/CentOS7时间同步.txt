@@ -1,0 +1,23 @@
+CentOS 7 同步时间
+
+Sync CentOS with NTP Time Servers
+
+# yum install ntp ntpdate
+
+# systemctl start ntpd
+
+# systemctl enable ntpd
+
+# systemctl status ntpd
+
+配置NTP服务器
+# ntpdate -u -s 0.cn.pool.ntp.org 1.cn.pool.ntp.org ntp6.aliyun.com
+
+重启
+# systemctl restart ntpd
+
+查看时间
+# timedatectl
+
+设置硬件时间，虚拟机上这步可以不做
+# hwclock -w

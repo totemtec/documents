@@ -1,9 +1,9 @@
 Docker的安装
 
 参考文档：
-https://docs.docker.com/engine/installation/linux/centos/
+https://docs.docker.com/install/linux/docker-ce/centos/
 
-环境：CentOS 7.1 x86_64
+环境：CentOS 7.x x86_64
 
 前提条件，查看系统信息
 # uname -r
@@ -18,22 +18,28 @@ https://docs.docker.com/engine/installation/linux/centos/
 1. 升级系统：
 # yum update
 
-2. 增加yum仓库
-# vi /etc/yum.repos.d/docker.repo
+删除老版本
+# yum remove docker \
+             docker-client \
+             docker-client-latest \
+             docker-common \
+             docker-latest \
+             docker-latest-logrotate \
+             docker-logrotate \
+             docker-engine
+             
+             
 
-添加如下内容：
+2. 设置yum仓库
+# yum install -y yum-utils device-mapper-persistent-data lvm2
 
-[dockerrepo]
-name=Docker Repository
-baseurl=https://yum.dockerproject.org/repo/main/centos/7/
-enabled=1
-gpgcheck=1
-gpgkey=https://yum.dockerproject.org/gpg
+# yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
 
 3. 安装Docker引擎
-# yum install docker-engine
+# yum install docker-ce docker-ce-cli containerd.io
 
+提示，输入y，回车
 
 4. 启动Docker
 # systemctl start docker
@@ -41,36 +47,15 @@ gpgkey=https://yum.dockerproject.org/gpg
 5. 验证Docker安装成功，运行一个测试镜像
 
 # docker run hello-world
-
-Unable to find image 'hello-world:latest' locally
-latest: Pulling from library/hello-world
-c04b14da8d14: Pull complete 
-Digest: sha256:0256e8a36e2070f7bf2d0b0763dbabdd67798512411de4cdcf9431a1feb60fd9
-Status: Downloaded newer image for hello-world:latest
-
-Hello from Docker!
-This message shows that your installation appears to be working correctly.
-
-To generate this message, Docker took the following steps:
- 1. The Docker client contacted the Docker daemon.
- 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
- 3. The Docker daemon created a new container from that image which runs the
-    executable that produces the output you are currently reading.
- 4. The Docker daemon streamed that output to the Docker client, which sent it
-    to your terminal.
-
-To try something more ambitious, you can run an Ubuntu container with:
- $ docker run -it ubuntu bash
-
-Share images, automate workflows, and more with a free Docker Hub account:
- https://hub.docker.com
-
-For more examples and ideas, visit:
- https://docs.docker.com/engine/userguide/
  
 6. 设置Docker服务开机启动
 
 # systemctl enable docker
+
+7. 删除docker引擎和镜像
+
+# yum remove docker-ce
+# rm -rf /var/lib/docker
 
 
 镜像的操作
