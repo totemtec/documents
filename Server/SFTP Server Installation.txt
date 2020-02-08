@@ -1,0 +1,40 @@
+SFTP 安装与配置
+
+参考：https://www.howtoforge.com/tutorial/how-to-setup-an-sftp-server-on-centos/
+
+1. 准备
+
+目录
+# mkdir -p /data/sftp
+# chmod 701 /data
+
+用户和组
+# groupadd sftpusers
+# useradd -g sftpusers -d /upload -s /sbin/nologin sftpuser
+# passwd sftpuser
+
+上传目录
+# mkdir -p /data/sftpuser/upload
+# chown -R root:sftpusers /data/sftpuser
+# chown -R sftpuser:sftpusers /data/sftpuser/upload
+
+
+2. 配置
+# vi /etc/ssh/sshd_config
+
+修改
+Subsystem sftp internal-sftp
+
+最后新加
+
+Match Group sftpusers
+ChrootDirectory /data/%u
+ForceCommand internal-sftp
+
+3. 重启前检查一下配置
+
+# systemctl status sshd
+
+4. 重启ssh服务
+
+# systemctl restart sshd
