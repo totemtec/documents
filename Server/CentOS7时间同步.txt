@@ -2,7 +2,7 @@ CentOS 7 同步时间
 
 Sync CentOS with NTP Time Servers
 
-# yum install ntp ntpdate
+# yum -y install ntp ntpdate
 
 # systemctl start ntpd
 
@@ -11,7 +11,9 @@ Sync CentOS with NTP Time Servers
 # systemctl status ntpd
 
 配置NTP服务器
-# ntpdate -u -s 0.cn.pool.ntp.org 1.cn.pool.ntp.org ntp6.aliyun.com
+# ntpdate -u -s ntp2.aliyun.com ntp4.aliyun.com ntp6.aliyun.com
+
+使用相同的服务器，才能同步到相同的时间
 
 重启
 # systemctl restart ntpd

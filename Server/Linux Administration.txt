@@ -51,6 +51,19 @@ LC_ALL=en_US.utf-8
 重新加载防火墙，重新加载才能生效
 # firewall-cmd --reload
 
+为指定的IP打开MySQL 3306端口
+
+# firewall-cmd --permanent --zone=internal --add-source=114.249.221.75/32
+# firewall-cmd --permanent --zone=internal --add-port=3306/tcp
+# firewall-cmd --reload
+
+为指定的IP打开SSH服务
+# firewall-cmd --permanent --zone=internal --add-source=114.249.221.75/32
+# firewall-cmd --zone=internal --add-service=ssh
+
+去掉ssh服务
+# firewall-cmd --zone=public --remove-service=ssh
+
 
 
 解决You have new mail in /var/spool/mail/root
@@ -132,6 +145,9 @@ passwd 用户名
 
 查看系统版本
 # lsb_release -a
+
+查看CentOS版本
+# cat /etc/redhat-release
 
 
 
