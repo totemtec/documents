@@ -4,12 +4,22 @@
 http://redis.io/download
 http://sharadchhetri.com/2015/07/05/install-redis-3-0-from-source-on-ubuntu-14-04-centos-7-rhel-7/
 
-1. yum方式安装，装的不是最新的
+1. yum方式安装，yum默认装的不是最新的
 参考：https://www.linode.com/docs/databases/redis/install-and-configure-redis-on-centos-7/
 # yum install epel-release
 # yum update
 # yum install redis
 
+
+2. yum安装，使用remi仓库
+
+# yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+# yum --enablerepo=remi install redis
+
+# systemctl start redis
+# systemctl enable redis
+
+3. 手动编译安装
 依赖gcc make wget
 # yum install make gcc wget
 

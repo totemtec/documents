@@ -1,59 +1,88 @@
-VSFTPD 安装与配置
+CentOS 7.6 64位
+vsftpd-3.0.2
+
+参考文档：
+https://www.fosslinux.com/6747/how-to-setup-and-configure-ftp-server-on-centos.htm
+
 
 1. 安装
-# yum install vsftpd
+# yum install vsftpd -y
 
-2. 修改配置
+启动
+# systemctl start vsftpd
+
+设置开机启动
+# systemctl enable vsftpd
+
+2. 配置
+
+备份配置文件
+# cp /etc/vsftpd/vsftpd.conf /etc/vsftpd/vsftpd.conf.origbackup
+
+修改配置文件
 # vi /etc/vsftpd/vsftpd.conf
 
-###################################
+修改下面配置项
 anonymous_enable=NO
-
+local_enable=YES
+write_enable=YES
 chroot_local_user=YES
-chroot_list_enable=YES
-chroot_list_file=/etc/vsftpd/chroot_list
 
-listen_ipv6=NO
+在最后新增下面配置项
+user_sub_token=$USER
+local_root=/home/$USER/ftp
+pasv_min_port=40000
+pasv_max_port=41000
 
+在 userlist_enable=YES 行后新增
 
-#最下面加入下面配置
-pam_service_name=vsftpd
-userlist_enable=YES
-tcp_wrappers=YES
+userlist_file=/etc/vsftpd/user_list
+userlist_deny=NO
 
-#/www是目录名
-local_root=/www
-use_localtime=YES
+保存并退出，重启vsftpd
 
-allow_writeable_chroot=YES
+# systemctl restart vsftpd
 
-###################################
+3. 配置防火墙
 
-
-3. 配置防火墙开启FTP服务端口
-
-# firewall-cmd --permanent --add-service=ftp
+# firewall-cmd --permanent --add-port=20-21/tcp
+# firewall-cmd --permanent --add-port=40000-41000/tcp
 # firewall-cmd --reload
 
-如果是阿里云配置安全规则，记得端口20和21，入方向和出方向都允许
+4. 创建ftp用户
 
-4. 启动nginx并设为开机自启
+# adduser ftpuser  或者指定目录，比如  # adduser -d /data/ftp ftpuser
+# passwd ftpuser
 
-# systemctl start vsftpd.service
-# systemctl enable vsftpd.service
+把此用户加入允许ftp操作的用户列表
+# vi /etc/vsftpd/user_list
+将ftpuser追加到文件末尾
+
+创建FTP上传文件目录
+# mkdir -p /home/ftpuser/ftp/upload
+
+设置目录权限
+# chmod 550 /home/ftpuser/ftp
+# chmod 750 /home/ftpuser/ftp/upload
+
+设置目录所有者
+# chown -R ftpuser: /home/ftpuser/ftp
 
 
-创建用户
-#useradd -d /www -s /sbin/nologin www
-修改该帐户密码:
-#passwd www
-修改指定目录的权限
-#chown -R www.www /www
+设置用户不能shell登录
+# usermod -s /sbin/nologin ftpuser
 
-将www用户加入文件中
-vi /etc/vsftpd/chroot_list
-www
+5. 测试FTP服务器
 
+客户端使用FileZilla，官方地址如下：
+https://filezilla-project.org/
 
-******************************************************
-如果使用FileZilla，记得把传输模式改为主动模式，默认是被动模式
+530 Login incorrect
+问题排查与解决
+
+# cat /etc/passwd
+查看用户主目录和登录shell是否正确，按本文应该是
+ftpvideo:x:1000:1000::/home/ftpuser:/sbin/nologin
+
+# cat /etc/shells
+需要把/sbin/nologin追加到末尾
