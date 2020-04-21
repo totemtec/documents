@@ -86,3 +86,10 @@ ftpvideo:x:1000:1000::/home/ftpuser:/sbin/nologin
 
 # cat /etc/shells
 需要把/sbin/nologin追加到末尾
+
+如果Nginx想直接使用/home/ftpuser的子目录作为网站主目录
+发生错误
+ open() "/home/ftpuser/upload/index.html" failed (13: Permission denied)，
+ 可以试试
+# chmod o+x /home/ftpuser
+然后保证所有子目录nginx用户都有读权限即可
