@@ -6,7 +6,11 @@ https://letsencrypt.org/
 
 使用通配符*域名，针对所有二级域名
 
-# yum insntall letsencrypt
+# yum -y install epel-release
+# yum -y install certbot
+
+# certbot --version
+certbot 1.3.0
 
 # certbot certonly --manual --agree-tos -m youmail@gmail.com -d *.domain.com
 
@@ -36,14 +40,14 @@ Before continuing, verify the record is deployed.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Press Enter to Continue
 
-配置DNS，增加一个TXT记录_acme-challenge，值为tLiPT_LrR5tLwHUSLEkoRY1YtIZ-24l1enKmObmM4s8
+配置DNS，增加一个TXT记录 _acme-challenge ，值为 tLiPT_LrR5tLwHUSLEkoRY1YtIZ-24l1enKmObmM4s8
 稍等几分钟，生效后，回车继续
 
 Waiting for verification...
 Resetting dropped connection: acme-v02.api.letsencrypt.org
 Cleaning up challenges
 
-IMPORTANT NOTES:
+IMPORTANT NOTES:   生成的证书和私钥存在下面路径
  - Congratulations! Your certificate and chain have been saved at:
    /etc/letsencrypt/live/domain.com/fullchain.pem
    Your key file has been saved at:
