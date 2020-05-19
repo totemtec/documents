@@ -16,3 +16,7 @@ export CLASSPATH=.:$JAVA_HOME/jre/lib:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar
 
 [root@dlp ~]# source /etc/profile
 
+
+在CentOS 8.1 x64 上更简单：
+
+[root@dlp ~] dnf install jdk-8u241-linux-x64.rpm
