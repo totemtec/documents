@@ -32,6 +32,8 @@ const array = [
 
 学习并练习Git的使用
 
+clone, add, commit, push, pull, history, branch, merge, 冲突与解决
+
 ### Day6
 学习公司的开发规范
 
