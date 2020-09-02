@@ -32,7 +32,7 @@ const array = [
 
 学习并练习Git的使用
 
-clone, add, commit, push, pull, history, branch, merge, 冲突与解决
+clone(克隆), add(加入), commit(提交), push(推), pull(拉)/fetch(取), history(历史), changes(修改), branch(分支), master(主分支), merge(合并), ignore(忽略), conflict(冲突), resolve(解决冲突)
 
 ### Day6
 学习公司的开发规范
