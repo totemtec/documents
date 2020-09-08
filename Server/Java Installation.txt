@@ -20,3 +20,7 @@ export CLASSPATH=.:$JAVA_HOME/jre/lib:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar
 在CentOS 8.1 x64 上更简单：
 
 [root@dlp ~] dnf install jdk-8u241-linux-x64.rpm
+
+修改java默认的加密策略
+vi /usr/java/default/jre/lib/security/java.security 
+去掉 crypto.policy=unlimited 的注释即可
