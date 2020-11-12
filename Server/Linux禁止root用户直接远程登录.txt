@@ -1,0 +1,74 @@
+CentOS
+
+1. 新建用户
+
+# useradd mjl
+
+自动创建了用户主目录 /home/mjl
+
+2. 为新用户设置密码
+
+# passwd mjl
+
+3. 尝试使用新用户登录服务器
+
+# ssh mjl@192.168.0.100
+
+$ whoami
+mjl
+
+$ sudo whoami
+输入密码后会提示：
+mjl is not in the sudoers file.  This incident will be reported.
+需要把用户添加到Sudoers列表中
+
+4. 为新用户授权sudo权限，其实不加也可以先su再执行命令
+
+方式1: 
+
+CentOS默认wheel组拥有sudo权限，讲新用户加入wheel组
+
+# usermod -aG wheel mjl
+
+方式2:
+
+修改文件/etc/sudoers，不建议这么做，建议使用下面方式
+
+# echo "mjl  ALL=(ALL) NOPASSWD:ALL" | tee /etc/sudoers.d/mjl
+
+上述命令表示：mjl 可以在任何主机上（第一个ALL）以任何用户的身份（第二个ALL，默认为 root）执行任何命令（第三个ALL），并且不需要密码
+
+加入后需要重新登录新用户，尝试 $ sudo whoami 即可
+
+5. 为新用户设置密钥登录
+
+$ mkdir .ssh
+$ vi .ssh/authorized_keys
+把自己本机的id_rsa.pub公钥加入进去就好了
+重启sshd
+# systemctl restart sshd
+
+要是不行就检查文件权限
+$ ls -al
+drwx------   2 mjl  mjl   65 Nov 12 13:07 .ssh
+$ ls -al .ssh/
+-rw------- 1 mjl mjl 577 Nov 12 12:38 .ssh/authorized_keys
+
+$ chmod 600 .ssh/authorized_keys
+$ chmod 700 .ssh
+
+6. 尝试用新用户登录并su和sudo
+
+7. 修改sshd配置，禁止root用户登录
+
+# vi /etc/ssh/sshd_config
+
+PermitRootLogin no
+PasswordAuthentication no
+
+重启sshd
+
+# systemctl restart sshd
+
+
+

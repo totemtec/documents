@@ -1,0 +1,5 @@
+CentOS使用certbot自动申请ssl证书
+
+1. 查看系统版本
+cat /etc/centos-release
+

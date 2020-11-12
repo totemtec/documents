@@ -24,3 +24,11 @@ export CLASSPATH=.:$JAVA_HOME/jre/lib:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar
 修改java默认的加密策略
 vi /usr/java/default/jre/lib/security/java.security 
 去掉 crypto.policy=unlimited 的注释即可
+
+
+在CentOS 7.x 安装Oracle JDK11
+
+
+# sudo yum localinstall jdk-11.0.9_linux-x64_bin.rpm
+
+
