@@ -4,11 +4,11 @@
 
 连接本机数据库
 ```
-# mysql -u root - p
+# mysql -u root -p
 ```
 连接远程数据库
 ```
-# mysql -u root - p -h host_ip
+# mysql -u root -p -h host_ip
 ```
 
 ### 1. 创建数据库
