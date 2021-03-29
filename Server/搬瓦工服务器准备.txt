@@ -1,0 +1,40 @@
+CentOS 7 
+
+防火墙
+# systemctl start firewalld
+# firewall-cmd --zone=public --add-port=26136/tcp --permanent
+# firewall-cmd --add-service=http --permanent
+# systemctl restart firewalld
+# systemctl enable firewalld
+
+密钥登录
+# mkdir .ssh
+# vi ~/.ssh/authorized_keys
+# cat id_rsa.pub >> ~/.ssh/authorized_keys
+# chmod 700 ~/.ssh
+# chmod 600 ~/.ssh/authorized_keys
+# vi /etc/ssh/sshd_config
+
+RSAAuthentication yes
+PubkeyAuthentication yes
+AuthorizedKeysFile      .ssh/authorized_keys
+
+
+PasswordAuthentication 设置no
+
+# systemctl restart sshd
+
+
+设置时区
+timedatectl set-timezone Asia/Hong_Kong
+
+安装Nginx
+安装PHP
+
+安装MySQL
+设置MySQL时区
+mysql > SET GLOBAL time_zone = '+8:00';
+
+
+安装Java
+

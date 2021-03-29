@@ -158,6 +158,11 @@ Set the SELinux user to system_u
 ```
 # mysqldump -u root -p cms > cms.sql
 ```
+# 导出全部数据库
+```
+# mysqldump -u root -p --all-databases > all.sql
+
+```
 
 # 导入数据库
 首先需要创建数据库
