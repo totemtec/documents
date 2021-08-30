@@ -1,5 +1,53 @@
-CentOS使用certbot自动申请ssl证书
+#  Let's Encrypt SSL on CentOS 7
 
-1. 查看系统版本
-cat /etc/centos-release
+## 安装必需的软件
+
+```
+yum install -y epel-release
+yum install -y certbot-nginx
+yum install -y nginx
+````
+
+## 配置Nginx 
+
+```
+mkdir -p /data/www/totemtec.com
+
+echo "server {
+    listen       80;
+    listen       [::]:80;
+    server_name  totemtec.com  test.totemtec.com;
+    root         /data/www/totemtec.com;
+}
+" >> /etc/nginx/conf.d/totemtec.com.conf
+
+systemctl enable nginx
+systemctl start nginx
+
+```
+
+## 申请证书
+第一次申请证书会让你确认是否接收邮件
+```
+certbot --nginx -m username@gmail.com --agree-tos -d totemtec.com, test.totemtec.com
+```
+
+如果只申请证书不自动安装，请使用certonly
+```
+certbot certonly -m username@gmail.com --agree-tos -d totemtec.com, test.totemtec.com
+```
+
+
+## 测试更新证书
+```
+certbot renew --force-renewal
+```
+
+## 设置自动更新
+
+```
+crontab -e
+15 4 * * * /usr/bin/certbot renew --quiet
+```
+每天凌晨04:15执行，certbot会检查到期时间小于3天的证书
 
