@@ -4,7 +4,7 @@
 
 ```
 yum install -y epel-release
-yum install -y certbot-nginx
+yum install -y certbot python3-certbot-nginx mod_ssl
 yum install -y nginx
 ````
 
@@ -15,7 +15,6 @@ mkdir -p /data/www/totemtec.com
 
 echo "server {
     listen       80;
-    listen       [::]:80;
     server_name  totemtec.com  test.totemtec.com;
     root         /data/www/totemtec.com;
 }
