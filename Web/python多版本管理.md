@@ -9,6 +9,10 @@ C:\Python27\Scripts\
 需要重启Terminal 命令行提示符
 好处是修改完以后，pip和运行脚本都没问题
 
+1. 手动 为环境变量PATH添加一段 %PYTHON_HOME%
+2. 使用脚本为PYTHON_HOME设置新值
+   参考：setpython2.7.bat
+
 
 ## 方式二：官方 Python Launcher for Windows
 
