@@ -16,10 +16,15 @@ nvm use 版本号
 ~~~
 更多命令请参考官方文档 
 
-**有时候nodejs和electron有 a32 和 x64 架构的区别**
+**有时候nodejs和electron有 ia32 和 x64 架构的区别**
 ~~~
 nvm arch [32] 
 nvm install 版本号 [32] 
 nvm current 
 nvm use 版本号 [32] 
+~~~
+
+查看当前nodejs使用的架构
+~~~
+node -p "process.arch"
 ~~~
