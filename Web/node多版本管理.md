@@ -9,11 +9,13 @@ https://github.com/coreybutler/nvm-windows/releases
 3. 运行nvm时，要求以管理员身份运行 “Terminal 命令提示符” 或者 “Windows PowerShell”
 
 4. 管理命令
-  > nvm install 版本号 
-  > nvm current 
-  > nvm use 版本号 
-  更多命令请参考官方文档 
-  
+~~~
+nvm install 版本号 
+nvm current 
+nvm use 版本号 
+~~~
+更多命令请参考官方文档 
+
 **有时候nodejs和electron有 a32 和 x64 架构的区别**
 ~~~
 nvm arch [32] 
