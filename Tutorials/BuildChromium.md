@@ -20,12 +20,9 @@ python 3.8+
 # apt install git -y
 ```
 
-安装Ubuntu默认Python3版本3.8
+安装 Ubuntu 默认 Python3 版本3.8
 ```
-# apt update -y
-# apt install python3 -y
-# python3 --version
-# update-alternatives --install /usr/bin/python python /usr/bin/python3 10
+# apt install python-is-python3
 # apt install python3-pip -y
 ```
 
