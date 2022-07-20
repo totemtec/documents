@@ -18,6 +18,8 @@ LiveData 只作一件事情也做的很好：拿到新数据的时候暴露数�
 我们来看看 LiveData 模式实现 和等价的 Flow 实现
 
 ### #1：暴露一次性操作的结果，使用可变数据持有者
+![](image/2.png)
+
 ```kotlin
 class MyViewModel {
     private val _myUiState = MutableStateFlow<Result<UiState>>(Result.Loading)
@@ -42,6 +44,7 @@ StateFlow 是一个特殊的 SharedFlow（特定类型Flow），与 LiveData 很
 > StateFlow 特别适合用来保存界面状态
 
 ### #2：暴露一次性操作的结果，使用不可变数据持有者
+![](image/4.png)
 ```kotlin
 class MyViewModel(...) : ViewModel() {
     val result: StateFlow<Result<UiState>> = flow {
@@ -56,6 +59,7 @@ class MyViewModel(...) : ViewModel() {
 stateIn 操作能将 Flow 转换为 StateFlow。
 
 ### #3：带参数的一次性数据加载
+![](image/6.png)
 ```kotlin
 class MyViewModel(authManager..., repository...) : ViewModel() {
     private val userId: Flow<UserId> = authManager.observeUser().map { user -> user.id }
@@ -81,6 +85,7 @@ class MyViewModel(authManager..., repository...) : ViewModel() {
     )
 ```
 ### #4：带参数观察数据流
+![](image/8.png)
 ```kotlin
 class MyViewModel(authManager..., repository...) : ViewModel() {
     private val userId: Flow<String?> = 
@@ -178,12 +183,16 @@ class MyViewModel(...) : ViewModel() {
 > 注意：哪怕是 lifecycleOwner 已经销毁了，它们都不会取消。
 > launch/launchWhenX 是不安全的
 
+![](image/9.png)
+
 app 在后台更新界面可能会导致崩溃，可以在界面上挂起收集器来解决这个问题。但是 app 在后台时，上游的流保持活动会浪费资源。
 
 这意味着上面我们配置 StateFlow 所作的工作没啥用啊，没事，有新的 API 来解决这个问题。
 
 ## lifecycle.repeatOnLifecycle 方案
 lifecycle-runtime-ktx 2.4.0 引入了这个新的协程构建器，就是我们需要的：它在指定状态下开始协程，并在状态退出后停止协程
+
+![](image/10.png)
 
 例如：
 ```kotlin
@@ -198,6 +207,8 @@ onCreateView(...) {
 上面代码会在 Fragment 状态为 STARTED 时开始收集，RESUMED 时继续，STOPPED 时停止。
 
 混合使用 repeatOnLifecycle 和 StateFlow 可以充分利用设备资源，同时获得最佳性能。
+
+![](image/11.png)
 
 > 警告：StateFlow 也可以进行 Data Binding，它使用 launchWhenStarted 来收集更新，
 
