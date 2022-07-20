@@ -1,0 +1,19 @@
+# 从 LiveData 迁移到 Kotlin 流
+### 原文
+```
+https://medium.com/androiddevelopers/migrating-from-livedata-to-kotlins-flow-379292f419fb
+```
+
+2017年，我们需要 LiveData。观察者模式让我们生活更轻松，但 RxJava 等方案对于初学者来说过于复杂，架构组件团队就专门为 Android 平台创建了 LiveData，一个能感知组件生命周期的、可观察的数据持有类。它简单易上手，RxJava 适用于更复杂的响应式流，两者组合使用效果更佳。
+
+## DeadData?
+LiveData 解决方案仍然适用于 Java 开发人员、初学者和简单场景。其他情况下，建议迁移到 Kotlin Flows。Flows 是 Kotlin语言的一部分，学习曲线比较陡，由 Jetbrains 维护。未来的 Compose 更适合响应式模型。
+
+我们已经谈到了 Flows 在应用内各部分的使用，除了 view 和 ViewModel。现在我们有更安全的方式从界面收集数据流，我们就创建了这个迁移向导。
+
+本文将学习如何在接受流式数据、显示流式数据，以及根据需求进行微调。
+
+## Flow：简单的事情更难，复杂的事情更容易
+LiveData 只作一件事情也做的很好：拿到新数据的时候暴露数据，并且理解 Android 组件的生命周期。也能启动协程，并作复杂的数据转换，但是有点复杂了。
+
+我们来看看 LiveData 模式实现 和等价的 Flow 实现
