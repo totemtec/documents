@@ -17,3 +17,152 @@ LiveData 解决方案仍然适用于 Java 开发人员、初学者和简单场�
 LiveData 只作一件事情也做的很好：拿到新数据的时候暴露数据，并且理解 Android 组件的生命周期。也能启动协程，并作复杂的数据转换，但是有点复杂了。
 
 我们来看看 LiveData 模式实现 和等价的 Flow 实现
+
+### #1：暴露一次性操作的结果，使用可变数据持有者
+```kotlin
+class MyViewModel {
+    private val _myUiState = MutableStateFlow<Result<UiState>>(Result.Loading)
+    val myUiState: StateFlow<Result<UiState>> = _myUiState
+
+    // Load data from a suspend fun and mutate state
+    init {
+        viewModelScope.launch { 
+            val result = ...
+            _myUiState.value = result
+        }
+    }
+}
+```
+
+StateFlow 是一个特殊的 SharedFlow（特定类型Flow），与 LiveData 很接近
+- 永远都有值
+- 永远只有1个值
+- 支持多个观察者（因为它是SharedFlow的子类）
+- 订阅时总是会回放最新的那个值，不管有多少个订阅者
+
+> StateFlow 特别适合用来保存界面状态
+
+### #2：暴露一次性操作的结果，使用不可变数据持有者
+```kotlin
+class MyViewModel(...) : ViewModel() {
+    val result: StateFlow<Result<UiState>> = flow {
+        emit(repository.fetchItem())
+    }.stateIn(
+        scope = viewModelScope, 
+        started = WhileSubscribed(5000), // Or Lazily because it's a one-shot
+        initialValue = Result.Loading
+    )
+}
+```
+stateIn 操作能将 Flow 转换为 StateFlow。
+
+### #3：带参数的一次性数据加载
+```kotlin
+class MyViewModel(authManager..., repository...) : ViewModel() {
+    private val userId: Flow<UserId> = authManager.observeUser().map { user -> user.id }
+
+    val result: StateFlow<Result<Item>> = userId.mapLatest { newUserId ->
+        repository.fetchItem(newUserId)
+    }.stateIn(
+        scope = viewModelScope, 
+        started = WhileSubscribed(5000), 
+        initialValue = Result.Loading
+    )
+}
+```
+> 注意：如果需要更大的灵活性，也可以使用 transformLatest 并显式发射数据项
+```kotlin
+    val result = userId.transformLatest { newUserId ->
+        emit(Result.LoadingData)
+        emit(repository.fetchItem(newUserId))
+    }.stateIn(
+        scope = viewModelScope, 
+        started = WhileSubscribed(5000), 
+        initialValue = Result.LoadingUser // Note the different Loading states
+    )
+```
+### #4：带参数观察数据流
+```kotlin
+class MyViewModel(authManager..., repository...) : ViewModel() {
+    private val userId: Flow<String?> = 
+        authManager.observeUser().map { user -> user?.id }
+
+    val result: StateFlow<Result<Item>> = userId.flatMapLatest { newUserId ->
+        repository.observeItem(newUserId)
+    }.stateIn(
+        scope = viewModelScope, 
+        started = WhileSubscribed(5000), 
+        initialValue = Result.LoadingUser
+    )
+}
+```
+不管是 user 变了，还是 user 的数据改了，暴露的 StateFlow 都会收到更新。
+
+### #5：组合多数据源：MediatorLiveData -> Flow.combine
+```kotlin
+val flow1: Flow<Int> = ...
+val flow2: Flow<Int> = ...
+
+val result = combine(flow1, flow2) { a, b -> a + b }
+```
+也可以使用 combineTransform 方法，或者 zip
+
+## 配置暴露的 StateFlow（使用 stateIn 操作符）
+前面我们使用 stateIn 将常规的 flow 转为 StateFlow，这需要一些配置。如果你想直接用，可以拷贝下面代码
+```kotlin
+val result: StateFlow<Result<UiState>> = someFlow
+    .stateIn(
+        scope = viewModelScope, 
+        started = WhileSubscribed(5000), 
+        initialValue = Result.Loading
+    )
+```
+如果你不确定这个看似随机5秒的 started 参数，我们继续看。
+
+stateIn 有3个参数
+> scope 携程上下文，共享在里面开始
+
+> started 共享开始和结束的控制策略，有3个值
+- Lazily：第一个订阅者出现时开始，协程上下文结束时取消
+- Eagerly：立即开始
+- WhileSubscribed：比较复杂
+
+> initialValue StateFlow的初始值
+
+一次性操作可以使用 Lazily 和 Eagerly。 但是想观察其他种类的流，应该使用 WhileSubscribed 并做一下小优化。
+
+## WhileSubscribed 策略
+没有收集器的时候，WhileSubscribed 会取消上游流。使用 stateIn 创建 StateFlow 暴露数据给视图，它也是从观察上游。上游一直保持活动状态会浪费资源，例如从数据库持续读取数据，或者从硬件传感器一直读取数据等。当应用到后台后，你应该做个好市民停止这些协程。
+
+WhileSubscribed 带两个参数：
+```kotlin
+public fun WhileSubscribed(
+    stopTimeoutMillis: Long = 0,
+    replayExpirationMillis: Long = Long.MAX_VALUE
+)
+```
+> stopTimeoutMillis 配置一个延时毫秒，最后一个订阅者消失与停止上游流之间的延时，默认是0，立即停止
+这个机制很有用，如果试图停止侦听不到1秒，不用取消上游流。比如用户旋转设备时，视图被销毁并快速重新创建。
+
+liveData 协程构建器，解决这个问题的方案是，协程没有订阅者后延迟5秒才停止。WhileSubscribed(5000) 也是做这个事情。
+
+```kotlin
+class MyViewModel(...) : ViewModel() {
+    val result = userId.mapLatest { newUserId ->
+        repository.observeItem(newUserId)
+    }.stateIn(
+        scope = viewModelScope, 
+        started = WhileSubscribed(5000), 
+        initialValue = Result.Loading
+    )
+}
+```
+这种方法搞定下面所有
+
+- 当用户让app退到后台，5秒后，其他部件的数据更新就停止了，节省耗电
+- 最后的数据会被缓存，当用户把app打开到前台，界面会立即拿到数据
+- 重新订阅并会拿到新数据，需要的时候会刷新屏幕
+
+## Replay expiration
+如果你不想让用户看到太陈旧的数据，更愿意让用户看加载动画，可以关注replayExpirationMillis参数。这种情况下他非常方便，并且还节省了一些内存。回到应用程序不会那么快，但不会显示旧数据。
+
