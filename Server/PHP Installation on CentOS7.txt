@@ -13,7 +13,7 @@ yum安装PHP7.3，使用第三方源
 
 2. 安装
 
-# yum -y install php php-mcrypt php-devel php-cli php-gd php-pear php-curl php-fpm php-mysql php-ldap php-zip php-fileinfo
+# yum -y install php php-mcrypt php-devel php-cli php-gd php-pear php-curl php-fpm php-mysql php-ldap php-zip php-fileinfo php-soap
 
 安装完成后，可以使用命令查看安装的版本
 # php -v
