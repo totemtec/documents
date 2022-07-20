@@ -166,3 +166,52 @@ class MyViewModel(...) : ViewModel() {
 ## Replay expiration
 如果你不想让用户看到太陈旧的数据，更愿意让用户看加载动画，可以关注replayExpirationMillis参数。这种情况下他非常方便，并且还节省了一些内存。回到应用程序不会那么快，但不会显示旧数据。
 
+> replayExpirationMillis 配置一个延时（毫秒）...TODO...
+
+## 视图观察StateFlow
+为了收集流，需要一个协程。Activity 和 Fragment 都提供一组协程构建器：
+- Activity.lifecycleScope.launch 立即开始，activity销毁时取消
+- Frament.lifecycleScope.launch 立即开始，fragment销毁时取消
+- Frament.viewLifecycleOwner.lifecycleScope.launch 立即开始，fragment上的视图销毁时取消。如果你修改界面，应该使用视图的生命周期。
+
+## launchWhenStarted，launchWhenResumed...
+这些特殊生命周期的 launchWhenX 版本，会等待 lifecycleOwner 到这个状态，并且在退出这个状态时挂起这个协程。
+> 注意：哪怕是 lifecycleOwner 已经销毁了，它们都不会取消。
+> launch/launchWhenX 是不安全的
+
+app 在后台更新界面可能会导致崩溃，可以在界面上挂起收集器来解决这个问题。但是 app 在后台时，上游的流保持活动会浪费资源。
+
+这意味着上面我们配置 StateFlow 所作的工作没啥用啊，没事，有新的 API 来解决这个问题。
+
+## lifecycle.repeatOnLifecycle 方案
+lifecycle-runtime-ktx 2.4.0 引入了这个新的协程构建器，就是我们需要的：它在指定状态下开始协程，并在状态退出后停止协程
+
+例如：
+```kotlin
+onCreateView(...) {
+    viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycle.repeatOnLifecycle(STARTED) {
+            myViewModel.myUiState.collect { ... }
+        }
+    }
+}
+```
+上面代码会在 Fragment 状态为 STARTED 时开始收集，RESUMED 时继续，STOPPED 时停止。
+
+混合使用 repeatOnLifecycle 和 StateFlow 可以充分利用设备资源，同时获得最佳性能。
+
+> 警告：StateFlow 也可以进行 Data Binding，它使用 launchWhenStarted 来收集更新，
+
+## 总结
+
+从 ViewModel 暴露数据和并从 View 层收集数据最好的方式是：
+- 暴露一个 StateFlow，使用 WhileSubscribed 策略，设置一个5秒超时。
+- 使用 repeatOnLifecycle 收集。
+
+下面组合会保持上游活动状态，浪费资源：
+- 使用 WhileSubscribed 策略暴露数据 并用 lifecycleScope.launch / launchWhenX 收集数据
+- 使用 Lazily / Eagerly 策略暴露数据，并用 repeatOnLifecycle 收集数据
+
+当然，如果你不需要强大的 Flow，也可以选用 LiveData。
+
+
