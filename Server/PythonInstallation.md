@@ -1,4 +1,4 @@
-# Python 最新版 在 CentOS 上的安装
+# Python3.11 最新版 在 CentOS7.6 上的安装
 
 安装依赖
 ```bash
@@ -34,3 +34,14 @@ make install
 ```bash
 python3 --version
 ```
+
+安装错误
+```
+The necessary bits to build these optional modules were not found:
+_tkinter
+To find the necessary bits, look in setup.py in detect_modules() for the module's name.
+```
+
+tkinter是一个图形界面库，一般用不上，具体安装方法可以见下面连接，没测试过
+
+https://tkdocs.com/tutorial/install.html#installlinux
