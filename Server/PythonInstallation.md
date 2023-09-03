@@ -11,7 +11,7 @@ cd /usr/src
 wget https://www.python.org/ftp/python/3.11.5/Python-3.11.5.tgz
 tar xzf Python-3.11.5.tgz
 cd Python-3.11.5
-./configure
+./configure --enable-optimizations
 make
 make install
 ```
