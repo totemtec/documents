@@ -125,6 +125,13 @@ dig -p 1053 @localhost +noall +answer <name> <type>
 dig -p 1053 @'dns.totemtec.com' +noall +answer www.example.org A
 ```
 
+或者使用 nslookup 查询
+
+```
+nslookup [-opt ...] host server
+nslookup test.com  name-server.com
+```
+
 ### 使用 file 插件组织指令   //TODO: 这里的配置有问题，跟内容不一样
 
 外部插件 redis 可以从 Redis 数据库里加载指令
