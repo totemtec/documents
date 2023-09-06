@@ -67,7 +67,7 @@ After=network.target
 Type=simple
 User=root
 # 指定运行端口和读取的配置文件
-ExecStart=/home/coredns/coredns -dns.port=53 -conf /home/coredns/Corefile
+ExecStart=/home/coredns/coredns -conf /home/coredns/Corefile
 Restart=on-failure
 
 [Install]
