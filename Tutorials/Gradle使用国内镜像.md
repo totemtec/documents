@@ -4,7 +4,7 @@
 
 ##### 加速 gradle 包下载
 
-gradle-wrapper.properties
+PROJECT_HOME/gradle/wrapper/gradle-wrapper.properties
 
 ```properties
 distributionUrl=https\://mirrors.cloud.tencent.com/gradle/gradle-7.3.3-bin.zip
