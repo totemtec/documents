@@ -20,6 +20,8 @@
  
 /etc/yum.repos.d/mysql-community.repo
 /etc/yum.repos.d/mysql-community-source.repo
+
+# rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
 ```
 
 ### 4. 安装mysql服务器
