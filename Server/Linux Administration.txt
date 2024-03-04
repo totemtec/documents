@@ -347,3 +347,20 @@ B为远程主机(即被控制的机器Server), 假如ip为172.24.253.2 ;
 # 4 - 没有用到 
 # 5 - X11(xwindow) 
 # 6 - 重新启动 
+
+
+# CentOS 8 SSH Error
+
+The authenticity of host '8.141.2.85 (8.141.2.85)' can't be established.
+ED25519 key fingerprint is SHA256:avnY4hAtZ+KNwoPoQVNxfpFNPYXMhTXcuBV7Uf0R8tw.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '8.141.2.85' (ED25519) to the list of known hosts.
+root@8.141.2.85: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
+
+解决办法：
+https://bitlaunch.io/blog/how-to-check-your-ssh-key-fingerprint/
+远程登录后，运行命令：
+ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub
+命令执行成功后输出：
+256 SHA256:NTw36MQjDxsHlxC/Xso5yKMlKJu93uYknRx2LEaqk7I root@6311ad8b487e6f00018c5cd1 (ED25519)
