@@ -23,7 +23,7 @@ npm install -g pnpm --registry=https://registry.npmmirror.com
 其他使用方法与 npm 完全相同。
 
 > **Note**
-> 不建议用 cnpm
+> 不建议用 cnpm，虽然速度快，但是与 npm 兼容的不好
 
 #### 方案三：项目配置使用国内镜像
 
