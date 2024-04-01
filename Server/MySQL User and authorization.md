@@ -1,4 +1,4 @@
-# MySQL数据库管理和用户授权
+# MySQL 数据库管理和用户授权
 
 ### 0. 连接数据库
 
@@ -26,6 +26,11 @@ mysql> CREATE USER username IDENTIFIED BY 'password';
 ### 3. 授予权限
 ```
 mysql> GRANT ALL PRIVILEGES ON database.* TO 'username'@'%' IDENTIFIED BY 'password';
+```
+
+MySQL 8.0 以上使用下面语句进行授权
+```
+GRANT ALL ON database.* TO 'username'@'%' WITH GRANT OPTION;
 ```
 
 ### 4. 刷新生效授权
