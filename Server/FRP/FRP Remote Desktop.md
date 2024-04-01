@@ -1,6 +1,6 @@
 # 使用 FRP 内网穿透，访问内网电脑的远程桌面
 
-环境 CentOS 7.6, Windows 11, FRP 0.51.3, WinSW 3.0 alpha 11
+环境 CentOS 9.3, Windows 11, FRP 0.56, WinSW 3.0 alpha 11
 
 理论上也可以实现访问内网电脑的任何端口或服务
 
@@ -17,16 +17,15 @@
 #### 中转服务器安装
 
 ```ini
-# frps.ini
-[common]
-bind_port = 7000
+# frps.toml
+bindPort = 7000
 ```
 
 使用端口 7000 来提供服务端接入。记得中转服务器防火墙要开这个端口
 
 启动中转服务
 
-`./frps -c ./frps.ini`
+`./frps -c ./frps.toml`
 
 #### 中转服务器安装为自启动服务
 
@@ -44,7 +43,7 @@ Wants = network.target
 [Service]
 Type = simple
 # 启动frps的命令，需修改为您的frps的安装路径
-ExecStart = /root/frp/frps -c /root/frp/frps.ini
+ExecStart = /root/frp/frps -c /root/frp/frps.toml
 
 [Install]
 WantedBy = multi-user.target
@@ -59,6 +58,9 @@ systemctl stop frps
 systemctl restart frps
 # 查看frp状态
 systemctl status frps
+
+# 设置开机启动
+systemctl enable frps
 ```
 
 #### Windows 桌面服务端安装
