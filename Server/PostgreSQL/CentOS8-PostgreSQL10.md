@@ -50,7 +50,7 @@ vi /var/lib/pgsql/data/pg_hba.conf
 
 # "local" is for Unix domain socket connections only
 local   all             all                                     peer
-# IPv4 local connections:  修改为 md5
+# IPv4 local connections:  ############### 修改为 md5  ##################
 host    all             all             127.0.0.1/32            md5
 # IPv6 local connections:
 host    all             all             ::1/128                 ident
@@ -59,8 +59,8 @@ host    all             all             ::1/128                 ident
 local   replication     all                                     peer
 host    replication     all             127.0.0.1/32            ident
 host    replication     all             ::1/128                 ident
-# 新增下面一行
-host    all             all             0.0.0.0/0               trust
+############### 新增下面一行 ##################
+host    all             all             0.0.0.0/0               md5
 ```
 
 vi /var/lib/pgsql/data/postgresql.conf
