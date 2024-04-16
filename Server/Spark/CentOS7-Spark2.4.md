@@ -47,10 +47,10 @@ vi spark-env.sh
 ```
 
 ```bash
-SPARK_CONF_DIR=/opt/spark/conf  
-HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop  
-YARN_CONF_DIR=/opt/hadoop/etc/hadoop  
-SPARK_HISTORY_OPTS="-Dspark.history.retainedApplications=3 -Dspark.history.fs.logDirectory=hdfs://master/spark/logs"
+export SPARK_CONF_DIR=/opt/spark/conf  
+export HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop  
+export YARN_CONF_DIR=/opt/hadoop/etc/hadoop  
+export SPARK_HISTORY_OPTS="-Dspark.history.retainedApplications=3 -Dspark.history.fs.logDirectory=hdfs://master/spark/logs"
 ```
 
 ```bash
