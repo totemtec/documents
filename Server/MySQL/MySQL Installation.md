@@ -11,7 +11,7 @@
 
 ### 2. 安装mysql57-community-release-el7-11.noarch.rpm包
 ```
-# yum localinstall mysql57-community-release-el7-11.noarch.rpm
+# yum localinstall -y mysql57-community-release-el7-11.noarch.rpm
 ```
 
 ### 3. 安装这个包后，查看获得的mysql的yum仓库
@@ -26,7 +26,7 @@
 
 ### 4. 安装mysql服务器
 ```
-# yum install mysql-community-server
+# yum install -y mysql-community-server
 ```
 **此步骤根据提示安装，下载文件较多，需要耐心等待**
 
