@@ -21,21 +21,30 @@ sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients virtinst libgues
 kvm-ok
 
 # 用户加入组，完成后需要重新登入
-sudo adduser current_user libvirt
-sudo adduser current_user kvm
+sudo adduser CURRENT_USER libvirt
+sudo adduser CURRENT_USER kvm
 
 # 查看状态
 systemctl status libvirtd
+```
 
+### 创建网桥
 
+```
+# 创建新网桥 br0
+sudo ip link add br0 type bridge
+# 验证br0是否创建成功
+sudo ip link show type bridge
 ```
 
 ### 准备
+
 修改配置
 
 vi /etc/netplan/01-network-manager-all.yaml
 
 文件内容如下：
+
 ```yaml
 network:
   version: 2
@@ -43,6 +52,7 @@ network:
 ```
 
 修改为：
+
 ```yaml
 network:
   version: 2
@@ -58,14 +68,15 @@ network:
         - enp3s0
 ```
 
-测试
+运行命令使配置生效
+
 ```
 sudo netplan try
 ```
 
 估计时间比较久，可能会断网
 
-# 创建新网桥br0
+# 创建新网桥 br0
 
 vi kvm-hostbridge.xml
 
@@ -85,31 +96,8 @@ virsh net-autostart hostbridge
 
 ### 打开防火墙
 
-```
+```bash
 sudo iptables -A FORWARD -p all -i br0 -j ACCEPT
 ```
 
 
-### 有用的命令
-
-```
-virsh net-list
-virsh net-info hostbridge
-virsh net-dhcp-leases hostbridge
-sudo brctl show br0
-```
-
-### 虚拟机内 Rocky9 网卡配置
-
-位于目录此目录下：
-
-vi /etc/NetworkManager/system-connections/
-```
-[ipv4]
-# use DHCP
-#method=auto
-
-method=manual
-address1=192.168.1.10/24,192.168.1.1
-dns=114.114.114.114
-```
