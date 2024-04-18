@@ -28,30 +28,20 @@ sudo adduser CURRENT_USER kvm
 systemctl status libvirtd
 ```
 
-### 创建网桥
+### 创建新连接
 
 ```
 # 创建新网桥 br0
 sudo ip link add br0 type bridge
-# 验证br0是否创建成功
+# 验证 br0 是否创建成功
 sudo ip link show type bridge
 ```
 
 ### 准备
 
-修改配置
-
 vi /etc/netplan/01-network-manager-all.yaml
 
-文件内容如下：
-
-```yaml
-network:
-  version: 2
-  renderer: NetworkManager
-```
-
-修改为：
+修改配置如下：
 
 ```yaml
 network:
@@ -60,23 +50,33 @@ network:
 
   ethernets:
     enp3s0:
-      dhcp4: true
+      dhcp4: no
   bridges:
-    br4:
+    br0:
       dhcp4: yes
       interfaces:
         - enp3s0
 ```
 
-运行命令使配置生效
+验证配置并使配置生效
 
-```
+```bash
 sudo netplan try
 ```
 
-估计时间比较久，可能会断网
+估计时间比较久，运行完了还需要及时按回车接受更改生效。
 
-# 创建新网桥 br0
+可能会断网，造成无法确认生效
+
+直接生效的命令是
+
+```bash
+sudo netplan apply
+```
+
+# 创建新网桥 hostbridge
+
+配置
 
 vi kvm-hostbridge.xml
 
@@ -87,6 +87,8 @@ vi kvm-hostbridge.xml
   <bridge name="br0"/>
 </network>
 ```
+
+创建命令
 
 ```bash
 virsh net-define /path/to/my/kvm-hostbridge.xml
@@ -100,4 +102,24 @@ virsh net-autostart hostbridge
 sudo iptables -A FORWARD -p all -i br0 -j ACCEPT
 ```
 
+### 有用的命令
+
+```bash
+virsh net-list
+virsh net-info hostbridge
+virsh net-dhcp-leases hostbridge
+sudo brctl show br0
+
+# 直接文本编辑虚拟机配置
+virsh edit 虚拟机名
+```
+
+重启网络
+
+```bash
+sudo systemctl restart network-manager
+
+# 或者是
+sudo systemctl restart system-networkd
+```
 
