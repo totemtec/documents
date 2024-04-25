@@ -27,7 +27,7 @@ sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/dock
 ### 安装最新版
 
 ```bash
-sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
 ### 安装其他版本
