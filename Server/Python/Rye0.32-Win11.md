@@ -25,3 +25,10 @@
 ### 重启 VSCode 控制台才能运行 rye
 
 安装完成后需要重启 Terminal / VSCode
+
+
+### 问题排查
+
+- 找不到 ipykernel
+  - 可以给本项目虚拟环境中安装：rye add ipykernel
+
