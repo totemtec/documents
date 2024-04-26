@@ -20,8 +20,7 @@ sudo yum remove docker \
 ### 设置 yum 仓库
 
 ```bash
-sudo yum install -y yum-utils
-sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install -y yum-utils && yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 ```
 
 ### 安装最新版
