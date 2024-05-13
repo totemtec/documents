@@ -123,6 +123,20 @@ D:\Programs\frp> .\WinSW-x64.exe stop frpc-service.xml
 D:\Programs\frp> .\WinSW-x64.exe uninstall frpc-service.xml
 ```
 
+#### frpc 防止 Windows Defender 误杀
+
+经常发现 frpc 自动服务无法启动，查看日志和文件才发现 frpc.exe 莫名奇妙丢失，最后找到是 Windows Defender 防护误杀了
+
+<p align="center">
+<img src="./image/defender_history.png" width="60%">
+</p>
+
+可以为 Windows Defender 添加排除项。搜索并打开 `病毒和威胁防护` -> `"病毒和威胁防护"设置` 中的 `管理设置` -> `排除项` 中的 `添加或删除排除项` 进行设置
+
+<p align="center">
+<img src="./image/defender_exclude.png" width="60%">
+</p>
+
 #### 客户端访问
 
 使用 Windows Remote Desktop 直接连接中转服务器 x.x.x.x:6000 端口即可
