@@ -8,7 +8,7 @@
 创建或修改 `/etc/docker/daemon.json`：
 
 ```bash
-sudo mkdir -p /etc/docker
+cd /etc/docker
 sudo tee /etc/docker/daemon.json <<-'EOF'
 {
     "registry-mirrors": [
