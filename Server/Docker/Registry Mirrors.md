@@ -27,3 +27,23 @@ sudo systemctl restart docker
 ```bash
 docker info
 ```
+
+### Docker Hub 镜像测速
+
+使用镜像前后，可使用 time 统计所花费的总时间。测速前先移除本地的镜像！
+
+```bash
+$ docker rmi node:latest
+$ time docker pull node:latest
+```
+
+输出
+
+```
+Pulling repository node
+[...]
+
+real   1m14.078s
+user   0m0.176s
+sys    0m0.120s
+```
