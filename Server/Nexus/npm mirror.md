@@ -1,11 +1,13 @@
-### Nexus 使用 npm 本地镜像
+### npm 使用本地镜像
 
-目的是项目的 `所有依赖包都走本地镜像`，本地镜像的缓存才可以拷贝同步到 内网镜像
+目的是使项目的 `所有依赖包都走本地镜像`，本地镜像的缓存才可以拷贝同步到 内网镜像
 
 参考文档
 > https://www.mintimate.cn/2023/06/24/hostMirrorByNexus/
 
-也可以查看本目录下 PDF，内容同上
+也可以查看本目录下 《Nexus自建镜像.pdf》，内容同上
+
+注意：局域网 IP 可能会被代理，请先关掉代理
 
 ### 开发电脑上，npm 先清理一下项目依赖和缓存
 
@@ -23,7 +25,7 @@ npm config get cache
 rd -r node_modules
 
 # 删除已经安装的依赖，Linux 版本
-# rm -rf node_modules
+rm -rf node_modules
 
 # 删除
 rm package-lock.json
@@ -48,6 +50,8 @@ npm install -g @vscode/vsce --registry=http://172.28.103.161:8081/repository/npm
 ```
 
 ### npm 重新安装项目依赖
+
+需要在 Linux 上同样的 node 和 npm 版本跑一边，否则有些库有系统依赖，缓存不上
 
 - 方式 1 ：修改 `用户级别` 默认镜像，然后安装
 
@@ -77,7 +81,7 @@ registry=http://172.28.103.161:8081/repository/npm-public/
 registry=http://172.28.103.161:8081/repository/npm-public/
 ```
 
-- 方式 3，每次安装指定镜像
+- 方式 3，每次安装依赖包时，指定镜像
 
 ```bash
 # 安装
@@ -89,3 +93,23 @@ npm install --registry=http://172.28.103.161:8081/repository/npm-public/
 浏览器访问镜像仓库，确认自己的依赖包已经被缓存
 
 > http://172.28.103.161:8081/#browse/browse:npm-public
+
+
+### 内网使用 npm 需要设置
+
+设置 npm 安装全局依赖时的存储路径，否则权限问题装不上
+
+```bash
+
+mkdir ~/.npm-global
+
+npm config set prefix "~/.npm-global"
+
+vi ~/.bashrc
+
+export PATH=~/.npm-global/bin:$PATH
+
+source ~/.bashrc
+```
+
+

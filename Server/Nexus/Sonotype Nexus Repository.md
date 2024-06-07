@@ -23,8 +23,11 @@ $ mkdir -p /opt/nexus/data && chown -R 200 /opt/nexus/data
 $ docker run -d -p 8081:8081 --name nexus -v /opt/nexus/data:/nexus-data -e INSTALL4J_ADD_VM_PARAMS="-Xms2703m -Xmx4096m -XX:MaxDirectMemorySize=4096m -Djava.util.prefs.userRoot=/nexus-data/javaprefs" sonatype/nexus3
 ```
 
-mkdir -p /opt/nexus2/data && chown -R 200 /opt/nexus2/data
-docker run -d -p 8082:8081 --name nexus2 -v /opt/nexus2/data:/nexus-data --ulimit nofile=65536:65536 -e INSTALL4J_ADD_VM_PARAMS="-Xms2703m -Xmx4096m -XX:MaxDirectMemorySize=4096m -Djava.util.prefs.userRoot=/nexus-data/javaprefs" sonatype/nexus3
+```bash
+$ mkdir -p /nfs/home/majianglin/nexus && chown -R 200 /nfs/home/majianglin/nexus
+
+$ docker run -d -p 8081:8081 --name nexus -v /nfs/home/majianglin/nexus:/nexus-data -e INSTALL4J_ADD_VM_PARAMS="-Xms2703m -Xmx4096m -XX:MaxDirectMemorySize=4096m -Djava.util.prefs.userRoot=/nexus-data/javaprefs" sonatype/nexus3
+```
 
 
 
