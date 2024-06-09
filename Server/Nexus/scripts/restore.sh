@@ -2,49 +2,27 @@
 
 # 此脚本运行在 81 上
 
-# 将 停止服务 命令写入 容器目录
+# 停止 nexus 服务
 
-cat >> ~/nexus/stop.sh <<EOF
-#!/bin/bash
-/opt/sonatype/nexus/bin/nexus stop
+docker exec -d -u nexus nexus /bin/bash -c "kill -9 \`pgrep -f nexus\`"
 
-sleep 120
+echo "nexus killed"
 
-kill -9 `pgrep -f keyword`
+sleep 3
 
-sleep 5
+# 将备份文件恢复
 
-exit
-EOF
+docker exec -it -u root nexus /bin/bash -c "cd /nexus-data && rm -rf keystores blobs && tar -xzf archive.tar.gz && mv -f BackUp/* restore-from-backup/ && exit"
 
-# 执行停止命令
+echo "restore files write finished"
 
-docker exec -it -u nexus nexus /nexus-data/stop.sh
+sleep 3
 
-exit
+# 重新启动 nexus 服务
 
-# 将 恢复文件脚本 写入容器目录
-cat >> ~/nexus/restore.sh <<EOF
-#!/bin/bash
+docker exec -d -u nexus nexus /bin/bash -c "exec /opt/sonatype/nexus/bin/nexus run"
 
-cd /nexus-data
-rm -rf keystores blobs
-tar -xzf archive.tar.gz
-mv -f BackUp/* restore-from-backup/
-rm -rf BackUp
+# 5分钟后清除备份文件
 
-exit
-EOF
+docker exec -d -u root nexus /bin/bash -c "sleep 300; rm -rf BackUp archive.tar.gz; rm -rf /nexus-data/restore-from-backup/*.bak"
 
-# 执行恢复命令
-
-docker exec -it -u root nexus /nexus-data/restore.sh
-
-exit
-
-
-# 重新启动 nexus
-
-docker exec -it -u nexus nexus /bin/bash -c "/opt/sonatype/nexus/bin/nexus start &"
-
-exit

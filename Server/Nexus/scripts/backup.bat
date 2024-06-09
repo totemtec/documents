@@ -13,18 +13,25 @@
 
 set local_nexus=101.43.217.229
 
-@echo "开始备份前，请在 http://101.43.217.229:8081 手动执行备份任务"
+@echo "开始备份前，请在 http://%local_nexus%:8081/#admin/system/tasks 手动执行备份任务 BackUpForLocal"
 
 set /p confirm=请确认已经手动完成了 nexus 备份任务 BackUpForLocal (yes)：
 
 if "yes" != confim (
 	@echo "需要先手动执行 nexus 备份任务 BackUpForLocal"
 ) else (
-	ssh root@%local_nexus% "bash -s" < backup.sh
+	ssh root@%local_nexus% "docker stop --time=120 nexus || cd /opt/nexus/data || tar -czf archive.tar.gz BackUp keystores blobs || docker start nexus"
+
+    @echo "备份完成"
+
+	ping 127.0.0.1 -n 6 > nul
+
+	@echo "正在拉取备份文件到我的电脑"
 
 	scp root@%local_nexus%:/opt/nexus/data/archive.tar.gz .
 
-	@echo "备份完成"
+	@echo "本地文件保存完毕"
+
 	@echo "请将备份文件 archive.tar.gz 传输到内网 /nfs/home/majianglin/nexus/ 目录下"
 )
 
