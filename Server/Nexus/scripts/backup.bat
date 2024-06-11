@@ -29,9 +29,9 @@ goto:eof
 
 :backup
     @echo 备份文件打包中，请耐心等待
-	ssh root@%local_nexus% "docker stop --time=120 nexus && cd /opt/nexus/data && tar -czf archive.tar.gz BackUp keystores blobs && docker start nexus"
+	ssh root@%local_nexus% "docker stop --time=120 nexus && cd /opt/nexus/data && rm -rf archive.tar.gz && tar -czf archive.tar.gz BackUp keystores blobs && docker start nexus"
 	@echo 备份文件打包完成。
-	ping 127.0.0.1 -n 6 > nul
+	ping 127.0.0.1 -n 3 > nul
 	@echo 拉取备份文件到我的电脑...
 	scp root@%local_nexus%:/opt/nexus/data/archive.tar.gz .
 	@echo 本地文件保存完成，文件名 archive.tar.gz
