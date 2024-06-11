@@ -1,4 +1,6 @@
+chcp 65001
 @echo off
+
 
 @rem 此脚本用来执行 Nexus 同步前的数据导出工作
 @rem 此脚本运行在 majianglin 我的 Windows 11 电脑上 
@@ -11,28 +13,34 @@
 
 @rem 172.28.103.161 是本地 Nexus 服务器 IP
 
-set local_nexus=101.43.217.229
+set local_nexus=172.28.103.161
 
-@echo "开始备份前，请在 http://%local_nexus%:8081/#admin/system/tasks 手动执行备份任务 BackUpForLocal"
+@echo ******
+@echo 开始备份前，请在 http://%local_nexus%:8081/#admin/system/tasks 手动执行备份任务 BackUpForLocal
+@echo ******
 
-set /p confirm=请确认已经手动完成了 nexus 备份任务 BackUpForLocal (yes)：
 
-if "yes" != confim (
-	@echo "需要先手动执行 nexus 备份任务 BackUpForLocal"
-) else (
-	ssh root@%local_nexus% "docker stop --time=120 nexus || cd /opt/nexus/data || tar -czf archive.tar.gz BackUp keystores blobs || docker start nexus"
+SET /P confirm=请确认已经手动完成了 nexus 备份任务 BackUpForLocal (yes)：
+@echo ******
+IF /I "%confirm%" NEQ "yes" GOTO exit
 
-    @echo "备份完成"
+call:backup
+goto:eof
 
+:backup
+    @echo 备份文件打包中，请耐心等待
+	ssh root@%local_nexus% "docker stop --time=120 nexus && cd /opt/nexus/data && tar -czf archive.tar.gz BackUp keystores blobs && docker start nexus"
+	@echo 备份文件打包完成。
 	ping 127.0.0.1 -n 6 > nul
-
-	@echo "正在拉取备份文件到我的电脑"
-
+	@echo 拉取备份文件到我的电脑...
 	scp root@%local_nexus%:/opt/nexus/data/archive.tar.gz .
-
-	@echo "本地文件保存完毕"
-
-	@echo "请将备份文件 archive.tar.gz 传输到内网 /nfs/home/majianglin/nexus/ 目录下"
-)
-
-pause
+	@echo 本地文件保存完成，文件名 archive.tar.gz
+	@echo 请将备份文件 archive.tar.gz 传输到内网 /nfs/home/majianglin/nexus/ 目录下
+	pause
+	goto:eof
+	
+:exit
+	@echo 需要先手动执行 nexus 备份任务 BackUpForLocal
+	@echo ******
+	pause
+	goto:eof
