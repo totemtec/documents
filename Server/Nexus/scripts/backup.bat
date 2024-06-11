@@ -42,5 +42,4 @@ goto:eof
 :exit
 	@echo 需要先手动执行 nexus 备份任务 BackUpForLocal
 	@echo ******
-	pause
 	goto:eof
