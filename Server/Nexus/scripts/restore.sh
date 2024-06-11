@@ -12,7 +12,7 @@ sleep 3
 
 # 将备份文件恢复
 
-docker exec -it -u root nexus /bin/bash -c "cd /nexus-data && rm -rf keystores blobs && tar -xzf archive.tar.gz && mv -f BackUp/* restore-from-backup/ && exit"
+docker exec -it -u root nexus /bin/bash -c "cd /nexus-data && rm -rf keystores blobs restore-from-backup/* && tar -xzf archive.tar.gz && mv -f BackUp/* restore-from-backup/ && exit"
 
 echo "restore files write finished"
 
@@ -22,7 +22,12 @@ sleep 3
 
 docker exec -d -u nexus nexus /bin/bash -c "exec /opt/sonatype/nexus/bin/nexus run"
 
+echo "restart nexus"
+
 # 5分钟后清除备份文件
 
 docker exec -d -u root nexus /bin/bash -c "sleep 300; rm -rf BackUp archive.tar.gz; rm -rf /nexus-data/restore-from-backup/*.bak"
 
+echo "clean will execute after 5 minutes"
+
+echo "DONE. you can using nexus service 5 minites later."
