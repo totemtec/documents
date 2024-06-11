@@ -6,13 +6,13 @@
 
 docker exec -d -u nexus nexus /bin/bash -c "kill -9 \`pgrep -f nexus\`"
 
-echo "nexus killed"
+sleep 10
 
-sleep 3
+echo "nexus killed"
 
 # 将备份文件恢复
 
-docker exec -it -u root nexus /bin/bash -c "cd /nexus-data && rm -rf keystores blobs restore-from-backup/* && tar -xzf archive.tar.gz && mv -f BackUp/* restore-from-backup/ && exit"
+docker exec -it -u root nexus /bin/bash -c "cd /nexus-data && rm -rf keystores blobs restore-from-backup/* cache/* db/component db/config db/security && tar -xzf archive.tar.gz && mv -f BackUp/* restore-from-backup/ && exit"
 
 echo "restore files write finished"
 
