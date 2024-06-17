@@ -39,6 +39,8 @@ systemctl restart sshd
 vi /etc/NetworkManager/NetworkManager.conf
 
 加入一行，禁止 NetworkManager 管理 DNS
+估计得完全禁止使用 NetworkManager
+
 
 ```
 dns=none

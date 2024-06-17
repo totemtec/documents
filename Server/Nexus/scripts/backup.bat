@@ -11,9 +11,9 @@ chcp 65001
 @rem 在 IDEA Terminal 中运行时，需要在右下角将 Line Separator 改为 CRLF - Windows(\r\n)
 @rem 脚本 backup.sh 使用UTF-8编码，使用 Unix and Mac 风格的换行符 \n
 
-@rem 172.28.103.161 是本地 Nexus 服务器 IP
+@rem 172.28.2.19 是本地 Nexus 服务器 IP
 
-set local_nexus=172.28.103.161
+set local_nexus=172.28.2.19
 
 @echo ******
 @echo 开始备份前，请在 http://%local_nexus%:8081/#admin/system/tasks 手动执行备份任务 BackUpForLocal

@@ -12,8 +12,8 @@ cd /etc/docker
 sudo tee /etc/docker/daemon.json <<-'EOF'
 {
     "registry-mirrors": [
-        "https://dockerproxy.com",
-        "https://docker.mirrors.ustc.edu.cn",
+        "https://mirror.iscas.ac.cn",
+        "https://dockerproxy.com/",
         "https://docker.nju.edu.cn"
     ]
 }
