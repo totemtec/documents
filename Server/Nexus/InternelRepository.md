@@ -6,8 +6,7 @@ ssh majianglin@172.18.20.81
 
 访问地址
 http://172.18.20.81
-admin
-Bosc2024$
+
 
 ### 创建目录和修改权限，在 81 上
 
@@ -65,10 +64,8 @@ docker exec -it -u nexus nexus /bin/bash
 ### 从内网镜像备份数据
 
 浏览器访问
-http://172.28.103.161:8081/#admin/system/tasks
+http://172.28.2.19:8081/#admin/system/tasks
 
-admin
-Bosc2024$
 
 1. 服务器管理和配置
 2. System 在最下面
@@ -80,25 +77,19 @@ Bosc2024$
 
 备份数据打包
 
-在本地镜像 172.28.103.161 机器上，用 root 用户操作
+在本地镜像 172.28.2.19 机器上，用 root 用户操作
 
 ```bash
-cd /opt/nexus/data/blobs
-tar -czf myDataBase.tar.gz myDataBase
-mv myDataBase.tar.gz ../
-cd ..
-tar -czf BackUp.tar.gz BackUp keystores
+cd /opt/nexus/data
+tar -czf archive.tar.gz BackUp keystores blobs
 ```
-
-注意上面还备份了 keystores 文件夹，参考文档
 
 > https://help.sonatype.com/en/prepare-a-backup.html
 
 在我的电脑上用 scp 下载到本地
 
 ```
-scp root@172.28.103.161:/opt/nexus/data/myDataBase.tar.gz .
-scp root@172.28.103.161:/opt/nexus/data/BackUp.tar.gz .
+scp root@172.28.2.19:/opt/nexus/data/archive.tar.gz .
 ```
 
 ### 在内网镜像上，恢复数据
@@ -108,11 +99,11 @@ scp root@172.28.103.161:/opt/nexus/data/BackUp.tar.gz .
 在内网主机上 
 
 ```bash
-mv myDataBase.tar.gz /nfs/home/majianglin/nexus/
-mv BackUp.tar.gz /nfs/home/majianglin/nexus/
+mv archive.tar.gz /nfs/home/majianglin/nexus/
 ```
 
 nexus 身份进入 nexus 容器
+
 ```bash
 # 进入 Docker，注意用户是 nexus
 docker exec -it -u nexus nexus /bin/bash
@@ -136,35 +127,25 @@ root 身份进入 nexus 容器
 docker exec -it -u root nexus /bin/bash
 ```
 
-数据存储 -> blobs文件夹内
+解压备份文件
 
 ```bash
-cd /nexus-data/blobs
-rm -rf myDataBase
-mv ../myDataBase.tar.gz .
-tar -xzf myDataBase.tar.gz
+cd /nexus-data
+rm -rf blobs BackUp restore-from-backup/* db/component db/config db/security
+tar -xzf archive.tar.gz
 ```
 
 BackUp 里面的 bak 文件放入 restore-from-backup 文件夹内
 
 ```bash
-cd /nexus-data
-rm -rf BackUp
-rm -rf keystores
-tar -xzf BackUp.tar.gz
-mv -f BackUp/* restore-from-backup
-
+mv -f BackUp/* restore-from-backup/
 rm -rf BackUp BackUp.tar.gz
-
-cd db
-rm -rf component config security
+exit
 ```
 
-root 推出容器，以 nexus 用户进入容器
+root 退出容器，以 nexus 用户进入容器
 
 ```bash
-exit
-
 # 进入 Docker，注意用户是 nexus
 docker exec -it -u nexus nexus /bin/bash
 

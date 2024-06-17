@@ -46,7 +46,7 @@ npm cache clean --force ; rd -r node_modules ; rm package-lock.json
 npm uninstall -g @vscode/vsce
 
 # 再安装
-npm install -g @vscode/vsce --registry=http://172.28.103.161:8081/repository/npm-public/
+npm install -g @vscode/vsce --registry=http://172.28.2.19:8081/repository/npm-public/
 ```
 
 ### npm 重新安装项目依赖
@@ -57,7 +57,7 @@ npm install -g @vscode/vsce --registry=http://172.28.103.161:8081/repository/npm
 
 ```bash
 # 设置使用的源
-npm config set registry http://172.28.103.161:8081/repository/npm-public/
+npm config set registry http://172.28.2.19:8081/repository/npm-public/
 
 # 查看设置是否成功
 npm config list
@@ -70,7 +70,7 @@ npm install
 这样 $USER_HOME/.npmrc 文件中会新增内容
 
 ```
-registry=http://172.28.103.161:8081/repository/npm-public/
+registry=http://172.28.2.19:8081/repository/npm-public/
 ```
 
 - 方式 2 ：修改 `项目级别` 默认镜像。然后安装
@@ -78,21 +78,21 @@ registry=http://172.28.103.161:8081/repository/npm-public/
 如果只是这个项目使用，可以创建 $PROJECT_HOME/.npmrc，内容同上。
 
 ```
-registry=http://172.28.103.161:8081/repository/npm-public/
+registry=http://172.28.2.19:8081/repository/npm-public/
 ```
 
 - 方式 3，每次安装依赖包时，指定镜像
 
 ```bash
 # 安装
-npm install --registry=http://172.28.103.161:8081/repository/npm-public/
+npm install --registry=http://172.28.2.19:8081/repository/npm-public/
 ```
 
 ### 安装完成后，确认缓存
 
 浏览器访问镜像仓库，确认自己的依赖包已经被缓存
 
-> http://172.28.103.161:8081/#browse/browse:npm-public
+> http://172.28.2.19:8081/#browse/browse:npm-public
 
 
 ### 内网使用 npm 需要设置
