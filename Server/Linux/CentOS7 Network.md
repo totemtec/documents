@@ -36,26 +36,27 @@ systemctl restart sshd
 
 ### CentOS 7.9 域名解析太慢
 
-vi /etc/NetworkManager/NetworkManager.conf
-
-加入一行，禁止 NetworkManager 管理 DNS
-估计得完全禁止使用 NetworkManager
-
-
-```
-dns=none
-```
+修改网卡配置文件，禁止自动获取 DNS
 
 ```bash
-systemctl daemon-reload
-systemctl restart NetworkManager
+vi /etc/sysconfig/network-scripts/ifcfg-eth0
+```
+
+增加 1 行
+
+```shell
+PEERDNS="no"
 ```
 
 手动管理 DNS
 
+```bash
 vi /etc/resolv.conf
-
 ```
+
+内容如下
+
+```shell
 nameserver 180.76.76.76
 nameserver 119.29.29.29
 nameserver 223.6.6.6
