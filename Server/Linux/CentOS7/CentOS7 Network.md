@@ -39,13 +39,15 @@ systemctl restart sshd
 修改网卡配置文件，禁止自动获取 DNS
 
 ```bash
-vi /etc/sysconfig/network-scripts/ifcfg-eth0
+vi /etc/NetworkManager/NetworkManager.conf
 ```
 
 增加 1 行
 
 ```shell
-PEERDNS="no"
+[main]
+dns=none
+rc-manager=unmanaged
 ```
 
 手动管理 DNS
