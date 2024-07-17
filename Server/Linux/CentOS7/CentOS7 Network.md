@@ -1,50 +1,34 @@
 ### CentOS 7 在 VMWare 虚拟机装完不联网问题
 
 ```bash
-cd /etc/sysconfig/network-scripts/
-vi ifcfg-ens33
-```
-
-修改最后 1 行为 yes ，并添加 2 行
-
-```
+vi /etc/sysconfig/network-scripts/ifcfg-ens33
+ 
+# 修改最后 1 行为 yes
 ONBOOT=yes
-IPV6_PRIVACY=no
-ETHTOOL_OPTS="autoneg on"
-```
 
-```bash
+# 重启网络服务
 systemctl service network restart
-```
-
-
-### CentOS 7 虚拟机 SSH 特别慢
-
-```bash
-vi /etc/ssh/sshd_config
-```
-
-修改为
-```
-UseDNS no
-```
-
-```bash
-systemctl restart sshd
 ```
 
 
 ### CentOS 7.9 域名解析太慢
 
+参考文档
+
+> https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/manually-configuring-the-etc-resolv-conf-file_configuring-and-managing-networking#disabling-dns-processing-in-the-networkmanager-configuration_manually-configuring-the-etc-resolv-conf-file
+
 修改网卡配置文件，禁止自动获取 DNS
 
 ```bash
-vi /etc/NetworkManager/NetworkManager.conf
+cat >>/etc/NetworkManager/conf.d/90-dns-none.conf <<EOF
+[main]
+dns=none
+EOF
 ```
 
-增加 1 行
+```bash
+vi /etc/NetworkManager/NetworkManager.conf
 
-```shell
 [main]
 dns=none
 rc-manager=unmanaged
@@ -62,4 +46,10 @@ vi /etc/resolv.conf
 nameserver 180.76.76.76
 nameserver 119.29.29.29
 nameserver 223.6.6.6
+```
+
+# 记得要重启 NetworkManager
+
+```bash
+systemctl restart NetworkManager
 ```
