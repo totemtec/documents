@@ -16,3 +16,4 @@ systemctl restart kubelet
 # 重新获取节点状态
 kubectl get nodes
 ```
+set http_proxy=http://172.28.100.33:15732 && set https_proxy=http://172.28.100.33:15732

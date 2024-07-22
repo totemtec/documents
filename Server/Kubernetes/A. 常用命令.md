@@ -1,7 +1,16 @@
 # K8s 常用命令
 
+### 命令补全
+
 ```bash
-# 查看资源
+yum -y install bash-completion
+echo "source <(kubectl completion bash)" >> /etc/profile
+source /etc/profile
+```
+
+### 查看资源
+
+```bash
 kubectl get nodes
 kubectl get pod -o wide
 
