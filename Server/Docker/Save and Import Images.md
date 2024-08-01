@@ -1,7 +1,11 @@
 # 导入导出镜像
 
 ```bash
-docker save -o <path for generated tar file> <image name>
+docker commit sim-debug sim-debug:1.0.0
+```
+
+```bash
+docker save -o ~/Desktop/sim-debug.tar sim-debug:1.0.0
 ```
 
 ```bash

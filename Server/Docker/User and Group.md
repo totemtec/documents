@@ -6,7 +6,7 @@
 $ grep 'docker' /etc/group
 ```
 
-### 将用户 `majianglin` 加入 `docerk` 组，加入完成后可以使用上面命令确认一下
+### 将用户 `majianglin` 加入 `docker` 组，加入完成后可以使用上面命令确认一下
 
 ```bash
 $ sudo usermod -aG docker majianglin
