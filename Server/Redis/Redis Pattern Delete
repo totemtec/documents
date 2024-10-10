@@ -1,0 +1,5 @@
+# Redis Pattern Delete Redis通配符批量删除命令
+
+```bash
+redis-cli KEYS "DEVICE:TOKEN:*" | xargs redis-cli DEL
+```
