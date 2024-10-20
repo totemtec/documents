@@ -1,5 +1,9 @@
 # Redis Pattern Delete Redis通配符批量删除命令
 
+
 ```bash
 redis-cli KEYS "DEVICE:TOKEN:*" | xargs redis-cli DEL
 ```
+
+如果没找到，会提示命令错误
+(error) ERR wrong number of arguments for 'del' command
