@@ -24,6 +24,20 @@
 # rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
 ```
 
+如果后续安装出现 GPG 校验错误，可以关掉 GPG 校验
+
+```
+vi /etc/yum.repos.d/mysql-community.repo
+
+[mysql57-community]
+name=MySQL 5.7 Community Server
+baseurl=http://repo.mysql.com/yum/mysql-5.7-community/el/7/$basearch/
+enabled=1
+gpgcheck=0   这里修改为 0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql
+```
+
+
 ### 4. 安装mysql服务器
 ```
 # yum install -y mysql-community-server

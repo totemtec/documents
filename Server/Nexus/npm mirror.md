@@ -57,7 +57,7 @@ npm install -g @vscode/vsce --registry=http://172.28.2.19:8081/repository/npm-pu
 
 ```bash
 # 设置使用的源
-npm config set registry http://172.28.2.19:8081/repository/npm-public/
+npm config set registry http://172.28.2.38:8081/repository/npm-public/
 
 # 查看设置是否成功
 npm config list

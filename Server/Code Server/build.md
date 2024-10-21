@@ -55,7 +55,7 @@ apt install -y build-essential g++ libx11-dev libxkbfile-dev libsecret-1-dev lib
 1. 克隆
 
 ```bash
-git clone https://github.com/coder/code-server
+git clone https://github.com/totemtec/code-server
 ```
 
 2. 克隆 vscode 子模块
@@ -63,9 +63,14 @@ git clone https://github.com/coder/code-server
 ```bash
 cd code-server
 git submodule update --init
+
+# 更新子模块版本号
+git submodule update --remote --merge
 ```
 
 3. 应用 patches
+
+这步可以不做
 
 ```bash
 quilt push -a
