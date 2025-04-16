@@ -1,0 +1,13 @@
+#!/usr/bin/expect
+spawn telnet bbs.newsmth.net
+expect "login:"
+send "YOUR_ACCOUNT\r"
+expect "Password:"
+send "YOUR_PASSWORD\r"
+
+interact {
+    timeout 60 {
+        send "^@"
+#        exp_continue
+    }
+}
