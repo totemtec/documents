@@ -13,7 +13,7 @@ chcp 65001
 
 @rem 172.28.2.38 是本地 Nexus 服务器 IP
 
-set local_nexus=172.28.2.38
+set local_nexus=172.28.2.189
 
 @echo ******
 @echo 开始备份前，请在 http://%local_nexus%:8081/#admin/system/tasks 手动执行备份任务 BackUpForLocal
