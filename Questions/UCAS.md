@@ -25,7 +25,10 @@ https://www.ucas.ac.cn/
 
 https://gaokao.chsi.com.cn/zzbm/xxgk/detailXx.action?xxId=8edb6d4t1bfpl28q
 
-重点是这个学校在 ** 提前批 **
+https://gaokao.chsi.com.cn/gkxx/zbzrft/zx/202506/20250605/2293385110.html
+
+
+重点是这个学校在 **提前批**
 
 ### 5. 时间安排
 
