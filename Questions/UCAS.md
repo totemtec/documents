@@ -23,7 +23,7 @@ https://www.ucas.ac.cn/
 
 https://gaokao.chsi.com.cn/zzbm/xxgk/detailXx.action?xxId=8edb6d4t1bfpl28q
 
-重点是这个学校在 *** 提前批 ***
+重点是这个学校在 ** 提前批 **
 
 ### 5. 时间安排
 
@@ -41,4 +41,4 @@ https://gaokao.chsi.com.cn/zzbm/xxgk/detailXx.action?xxId=8edb6d4t1bfpl28q
 - 学业水平考试成绩占10%，B/C/D/E类都会拉分，全 A 才满分，详情见下图，各省不一样，天津市的标准应该很快可以查到
 - 面试里有个体育，立定跳远、仰卧起坐、跳绳三选一，其实就是走过场，看看身体是否健康，完全没门槛
 
-![alt text](img/image.png)
+![alt text](img/ucas-1.png)
