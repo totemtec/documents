@@ -37,3 +37,19 @@ Remove_Scan_with_Microsoft_Defender_context_menu.reg
 开源工具
 
 https://github.com/ionuttbara/windows-defender-remover
+
+### 彻底删除 用不到的系统自带软件包
+
+使用管理员运行PowerShell，打开执行 PowerShell 脚本的权限
+
+```sh
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
+```
+
+使用脚本
+
+Remove-Appx-AllUsers.ps1
+
+参考了
+
+https://github.com/MSEndpointMgr/Windows/tree/master/BuiltInApps
