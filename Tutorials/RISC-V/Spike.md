@@ -46,6 +46,53 @@ spike --isa=RV32IMAFDC pk hello.elf
 这种情况下 Spike 会占用一整个核心跑到 100%，风扇就呼呼的了，所以限制一下 Spike 的CPU 占用
 
 ```sh
-sudo systemd-run --scope -p CPUQuota=10% ./run.sh debug
+sudo systemd-run --scope -p CPUQuota=5% ./run.sh debug
 ```
 
+
+### OpenOCD 连接 Spike 进行调试
+
+spike.cfg
+```
+adapter driver remote_bitbang
+remote_bitbang host localhost
+remote_bitbang port 9824
+
+set _CHIPNAME riscv
+jtag newtap $_CHIPNAME cpu -irlen 5
+
+set _TARGETNAME $_CHIPNAME.cpu
+target create $_TARGETNAME riscv -chain-position $_TARGETNAME
+
+bindto 0.0.0.0
+gdb_report_data_abort enable
+
+init
+reset halt
+```
+
+```sh
+openocd -f spike.cfg
+```
+
+### GDB 连接 OpenOCD 进行调试
+
+.gdbinit
+```
+#./.gdbinit
+# coregen.cfg need bindto 0.0.0.0 before init
+
+target extended-remote:3333
+set confirm off
+set print pretty on
+set sysroot
+set pagination off
+set disassemble-next-line on
+
+file RTOSDemo32.axf
+load
+```
+
+```sh
+riscv-none-elf-gdb -iex "set auto-load safe-path /"
+```
