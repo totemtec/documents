@@ -15,11 +15,11 @@ cd openocd
 ### 配置
 
 ./bootstrap
-./configure --enable-remote-bitbang
+./configure  --prefix=/opt/openocd  --enable-ftdi  --enable-remote-bitbang
 
 ### 构建和安装
 
-make
+make -j"$(nproc)"
 sudo make install
 
 
@@ -32,7 +32,7 @@ spike --isa=RV32IMAFDC --rbb-port=9824 --halted hello.elf
 
 ### OpenOCD 连接 spike 的配置
 
-pike.cfg
+spike.cfg
 
 ```
 adapter driver remote_bitbang
